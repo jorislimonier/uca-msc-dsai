@@ -1,0 +1,118 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\thetahat}{\hat\theta}
+
+\title{Statistical inference theory: Exercises}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Homework for October 7th 2021}
+\begin{figure}[h]
+    \centering
+    \includegraphics[angle=-90, width=.5\textwidth]{exercise.jpg}
+\end{figure}
+\subsection{Exercise}
+Let \(X_1, \ldots, X_n\) be i.i.d. random variables with distribution \(\mathcal{U}(0, \theta)\). \\
+Let \(\hat\theta_n = \max(X_1, \ldots, X_n)\).
+
+\paragraph{Is \(\hat\theta_n\) an unbiased estimator for \(\theta\) ?\\}
+\(\hat\theta_n\) is an estimator since it does not depend on any parameter.\\
+Now, \(\hat\theta_n\) is unbiased if \(\E[\hat\theta_n] = \theta\). We compute \(F_{\thetahat_n}\), the CDF of \(\hat\theta_n\):
+\begin{align*}
+    F_{\thetahat_n}(x)
+     & = \P(X_1 \leq x, \ldots, X_n \leq x)   \\
+     & = \P(X_1 \leq x) \ldots \P(X_n \leq x) \\
+     & = \left[\P(X_1 \leq x)\right]^n        \\
+     & = \begin{cases}
+        0                                 & x < 0                \\
+        \left[ \frac{x}{\theta} \right]^n & 0 \leq x \leq \theta \\
+        1                                 & x > \theta
+    \end{cases}
+\end{align*}
+Then \(f_{\thetahat_n}\), the CDF of \(\thetahat_n\) is given by:
+\begin{align*}
+    f_{\thetahat_n}(x)
+     & = \frac{d}{dx} F_{\thetahat_n}(x) \\
+     & =
+    \begin{cases}
+        \frac{n x^{n-1}}{\theta^n} & x \in [0, \theta] \\
+        0                          & \text{otherwise}
+    \end{cases}
+\end{align*}
+Hence the expected value is given by:
+\begin{align*}
+    \E[\hat\theta_n]
+     & = \int_{-\infty}^{+\infty} t f(t) dt                         \\
+     & = \frac{n}{\theta^n} \int_{0}^{\theta} t^n dt                \\
+     & = \frac{n}{\theta^n (n+1)} \left[t^{n+1}\right]_{0}^{\theta} \\
+     & = \frac{n}{\theta^n (n+1)} \left[ \theta^{n+1} - 0 \right]   \\
+     & = \frac{n \theta}{n+1}                                       \\
+\end{align*}
+Since \(\E[\hat\theta_n] = \frac{n \theta}{n+1} \neq \theta\), we have that \(\thetahat_n\) is not an unbiased estimator for \(\theta\).
+
+
+\paragraph{If not, determine an unbiased one which is a funtion of \(\max(X_1, \ldots, X_n)\)}
+
+\textbf{Method 1:}
+\begin{align*}
+             & \E[\hat\theta_n] = \frac{n \theta}{n+1} \\                                       \\
+    \implies & \E[\hat\theta_n] \frac{n+1}{n} = \theta \\                                       \\
+    \implies & \E \left[ \frac{n+1}{n} \hat\theta_n \right] = \theta \\                                       \\
+\end{align*}
+So \(\overline{\theta} := \frac{n+1}{n} \hat\theta_n\) is an unbiased estiamtor for \(\theta\).\\
+\textbf{Method 2:} We consider \(\bar\theta := \frac{n+1}{n} \thetahat = \frac{n+1}{n} \max(X_1, \ldots, X_n)\). Then \(F_{\thetahat_n}\), the CDF of \(\hat\theta_n\) is given by:
+\begin{align*}
+    F_{\bar \theta_n}(x)
+     & = \P \left( \bar\theta \leq x \right)                                                        \\
+     & = \P \left( \frac{n+1}{n} \thetahat \leq x \right)                                           \\
+     & = \P \left( X_1 \leq \frac{n}{n+1}x, \ldots, X_n \leq \frac{n}{n+1}x \right)                 \\
+     & = \P \left( X_1 \leq \frac{n}{n+1}x \right) \ldots \P \left( X_n \leq \frac{n}{n+1}x \right) \\
+     & = \left[ \P \left( X_1 \leq \frac{n}{n+1}x \right) \right]^n                                 \\
+     & = \begin{cases}
+        0                                         & x < 0                               \\
+        \left[ \frac{n}{\theta (n+1)} x \right]^n & 0 \leq x \leq \frac{\theta(n+1)}{n} \\
+        1                                         & x > \frac{\theta(n+1)}{n}
+    \end{cases}                                                                  \\
+\end{align*}
+Then \(f_{\thetahat_n}\), the CDF of \(\thetahat_n\) is given by:
+\begin{align*}
+    f_{\thetahat_n}(x)
+     & = \frac{d}{dx} F_{\thetahat_n}(x) \\
+     & =
+    \begin{cases}
+        \left[\frac{n}{\theta (n+1)}\right]^n n x^{n-1} & x \in [0, \frac{\theta (n+1)}{n}] \\
+        0                                               & \text{otherwise}
+    \end{cases}            \\
+     & =
+    \begin{cases}
+        \frac{n^{n+1}}{\theta^n (n+1)^n} x^{n-1} & x \in [0, \frac{\theta (n+1)}{n}] \\
+        0                                        & \text{otherwise}
+    \end{cases}            \\
+\end{align*}
+
+Hence the expected value is given by:
+\begin{align*}
+    \E[\hat\theta_n]
+     & = \int_{-\infty}^{+\infty} t f(t) dt                                                                 \\
+     & = \frac{n^{n+1}}{\theta^n (n+1)^n} \int_{0}^{\frac{\theta (n+1)}{n}} t^n dt                          \\
+     & = \frac{n^{n+1}}{\theta^n (n+1)^n} \left[\frac{t^{n+1}}{n+1}\right]_{0}^{\frac{\theta (n+1)}{n}}     \\
+     & = \frac{n^{n+1}}{\theta^n (n+1)^{n+1}} \left[t^{n+1}\right]_{0}^{\frac{\theta (n+1)}{n}}             \\
+     & = \frac{n^{n+1}}{\theta^n (n+1)^{n+1}} \left[ \left( \frac{\theta (n+1)}{n}\right)^{n+1} - 0 \right] \\
+     & = \theta                                                                                             \\
+\end{align*}
+Now \(\E[\hat\theta_n] = \theta\), therefore \(\thetahat_n\) is an unbiased estimator for \(\theta\).
+
+
+
+\end{document}

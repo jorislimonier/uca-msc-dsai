@@ -1,0 +1,6 @@
+for i in $(seq 50 99)
+do
+  touch file$i
+done
+echo "Nb of arguments is $#"
+echo "Arguments from input are $1 $2 $3"

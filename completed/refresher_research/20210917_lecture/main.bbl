@@ -1,0 +1,65 @@
+\begin{thebibliography}{1}
+
+\bibitem{bodla_soft-nms_2017}
+Navaneeth Bodla, Bharat Singh, Rama Chellappa, and Larry~S. Davis.
+\newblock Soft-{NMS} — {Improving} {Object} {Detection} with {One} {Line} of
+  {Code}.
+\newblock In {\em 2017 {IEEE} {International} {Conference} on {Computer}
+  {Vision} ({ICCV})}, pages 5562--5570, Venice, October 2017. IEEE.
+
+\bibitem{cai_cascade_2018}
+Zhaowei Cai and Nuno Vasconcelos.
+\newblock Cascade {R}-{CNN}: {Delving} {Into} {High} {Quality} {Object}
+  {Detection}.
+\newblock In {\em 2018 {IEEE}/{CVF} {Conference} on {Computer} {Vision} and
+  {Pattern} {Recognition}}, pages 6154--6162, Salt Lake City, UT, June 2018.
+  IEEE.
+
+\bibitem{cao_hierarchical_2019}
+Jiale Cao, Yanwei Pang, Jungong Han, and Xuelong Li.
+\newblock Hierarchical {Shot} {Detector}.
+\newblock In {\em 2019 {IEEE}/{CVF} {International} {Conference} on {Computer}
+  {Vision} ({ICCV})}, pages 9704--9713, Seoul, Korea (South), October 2019.
+  IEEE.
+
+\bibitem{chao_hardnet_2019}
+Ping Chao, Chao-Yang Kao, Yushan Ruan, Chien-Hsiang Huang, and Youn-Long Lin.
+\newblock {HarDNet}: {A} {Low} {Memory} {Traffic} {Network}.
+\newblock In {\em 2019 {IEEE}/{CVF} {International} {Conference} on {Computer}
+  {Vision} ({ICCV})}, pages 3551--3560, Seoul, Korea (South), October 2019.
+  IEEE.
+
+\bibitem{chen_deeplab_2017}
+Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, and
+  Alan~L. Yuille.
+\newblock {DeepLab}: {Semantic} {Image} {Segmentation} with {Deep}
+  {Convolutional} {Nets}, {Atrous} {Convolution}, and {Fully} {Connected}
+  {CRFs}.
+\newblock {\em arXiv:1606.00915 [cs]}, May 2017.
+\newblock arXiv: 1606.00915.
+
+\bibitem{chen_deeplab_2017-1}
+Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, and
+  Alan~L. Yuille.
+\newblock {DeepLab}: {Semantic} {Image} {Segmentation} with {Deep}
+  {Convolutional} {Nets}, {Atrous} {Convolution}, and {Fully} {Connected}
+  {CRFs}.
+\newblock {\em arXiv:1606.00915 [cs]}, May 2017.
+\newblock arXiv: 1606.00915.
+
+\bibitem{chen_deeplab_2017-2}
+Liang-Chieh Chen, George Papandreou, Iasonas Kokkinos, Kevin Murphy, and
+  Alan~L. Yuille.
+\newblock {DeepLab}: {Semantic} {Image} {Segmentation} with {Deep}
+  {Convolutional} {Nets}, {Atrous} {Convolution}, and {Fully} {Connected}
+  {CRFs}.
+\newblock {\em arXiv:1606.00915 [cs]}, May 2017.
+\newblock arXiv: 1606.00915.
+
+\bibitem{chen_gridmask_2020}
+Pengguang Chen, Shu Liu, Hengshuang Zhao, and Jiaya Jia.
+\newblock {GridMask} {Data} {Augmentation}.
+\newblock {\em arXiv:2001.04086 [cs]}, January 2020.
+\newblock arXiv: 2001.04086.
+
+\end{thebibliography}

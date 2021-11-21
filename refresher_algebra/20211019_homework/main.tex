@@ -1,0 +1,328 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+
+% \pagenumbering{roman}
+\begin{document}
+
+\newgeometry{width=150mm,top=25mm,bottom=25mm}
+
+% Inserting title page
+\import{./}{title}
+
+\tableofcontents
+
+\restoregeometry
+
+\section{Exercise 1}
+We consider a symmetric matrix \(S \in \R^{D \times D}\) and the associated quadratic form $f: \mathbb{R}^{D} \to \R$ defined by
+$$
+    f(u) := u^{T} S u = \sum_{i=1}^{D} \sum_{j=1}^{D} u_{i} u_{j} S_{i j}
+$$
+
+\subsection{First part - Question (a)}
+\label{ex1.I.a}
+Let \(i_0 \in \{1, \ldots, D\}\). We want to compute \(\frac{\partial f}{\partial u_{i_0}} (u)\)
+\begin{align}
+    \frac{\partial f}{\partial u_{i_0}} (u)
+    \nonumber
+     & := \frac{\partial}{\partial u_{i_0}} \left[ \sum_{i=1}^{D} \sum_{j=1}^{D} u_{i} u_{j} S_{i j} \right]                                                                                                                                                                                                             \\
+    \nonumber
+     & = \sum_{i=1}^{D} \sum_{j=1}^{D} \left[ \frac{\partial}{\partial u_{i_0}} u_{i} u_{j} S_{i j} \right]                                                                                                                                                                                                              \\
+    \nonumber
+     &                                                                                                                                                                                                                                                                   & \textit{(Leibniz rule)}                       \\
+    \nonumber
+     & = \sum_{i=1}^{D} \sum_{j=1}^{D} \left[ \frac{\partial u_{i}}{\partial u_{i_0}} u_{j} S_{i j} + u_{i}  \frac{\partial u_{j}}{\partial u_{i_0}} S_{i j} \right]                                                                                                                                                     \\
+    \nonumber
+     & = \sum_{i=1}^{D} \sum_{j=1}^{D} \frac{\partial u_{i}}{\partial u_{i_0}} u_{j} S_{i j} + \sum_{i=1}^{D} \sum_{j=1}^{D} u_{i} \frac{\partial u_{j}}{\partial u_{i_0}} S_{i j}                                                                                                                                       \\
+    \nonumber
+     & = \sum_{i=1}^{D} \underbrace{\frac{\partial u_{i}}{\partial u_{i_0}}}_{=\boldsymbol{1}_{\{i=i_0\}}} \sum_{j=1}^{D} u_{j} S_{i j} + \sum_{i=1}^{D} \sum_{j=1}^{D} u_{i} \underbrace{\frac{\partial u_{j}}{\partial u_{i_0}}}_{=\boldsymbol{1}_{\{j=i_0\}}} S_{i j}                                                 \\
+    %     \nonumber
+    %     & = 1 \times \sum_{j=1}^{D} u_{j} S_{i_0 j} + \sum_{i=1}^{D} u_{i} \times 1 \times S_{i i_0}                                                                                                                                                                                                                        \\
+    % \end{align*}
+    % \begin{align}
+    \nonumber
+     & = \sum_{j=1}^{D} u_{j} S_{i_0 j} + \sum_{i=1}^{D} u_{i} S_{i i_0}                                                                                                                                                                                                                                                 \\
+    \nonumber
+     &                                                                                                                                                                                                                                                                   & \textit{(change counter name}                 \\[-.1cm]
+    \nonumber
+     &                                                                                                                                                                                                                                                                   & \textit{and since } S \textit{ is symmetric}) \\
+    \nonumber
+     & = \sum_{i=1}^{D} u_{i} S_{i_0 i} + \sum_{i=1}^{D} u_{i} S_{i_0 i}                                                                                                                                                                                                                                                 \\
+    \nonumber
+     & = 2 \sum_{i=1}^{D} S_{i_0 i} u_i                                                                                                                                                                                                                                                                                  \\
+    \label{eqn: ex1.1.a deriv of quad form}
+     & = 2 S_{i_0 *} u
+\end{align}
+Where \(S_{i_0 *}\) denotes the \(i_0\)-th row of \(S\) (analogously, \(S_{* i_0}\) would denote the \(i_0\)-th column of \(S\)). \\
+Now by definition, of the gradient of \(f\) and by plugging in the result from \eqref{eqn: ex1.1.a deriv of quad form}, we get that:
+\begin{align*}
+    \nabla f (u)
+     & :=
+    \begin{bmatrix}
+        \frac{\partial f}{\partial u_{1}} (u) \\
+        \vdots                                \\
+        \frac{\partial f}{\partial u_{D}} (u) \\
+    \end{bmatrix} \\
+     & =
+    \begin{bmatrix}
+        2 S_{1 *} u \\
+        \vdots      \\
+        2 S_{D *} u \\
+    \end{bmatrix} \\
+     & = 2 Su
+\end{align*}
+which finishes the proof.
+
+\subsection{First part - Question (b)}
+Let \(S := I\), with \(I \in \R^{D \times D}\) the identity matrix. Naturally, \(I\) is symmetric, therefore we can apply subsection \ref{ex1.I.a}:
+\begin{align*}
+             & g(u) := u^T u             \\
+    \implies & g(u) = u^T S u            \\
+    \implies & g(u) = f(u)               \\
+    \implies & \nabla g(u) = \nabla f(u) \\
+    \implies & \nabla g(u) = 2Su         \\
+    \implies & \nabla g(u) = 2u          \\
+\end{align*}
+
+\subsection{Second part - Question (a)}
+Now we assume that \(S\) si positive definite and has eigendecomposition \(S = Q \Lambda Q^T\) with \(Q\) orthogonal and \(\Lambda\) that has the eigenvalues \(\lambda_1, \ldots, \lambda_D\) of \(S\) on its diagonal, in decreasing order.\\
+We consider the unit sphere \(\U := \left\{ u \in \R^D \mid \| u \|_2 = 1\right\}\).\\
+We want to show that \(\forall u \in \U, \ y := Q^T u \in \U\).\\
+\begin{align*}
+    \| Q^T u \|_2
+     & = \sqrt{\left( Q^T u \right)^T \left( Q^T u \right)}                                                       \\
+     & = \sqrt{u^T \left( Q^T \right)^T Q^T u}                                                                    \\
+     & = \sqrt{u^T Q Q^T u}                                                                                       \\
+     &                                                      & (QQ^T=I \textit{ since } Q \textit{ is orthogonal)} \\
+     & = \sqrt{u^T u}                                                                                             \\
+     & = \sqrt{\left\| u \right\|^2}                                                                              \\
+     &                                                      & \textit{(Since norms are non-negative)}             \\
+     & = \left\| u \right\|                                                                                       \\
+\end{align*}
+which completes the proof.
+
+\subsection{Second part - Question (b)}
+We want to show the following:
+\[
+    \max _{u \in \U}\left(u^{T} S u\right) \leq \lambda_{1}
+\]
+
+\begin{align*}
+    \max _{u \in \U}\left( u^{T} S u \right)
+     & = \max _{u \in \U} \left( u^{T} Q \Lambda Q^T u \right)
+     & \textit{(by the order of the eigenvalues)}                       \\
+     & \leq \max _{u \in \U} \left( u^{T} Q (\lambda_1 I) Q^T u \right) \\
+     &
+     & \textit{(since } \lambda_1 \in \R)                               \\
+     & = \max _{u \in \U} \left( \lambda_1 u^{T} Q Q^T u \right)        \\
+     & = \max _{u \in \U} \left( \lambda_1 u^{T} u \right)              \\
+     & = \max _{u \in \U} \left( \lambda_1 \| u \|^2 \right)            \\
+     &
+     & \textit{(since } u \in \U)                                       \\
+     & = \max _{u \in \U} \left( \lambda_1 \right)                      \\
+     & = \lambda_{1}
+\end{align*}
+Hence the proof is complete.
+
+\section{Exercise 2}
+\subsection{Question (a)}
+\begin{align*}
+    P_{W}(v)
+     & = \sum_{j=1}^{K} \left\langle v, u_{j} \right\rangle u_{j} \\
+     & = \sum_{j=1}^{K} u_{j} \left\langle v, u_{j} \right\rangle \\
+     & = \sum_{j=1}^{K} u_{j} u_{j}^T v                           \\
+\end{align*}
+Therefore, the matrix product looks like:
+\begin{align*}
+    UU^Tv & =
+    \begin{bmatrix}
+        |   &        & |   \\
+        u_1 & \ldots & u_K \\
+        |   &        & |
+    \end{bmatrix}
+    \begin{bmatrix}
+        - u_1^T   - \\
+        \vdots      \\
+        - u_K^T   - \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        | \\
+        v \\
+        | \\
+    \end{bmatrix}
+\end{align*}
+where for verification purposes, we can follow the evolution of \(v\) as the linear transformations are applied. This gives us the following visual:
+\begin{align*}
+    UU^T v
+     & =
+    \begin{bmatrix}
+        |   &        & |   \\
+        u_1 & \ldots & u_K \\
+        |   &        & |
+    \end{bmatrix}
+    \begin{bmatrix}
+        - u_1^T   - \\
+        \vdots      \\
+        - u_K^T   - \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        | \\
+        v \\
+        | \\
+    \end{bmatrix}                                     \\
+     & =
+    \begin{bmatrix}
+        |   &        & |   \\
+        u_1 & \ldots & u_K \\
+        |   &        & |
+    \end{bmatrix}
+    \begin{bmatrix}
+        u_1^T v \\
+        \vdots  \\
+        u_K^T v \\
+    \end{bmatrix}
+     & \textit{(where } \forall 1 \leq i \leq K, \ u^T_i v \in \R) \\
+     & =
+    u_1^T v
+    \begin{bmatrix}
+        |   \\
+        u_1 \\
+        |
+    \end{bmatrix}
+    + \ldots +
+    u_K^T v
+    \begin{bmatrix}
+        |   \\
+        u_K \\
+        |
+    \end{bmatrix}
+\end{align*}
+In the last line, we use the ``columns times rows" approach rather than the usual ``rows times columns" because it diretly yields the result. \\
+We now see that this visual representation confirms the formula obtained previously, so the columns of \(U\) are the \(u_i, \ 1 \leq i \leq K\).
+
+\subsection{Question (b)}
+Since \(M_{P_W}\) can be written as \(M_{P_W} = UU^T\), we have:
+\begin{align*}
+    \left( M_{P_W} \right)^T
+     & = \left( UU^T \right)^T    \\
+     & = \left( U^T \right)^T U^T \\
+     & = UU^T                     \\
+     & = M_{P_W}                  \\
+\end{align*}
+which proves the symmetry.\\
+We use a similar argument to show nilpotence:
+\begin{align*}
+    \left( M_{P_W} \right)^2
+     & = \left( UU^T \right)\left( UU^T \right)                                                                            \\
+     & = U \underbrace{U^TU}_{=I} U^T                                                                                      \\
+     &                                          & \textit{(since } \{u_1, \ldots, u_K\} \textit{ is an orthonormal basis}) \\
+     & = UU^T                                                                                                              \\
+     & = M_{P_W}                                                                                                           \\
+\end{align*}
+which proves the nilpotence.
+
+\section{Exercise 3: Principal Component Analysis}
+Given \(N\) observations, \(x_1, \ldots, x_n \in \R^D\), we consider their empirical mean
+\[
+    \bar x := \frac{1}{N} \sum_{i=1}^{N} x_i
+\]
+and their empirical variance
+\[
+    \bar{S}_{x} = \frac{1}{N} \sum_{i=1}^{N}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{T}, \quad \in \mathbb{R}^{D \times D}
+\]
+which is symmetric and positive definite.
+
+\subsection{First part - Question (a)}
+Using that \(y_i = U^T x_i\), we have:
+\begin{align*}
+    \bar y
+     & = \frac{1}{N} \sum_{i=1}^{N} y_i                              \\
+     & = \frac{1}{N} \sum_{i=1}^{N} U^T x_i                          \\
+     & = U^T \underbrace{\frac{1}{N} \sum_{i=1}^{N} x_i}_{{=\bar x}} \\
+     & = U^T \bar x
+\end{align*}
+as expected.
+
+\subsection{First part - Question (b)}
+\begin{align*}
+    U^T \bar S_x U
+     & = U^T \left[ \frac{1}{N} \sum_{i=1}^{N}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{T} \right] U                                                                                                         \\
+     & = \frac{1}{N} \sum_{i=1}^{N} \left[ U^T \left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{T} U \right]                                                                                                        \\
+     & = \frac{1}{N} \sum_{i=1}^{N} \left[ \left( \underbrace{U^T x_{i}}_{=y_i} - \underbrace{U^T \bar{x}}_{=\bar y}\right) \left( \underbrace{x_{i}^T U}_{=y_i^T} - \underbrace{\bar{x}^T U}_{\bar y^T} \right) \right] \\
+     & = \frac{1}{N} \sum_{i=1}^{N} \left( y_{i} - \bar{y}\right) \left( y_i^T - \bar{y} \right)                                                                                                                         \\
+     & = \bar S_y                                                                                                                                                                                                        \\
+\end{align*}
+
+\subsection{Second part - Question (a)}
+We want to show that the maximization of \(\operatorname{trace}(\bar S_y)\) can be stated as
+\[
+    \max _{\substack{u_{1}, \ldots, u_{K}, \\ u_{i} \perp u_{j}}} \sum_{k=1}^{K} \left[u_{k}^{T} S_{x} u_{k}-\lambda_{k} \left(\left\|u_{k}\right\|_{2}^{2} - 1\right) \right], \quad \lambda_{k} \in \mathbb{R}
+\]
+Let us first compute \(\operatorname{trace}(\bar S_y)\):
+\begin{align}
+    \operatorname{trace}(\bar S_y)
+    \nonumber
+     & = \operatorname{trace} \left[ U^T \bar S_x U \right] \\
+    \label{ex3.II.a: objective function}
+     & = \sum_{k=1}^K u_k^T \bar S_{x} u_k
+\end{align}
+but we have to take into account that the \(U\) is an orthogonal matrix, which means:
+\[
+    \forall \ 1 \leq k,l \leq K, u_k^T u_l = \boldsymbol{1}_{\{k=l\}}
+\]
+hence
+\begin{equation}
+    \label{ex3.II.a: orthogonal}
+    \forall \ 1 \leq k \leq K, \
+    \begin{cases}
+        \|u_k\|_2^2 = 1 & k=l      \\
+        u_k \perp u_l   & k \neq l
+    \end{cases}
+\end{equation}
+which implies:
+\begin{equation}
+    \label{ex3.II.a: constraints}
+    \forall \ 1 \leq k \leq K, \quad \|u_k\|_2^2 - 1 = 0
+\end{equation}
+Thus, by equations \eqref{ex3.II.a: objective function}, \eqref{ex3.II.a: orthogonal} and \eqref{ex3.II.a: constraints}, the Lagrangian is given by:
+\begin{equation*}
+    \mathcal{L} (u_1, \ldots, u_K; \lambda_1, \ldots, \lambda_K) = \sum_{k=1}^{K} \left[u_{k}^{T} S_{x} u_{k}-\lambda_{k} \left(\left\|u_{k}\right\|_{2}^{2} - 1\right) \right]
+\end{equation*}
+Finally, maximizing \(\mathcal{L}\) over the \(u_k, \ 1 \leq k \leq K,\) which are orthogonal, yields the desired result.
+
+\subsection{Second part - Question (b)}
+Assume \(K=1\) and let \(g\left(u_{1}, \lambda_{1}\right):=u_1^T \overline{S}_x u_1-\lambda_1 \left( \left\|u_1\right\|_2^2 - 1 \right)\). We note that \(g\) is differentiable with respect to all variablessince it is a sum of differentiable functions. Thus we get:
+\[
+    \nabla g (u_1, \lambda_1) =
+    \begin{bmatrix}
+        2\overline{S}_x u_1 - 2 \lambda_1 u_1 \\
+        - \| u_1 \|_2^2 + 1
+    \end{bmatrix}
+\]
+which we set equal to 0, therefore obtaining the following system of equations:
+\begin{align*}
+             & \nabla g (u_1, \lambda_1) = 0 \\
+    \implies &
+    \begin{cases}
+        2\overline{S}_x u_1 - 2 \lambda_1 u_1 = 0 \\
+        - \| u_1 \|_2^2 + 1 = 0
+    \end{cases}               \\
+    \implies &
+    \begin{cases}
+        \overline{S}_x u_1 = \lambda_1 u_1 \\
+        \| u_1 \|_2^2 = 1
+    \end{cases}               \\
+\end{align*}
+By definition, we see that the eigenpairs of \(\overline{S}_x\) (with normalized eigenvectors) are solutions of this system, so they are the stationary points of \(g\).
+
+\subsection{Second part - Question (c)}
+The stationary point maximizing \(g\) is the eigenpair (with normalized eigenvector) associated to the largest of the eigenvalues of \(\overline{S}_x\).
+
+\subsection{Second part - Question (d)}
+In the general case, the Lagrangian is maximized by maximizing each of the individual terms of the sum. We can't choose \(K\) repetitions of the eigenpair associated with the largest eigenvalue because of the orthogonality condition, so we choose the eigenpairs associated with the largest \(K\) eigenvalues among the total of all \(D\) eigenvectors of \(\overline{S}_x\).
+
+
+\end{document}

@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}2021 October 28 lecture}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Exercise 1 (Student t)}{1}{subsection.1.1}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find \(t\) such that \(\mathbb {P}(T \leq t) = 0.8\)\\}{1}{section*.2}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find \(t\) such that \(\mathbb {P}(T \leq t) = 0.1\)\\}{1}{section*.3}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find \(t\) such that \(\mathbb {P}(T \geq t) = 0.8\)\\}{2}{section*.4}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find \(t\) such that \(\mathbb {P}(-t \leq T \leq t) = 0.9\)\\}{2}{section*.5}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find the probability of \(\mathbb {P}(T \leq -0.134)\)\\}{2}{section*.6}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find the probability of \(\mathbb {P}(T \geq -0.271)\)\\}{2}{section*.7}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find the probability of \(\mathbb {P}(T \leq 0.941)\)\\}{3}{section*.8}%
+\contentsline {paragraph}{If \(T\) has 4 degrees of freedom, find the probability of \(\mathbb {P}(-0.414 \leq T \leq 1.533)\)\\}{3}{section*.9}%

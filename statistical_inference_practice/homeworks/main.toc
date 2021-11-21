@@ -1,0 +1,31 @@
+\contentsline {section}{\numberline {1}Homework for October 8, 2021}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Chapter 6 - Exercise 2}{1}{subsection.1.1}%
+\contentsline {paragraph}{What is the bias of \(\hat \theta _n\) ?\\}{1}{section*.2}%
+\contentsline {paragraph}{What is \(SE\), the standard error of \(\hat \theta _n\) ?\\}{2}{section*.3}%
+\contentsline {paragraph}{What is \(MSE\), the Mean-Square Error of \(\hat \theta _n\) ?\\}{4}{section*.4}%
+\contentsline {subsection}{\numberline {1.2}Chapter 6 - Exercise 3}{4}{subsection.1.2}%
+\contentsline {paragraph}{What is the bias of \(\hat \theta _n\) ?\\}{4}{section*.5}%
+\contentsline {paragraph}{What is \(SE\), the standard error of \(\hat \theta _n\) ?\\}{5}{section*.6}%
+\contentsline {paragraph}{What is \(MSE\), the Mean-Square Error of \(\hat \theta _n\) ?\\}{5}{section*.7}%
+\contentsline {section}{\numberline {2}Homework for October 20, 2021}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Chapter 7 - Exercise 2}{5}{subsection.2.1}%
+\contentsline {paragraph}{Find the plug-in estimator and estimated standard error for $p$.\\}{6}{section*.8}%
+\contentsline {paragraph}{Find an approximate 90 percent confidence interval for $p$.\\}{6}{section*.9}%
+\contentsline {paragraph}{Find the plug-in estimator and estimated standard error for $p-q$.\\}{7}{section*.10}%
+\contentsline {paragraph}{Find an approximate 90 percent confidence interval for $p-q$.\\}{7}{section*.11}%
+\contentsline {subsection}{\numberline {2.2}Chapter 7 - Exercise 5}{7}{subsection.2.2}%
+\contentsline {paragraph}{Let $x$ and $y$ be two distinct points. Find $\operatorname {Cov}\left (\hat {F}_{n}(x), \hat {F}_{n}(y)\right )$.}{7}{section*.12}%
+\contentsline {subsection}{\numberline {2.3}Chapter 7 - Exercise 6}{7}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Homework for October 29}{7}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Custom exercise}{7}{subsection.3.1}%
+\contentsline {paragraph}{Compute the 3 types of normal confidence intervals for \(\theta \).}{8}{section*.13}%
+\contentsline {paragraph}{Repeat the experiment to check how often \(\theta \) belongs to the confidence intervals.}{8}{section*.14}%
+\contentsline {section}{\numberline {4}Homework for November 5, 2021}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Chapter 9 - Exercise 1}{8}{subsection.4.1}%
+\contentsline {paragraph}{Let $X_{1}, \ldots , X_{n} \sim \operatorname {Gamma}(\alpha , \beta )$. Find the method of moments estimator for $\alpha $ and $\beta $.}{8}{section*.15}%
+\contentsline {subsection}{\numberline {4.2}Chapter 9 - Exercise 2}{8}{subsection.4.2}%
+\contentsline {paragraph}{Let $X_{1}, \ldots , X_{n} \sim $ Uniform $(a, b)$ where $a$ and $b$ are unknown parameters and $a<b$.}{8}{section*.16}%
+\contentsline {paragraph}{(a) Find the method of moments estimators for $a$ and $b$.\\}{9}{section*.17}%
+\contentsline {paragraph}{(b) Find the MLE $\hat {a}$ and $\hat {b}$.\\}{11}{section*.18}%
+\contentsline {paragraph}{(c) Let $\tau =\DOTSI \intop \ilimits@ x d F(x)$. Find the MLE of $\tau $.\\}{12}{section*.19}%
+\contentsline {paragraph}{(d) Let $\hat {\tau }$ be the MLE of $\tau $. Let $\setbox \z@ \hbox {\mathsurround \z@ $\textstyle \tau $}\mathaccent "0365{\tau }$ be the nonparametric plug-in estimator of $\tau =\DOTSI \intop \ilimits@ x d F(x)$. Suppose that $a=1, b=3$, and $n=10$. Find the MSE of $\hat {\tau }$ by simulation. Find the MSE of $\setbox \z@ \hbox {\mathsurround \z@ $\textstyle \tau $}\mathaccent "0365{\tau }$ analytically. Compare.\\}{13}{section*.20}%

@@ -1,0 +1,631 @@
+{
+    "persons": [
+        {
+            "name": "Annie",
+            "role": "suspect",
+            "metier": "enseignant",
+            "position": {
+                "x": 30,
+                "y": 40
+            },
+            "taille": 170,
+            "age": 34,
+            "alibi": 8,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "John",
+            "role": "suspect",
+            "metier": "boucher",
+            "position": {
+                "x": 80,
+                "y": 80
+            },
+            "taille": 175,
+            "age": 37,
+            "alibi": 4,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "Muriel",
+            "role": "suspect",
+            "metier": "enseignant",
+            "position": {
+                "x": 100,
+                "y": 35
+            },
+            "taille": 175,
+            "age": 40,
+            "alibi": 3,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "Pierre",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 40,
+                "y": 70
+            },
+            "taille": 176,
+            "age": 14,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Marie",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 30,
+                "y": 50
+            },
+            "taille": 156,
+            "age": 63,
+            "alibi": 2,
+            "permisArme": "non",
+            "vision": 2
+        },
+        {
+            "name": "Carlos",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 20,
+                "y": 10
+            },
+            "taille": 186,
+            "age": 67,
+            "alibi": 5,
+            "permisArme": "oui",
+            "vision": 5
+        },
+        {
+            "name": "Jean-Claude",
+            "role": "victime",
+            "metier": "enseignant",
+            "position": {
+                "x": 120,
+                "y": 110
+            },
+            "taille": 171,
+            "age": 54,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Kevin",
+            "role": "suspect",
+            "metier": "ingenier",
+            "position": {
+                "x": 80,
+                "y": 120
+            },
+            "taille": 181,
+            "age": 43,
+            "alibi": 1,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "Joao",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 90,
+                "y": 120
+            },
+            "taille": 172,
+            "age": 40,
+            "alibi": 7,
+            "permisArme": "non",
+            "vision": 6
+        },
+        {
+            "name": "Paulo",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 80,
+                "y": 110
+            },
+            "taille": 169,
+            "age": 47,
+            "alibi": 6,
+            "permisArme": "non",
+            "vision": 5
+        },
+        {
+            "name": "Antonio",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 70,
+                "y": 120
+            },
+            "taille": 173,
+            "age": 37,
+            "alibi": 3,
+            "permisArme": "non",
+            "vision": 5
+        },
+        {
+            "name": "Joaquim",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 90,
+                "y": 110
+            },
+            "taille": 183,
+            "age": 22,
+            "alibi": 8,
+            "permisArme": "non",
+            "vision": 5
+        },
+        {
+            "name": "Amelie",
+            "role": "suspect",
+            "metier": "restaurateur",
+            "position": {
+                "x": 20,
+                "y": 60
+            },
+            "taille": 170,
+            "age": 38,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Guy",
+            "role": "suspect",
+            "metier": "restaurateur",
+            "position": {
+                "x": 10,
+                "y": 60
+            },
+            "taille": 190,
+            "age": 52,
+            "alibi": 9,
+            "permisArme": "non",
+            "vision": 7
+        },
+        {
+            "name": "Roger",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 50,
+                "y": 40
+            },
+            "taille": 169,
+            "age": 55,
+            "alibi": 2,
+            "permisArme": "oui",
+            "vision": 7
+        },
+        {
+            "name": "Marcel",
+            "role": "suspect",
+            "metier": "pretre",
+            "position": {
+                "x": 70,
+                "y": 55
+            },
+            "taille": 170,
+            "age": 65,
+            "alibi": 4,
+            "permisArme": "oui",
+            "vision": 7
+        },
+        {
+            "name": "Jacques",
+            "role": "suspect",
+            "metier": "boulanger",
+            "position": {
+                "x": 80,
+                "y": 60
+            },
+            "taille": 170,
+            "age": 65,
+            "alibi": 3,
+            "permisArme": "oui",
+            "vision": 7
+        },
+        {
+            "name": "Nicole",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 20,
+                "y": 50
+            },
+            "taille": 156,
+            "age": 35,
+            "alibi": 1,
+            "permisArme": "oui",
+            "vision": 7
+        },
+        {
+            "name": "Bernard",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 10,
+                "y": 30
+            },
+            "taille": 170,
+            "age": 38,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 7
+        },
+        {
+            "name": "Jacqueline",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 50,
+                "y": 90
+            },
+            "taille": 170,
+            "age": 63,
+            "alibi": 5,
+            "permisArme": "non",
+            "vision": 2
+        },
+        {
+            "name": "Gerard",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 50,
+                "y": 100
+            },
+            "taille": 172,
+            "age": 43,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 2
+        },
+        {
+            "name": "Cristiane",
+            "role": "suspect",
+            "metier": "client",
+            "position": {
+                "x": 50,
+                "y": 92
+            },
+            "taille": 153,
+            "age": 36,
+            "alibi": 3,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Réné",
+            "role": "suspect",
+            "metier": "client",
+            "position": {
+                "x": 50,
+                "y": 88
+            },
+            "taille": 177,
+            "age": 39,
+            "alibi": 4,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Robert",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 20,
+                "y": 40
+            },
+            "taille": 177,
+            "age": 26,
+            "alibi": 7,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Colette",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 50,
+                "y": 30
+            },
+            "taille": 167,
+            "age": 82,
+            "alibi": 2,
+            "permisArme": "non",
+            "vision": 2
+        },
+        {
+            "name": "Josette",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 50,
+                "y": 20
+            },
+            "taille": 163,
+            "age": 91,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 2
+        },
+        {
+            "name": "Maurice",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 50,
+                "y": 17
+            },
+            "taille": 170,
+            "age": 92,
+            "alibi": 9,
+            "permisArme": "oui",
+            "vision": 2
+        },
+        {
+            "name": "Georges",
+            "role": "suspect",
+            "metier": "retraité",
+            "position": {
+                "x": 25,
+                "y": 20
+            },
+            "taille": 169,
+            "age": 81,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 3
+        },
+        {
+            "name": "Henri",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 70,
+                "y": 70
+            },
+            "taille": 173,
+            "age": 16,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Paul",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 80,
+                "y": 66
+            },
+            "taille": 170,
+            "age": 14,
+            "alibi": 4,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Christian",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 80,
+                "y": 70
+            },
+            "taille": 176,
+            "age": 16,
+            "alibi": 4,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Yves",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 80,
+                "y": 72
+            },
+            "taille": 170,
+            "age": 15,
+            "alibi": 4,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Simone",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 80,
+                "y": 68
+            },
+            "taille": 173,
+            "age": 15,
+            "alibi": 4,
+            "permisArme": "non",
+            "vision": 8
+        },
+        {
+            "name": "Ginette",
+            "role": "suspect",
+            "metier": "écolier",
+            "position": {
+                "x": 80,
+                "y": 20
+            },
+            "taille": 149,
+            "age": 84,
+            "alibi": 1,
+            "permisArme": "non",
+            "vision": 3
+        },
+        {
+            "name": "Gilbert",
+            "role": "suspect",
+            "metier": "ouvrier",
+            "position": {
+                "x": 80,
+                "y": 30
+            },
+            "taille": 170,
+            "age": 84,
+            "alibi": 1,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "Serge",
+            "role": "suspect",
+            "metier": "commerçant",
+            "position": {
+                "x": 60,
+                "y": 50
+            },
+            "taille": 170,
+            "age": 54,
+            "alibi": 1,
+            "permisArme": "oui",
+            "vision": 8
+        },
+        {
+            "name": "Suzanne",
+            "role": "suspect",
+            "metier": "docteur",
+            "position": {
+                "x": 55,
+                "y": 70
+            },
+            "taille": 170,
+            "age": 53,
+            "alibi": 1,
+            "permisArme": "oui",
+            "vision": 8
+        }
+    ],
+    "links": [
+        {
+            "source": "Annie",
+            "target": "Muriel",
+            "relation": "travail"
+        },
+        {
+            "source": "Annie",
+            "target": "Jean-Claude",
+            "relation": "travail"
+        },
+        {
+            "source": "Annie",
+            "target": "Marie",
+            "relation": "voisin"
+        },
+        {
+            "source": "Annie",
+            "target": "Marie",
+            "relation": "voisin"
+        },
+        {
+            "source": "Kevin",
+            "target": "Joao",
+            "relation": "travail"
+        },
+        {
+            "source": "Kevin",
+            "target": "Paulo",
+            "relation": "travail"
+        },
+        {
+            "source": "Kevin",
+            "target": "Antonio",
+            "relation": "travail"
+        },
+        {
+            "source": "Kevin",
+            "target": "Joaquim",
+            "relation": "travail"
+        },
+        {
+            "source": "Kevin",
+            "target": "Roger",
+            "relation": "travail"
+        },
+        {
+            "source": "Guy",
+            "target": "Amelie",
+            "relation": "travail"
+        }
+    ],
+    "family-links": [
+        {
+            "source": "John",
+            "target": "Muriel",
+            "relation": "ex"
+        },
+        {
+            "source": "Annie",
+            "target": "Kevin",
+            "relation": "ex"
+        },
+        {
+            "source": "Annie",
+            "target": "John",
+            "relation": "conjoint"
+        },
+        {
+            "source": "Nicole",
+            "target": "Bernard",
+            "relation": "conjoint"
+        },
+        {
+            "source": "Annie",
+            "target": "Amelie",
+            "relation": "soeur"
+        },
+        {
+            "source": "Amelie",
+            "target": "Kevin",
+            "relation": "conjoint"
+        },
+        {
+            "source": "Marie",
+            "target": "Carlos",
+            "relation": "conjoint"
+        },
+        {
+            "source": "John",
+            "target": "Muriel",
+            "relation": "ex"
+        },
+        {
+            "source": "Guy",
+            "target": "Muriel",
+            "relation": "conjoint"
+        },
+        {
+            "source": "Pierre",
+            "target": "John",
+            "relation": "enfant"
+        },
+        {
+            "source": "Pierre",
+            "target": "Muriel",
+            "relation": "enfant"
+        }
+    ]
+}

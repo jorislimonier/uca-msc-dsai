@@ -1,0 +1,16 @@
+\babel@toc {british}{}
+\contentsline {section}{\numberline {1}Exercise 1}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}First part - Question (a)}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}First part - Question (b)}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Second part - Question (a)}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Second part - Question (b)}{4}{subsection.1.4}%
+\contentsline {section}{\numberline {2}Exercise 2}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Question (a)}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Question (b)}{6}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Exercise 3: Principal Component Analysis}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}First part - Question (a)}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}First part - Question (b)}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Second part - Question (a)}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Second part - Question (b)}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Second part - Question (c)}{9}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Second part - Question (d)}{9}{subsection.3.6}%

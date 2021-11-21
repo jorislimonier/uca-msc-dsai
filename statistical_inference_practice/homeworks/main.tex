@@ -1,0 +1,476 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\thetahat}{\hat\theta}
+\newcommand{\ie}{\textit{i.e. }}
+
+\title{Statistical inference practice}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Homework for October 8, 2021}
+\subsection{Chapter 6 - Exercise 2}
+
+Let \(X_1, \ldots, X_n\) be i.i.d. random variables with distribution \(\mathcal{U}(0, \theta)\). \\
+Let \(\hat\theta_n = \max(X_1, \ldots, X_n)\).
+
+\paragraph{What is the bias of \(\hat\theta_n\) ?\\}
+\(\hat\theta_n\) is unbiased if \(\E[\hat\theta_n] = \theta\). \\
+We compute \(F_{\thetahat_n}\), the CDF of \(\hat\theta_n\):
+\begin{align*}
+    F_{\thetahat_n}(x)
+     & = \P(\thetahat \leq x)                                                       \\
+     & = \P(X_1 \leq x, \ldots, X_n \leq x)                                         \\
+     & = \P(X_1 \leq x) \ldots \P(X_n \leq x) & \textit{(independence)}             \\
+     & = \left[\P(X_1 \leq x)\right]^n        & \textit{(identity of distribution)} \\
+     & = \begin{cases}
+        0                                 & x < 0                \\
+        \left[ \frac{x}{\theta} \right]^n & 0 \leq x \leq \theta \\
+        1                                 & x > \theta
+    \end{cases}
+\end{align*}
+Then \(f_{\thetahat_n}\), the PDF of \(\thetahat_n\) is given by:
+\begin{align*}
+    f_{\thetahat_n}(x)
+     & = \frac{d}{dx} F_{\thetahat_n}(x) \\
+     & =
+    \begin{cases}
+        \frac{n x^{n-1}}{\theta^n} & x \in [0, \theta] \\
+        0                          & \text{otherwise}
+    \end{cases}
+\end{align*}
+Hence the expected value is given by:
+\begin{align*}
+    \E[\hat\theta_n]
+     & = \int_{-\infty}^{+\infty} t f(t) dt                         \\
+     & = \frac{n}{\theta^n} \int_{0}^{\theta} t^n dt                \\
+     & = \frac{n}{\theta^n (n+1)} \left[t^{n+1}\right]_{0}^{\theta} \\
+     & = \frac{n}{\theta^n (n+1)} \left[ \theta^{n+1} - 0 \right]   \\
+     & = \frac{n \theta}{n+1}                                       \\
+\end{align*}
+Since \(\E[\hat\theta_n] = n \theta \neq \theta\), we have that \(\thetahat_n\) is not an unbiased estimator for \(\theta\). However, \(\E[\thetahat_n] \xrightarrow[n \to \infty]{} \theta\), therefore \(\thetahat_n\) is asymptotically unbiased.
+
+
+\paragraph{What is \(SE\), the standard error of \(\hat\theta_n\) ?\\}
+
+\begin{align}
+    SE
+    \nonumber
+     & = SE(\thetahat_n)                              \\
+    \nonumber
+     & = \sqrt{Var(\thetahat_n)}                      \\
+    \label{eqn: ex2 SE}
+     & = \sqrt{\E[\thetahat_n^2] - \E[\thetahat_n]^2}
+\end{align}
+We need to find \(\E[\thetahat_n^2]\).
+\begin{align*}
+    \E[\thetahat_n^2]
+     & := \int_{-\infty}^{+\infty} t^2 f(t) dt                      \\
+     & = \frac{n}{\theta^n} \int_{0}^{\theta} t^{n+1} dt            \\
+     & = \frac{n}{\theta^n (n+2)} \left[t^{n+2}\right]_{0}^{\theta} \\
+     & = \frac{n}{\theta^n (n+2)} \left[\theta^{n+2} - 0\right]     \\
+     & = \frac{n \theta^2}{n+2}                                     \\
+\end{align*}
+
+Then \eqref{eqn: ex2 SE} becomes:
+\begin{align*}
+    SE
+     & = \sqrt{\E[\thetahat_n^2] - \E[\thetahat_n]^2}                                                                   \\
+     & = \sqrt{\frac{n \theta^2}{n+2} - \left[ \frac{n \theta}{n+1} \right]^2}                                          \\
+     & = \sqrt{n \theta^2 \left[ \frac{1}{n+2} - \frac{n}{(n+1)^2} \right]}                                             \\
+     & = \sqrt{n \theta^2 \left[ \frac{1}{n+2} - \frac{n}{n^2 + 2n + 1} \right]}                                        \\
+     & = \sqrt{n \theta^2 \left[ \frac{n^2 + 2n + 1}{(n+2)(n^2 + 2n + 1)} - \frac{n(n+2)}{(n^2 + 2n + 1)(n+2)} \right]} \\
+     & = \sqrt{n \theta^2 \frac{n^2 + 2n + 1 - n(n+2)}{(n^2 + 2n + 1)(n+2)} }                                           \\
+     & = \sqrt{\frac{n \theta^2}{(n^2 + 2n + 1)(n+2)} }                                                                 \\
+     & = \frac{\theta}{n+1} \sqrt{\frac{n}{n+2}}                                                                        \\
+\end{align*}
+
+
+\paragraph{What is \(MSE\), the Mean-Square Error of \(\hat\theta_n\) ?\\}
+The MSE is given by:
+\begin{align*}
+    MSE
+     & := bias^2 (\thetahat_n) + Var(\thetahat_n)                                          \\
+     & = \left[ \E[\thetahat] - \theta \right]^2 + \frac{n \theta^2}{(n+1)^2 (n+2)}        \\
+     & = \left[ \frac{n \theta}{n+1} - \theta \right]^2 + \frac{n \theta^2}{(n+1)^2 (n+2)} \\
+     & = \left[ \frac{-\theta}{n+1} \right]^2 + \frac{n \theta^2}{(n+1)^2 (n+2)}           \\
+     & = \frac{\theta^2}{(n+1)^2} \left[ 1 + \frac{n}{n+2} \right]                         \\
+     & = \frac{\theta^2}{(n+1)^2} \frac{2n+2}{n+2}                                         \\
+     & = \frac{2 \theta^2}{(n+1)(n+2)}                                                     \\
+\end{align*}
+
+
+\subsection{Chapter 6 - Exercise 3}
+
+Let \(X_1, \ldots, X_n\) be i.i.d. random variables with distribution \(\mathcal{U}(0, \theta)\). \\
+Let \(\hat\theta_n := 2 \bar{X_n}\).
+
+\paragraph{What is the bias of \(\hat\theta_n\) ?\\}
+\(\hat\theta_n\) is unbiased if \(\E[\hat\theta_n] = \theta\). \\
+We compute \(\E[\thetahat_n]\):
+\begin{align*}
+    \E[\thetahat_n]
+     & = \E \left[2\bar{X}_n \right]                                       \\
+     & = \E \left[2\frac{X_1 + \ldots + X_n}{n} \right]                    \\
+     & = \frac{2}{n} \E \left[X_1 + \ldots + X_n \right]                   \\
+     & = \frac{2}{n} \E \left[X_1 \right] + \ldots + \E \left[ X_n \right] \\
+     & = 2\E \left[X_1 \right]                                             \\
+     & = \theta                                                            \\
+\end{align*}
+Therefore \(\thetahat\) is unbiased.
+
+
+\paragraph{What is \(SE\), the standard error of \(\hat\theta_n\) ?\\}
+
+\begin{align*}
+    SE
+     & = SE(\thetahat_n)                                                                                                         \\
+     & = \sqrt{Var(\thetahat_n)}                                                                                                 \\
+     & = \sqrt{Var(2\bar{X}_n)}                                                                                                  \\
+     & = \frac{2}{n} \sqrt{Var \left( X_1 + \ldots + X_n \right)}                                                                \\
+     & = \frac{2}{n} \sqrt{Var \left( X_1 \right) + \ldots +  Var \left( X_n \right)} & \textit{(The } X_i \textit{ are i.i.d.)} \\
+     & = \frac{2}{n} \sqrt{\frac{n\theta^2}{12}}                                                                                 \\
+     & = \frac{2 \theta}{2\sqrt{3n}}                                                                                             \\
+     & = \frac{\theta}{\sqrt{3n}}                                                                                                \\
+\end{align*}
+
+
+
+\paragraph{What is \(MSE\), the Mean-Square Error of \(\hat\theta_n\) ?\\}
+The MSE is given by:
+\begin{align*}
+    MSE
+     & := bias^2 (\thetahat_n) + Var(\thetahat_n)                                        \\
+     & = \underbrace{\left[ \E[\thetahat] - \theta \right]^2}_{=0} + \frac{\theta^2}{3n} \\
+     & = \frac{\theta^2}{3n}                                                             \\
+\end{align*}
+
+
+\section{Homework for October 20, 2021}
+\subsection{Chapter 7 - Exercise 2}
+
+Let $X_{1}, \ldots, X_{n} \sim \operatorname{Bernoulli}(p)$ and let $Y_{1}, \ldots, Y_{m} \sim \operatorname{Bernoulli}(q)$.
+\begin{itemize}
+    \item Find the plug-in estimator and estimated standard error for $p$.
+    \item Find an approximate 90 percent confidence interval for $p$.
+    \item Find the plug-in estimator and estimated standard error for $p-q$.
+    \item Find an approximate 90 percent confidence interval for $p-q$.
+\end{itemize}
+
+
+\paragraph{Find the plug-in estimator and estimated standard error for $p$.\\}
+Let \(\phi\) be the plug-in estimator for \(p\), it is given by:
+\[
+    \phi = \E[X_i], \ i = 1, \ldots, n
+\]
+and
+\[
+    \hat \phi = \E[Z], \text{ with } \P (Z = X_i \mid X_1, \ldots, X_n) = \frac{1}{n}
+\]
+\begin{align*}
+    \hat \phi
+     & = \E[Z]                        \\
+     & = \sum_{i=1}^n X_i \P(Z = X_i) \\
+     & = \sum_{i=1}^n \frac{1}{n} X_i \\
+     & = \overline X                  \\
+\end{align*}
+and the standard error \(se\) is given by:
+\begin{align*}
+    se (\phi)
+     & = \sqrt{Var(\phi)}                   \\                                                                                                                              \\
+     & = \sqrt{Var\left(\overline X\right)} \\                                                                                                                              \\
+     & = \sqrt{\frac{p(1-p)}{n}}            \\                                                                                                                              \\
+\end{align*}
+
+
+\paragraph{Find an approximate 90 percent confidence interval for $p$.\\}
+We know that 90\% (\ie \(\alpha = 0.05\)) confidence intervals are of the following form:
+\begin{align*}
+     & \overline{X} \pm z_{\alpha/2} se(p_{pin})                                                      \\
+     & = \overline{X} \pm 1.645 \sqrt{\frac{1}{n} \left[ \sum_{i=1}^n X_i^2 \right] - \overline{X}^2} \\
+\end{align*}
+
+
+\paragraph{Find the plug-in estimator and estimated standard error for $p-q$.\\}
+Let \(\Pi\) be the plug-in estimator for \(p-q\) and \(\chi \in \left\{ X_1, \ldots, X_n, Y_1, \ldots, Y_m\right\}\)
+\begin{align*}
+    \P(\Pi = \chi)
+     & = \frac{1}{\#\left\{ X_1, \ldots, X_n\right\} + \#\left\{ Y_1, \ldots, Y_m\right\}} \\
+     & = \frac{1}{m+n}
+\end{align*}
+\begin{align*}
+    se (\Pi)
+     & = \sqrt{Var(\Pi)}                                                                                                                           \\
+     & = \sqrt{\E[\Pi^2] - \E[\Pi]^2}                                                                                                              \\
+     & = \sqrt{\left[\sum_{i=1}^n \chi^2 \P \left\{ \Pi = \chi \right\}\right] - \left[\sum_{i=1}^n \chi \P \left\{ \Pi = \chi \right\} \right]^2} \\
+     & = \sqrt{\left[\sum_{i=1}^n \chi^2 \frac{1}{m+n}\right] - \left[\sum_{i=1}^n \chi \frac{1}{m+n} \right]^2}                                   \\
+     & = \sqrt{\frac{1}{m+n}\left[\sum_{i=1}^n \chi^2\right] - \overline{\chi}^2}                                                                  \\
+\end{align*}
+
+\paragraph{Find an approximate 90 percent confidence interval for $p-q$.\\}
+We know that 90\% (\ie \(\alpha = 0.05\)) confidence intervals are of the following form:
+\begin{align*}
+     & \overline{\chi} \pm z_{\alpha/2} se(p_{pin})                                                         \\
+     & = \overline{\chi} \pm 1.645 \sqrt{\frac{1}{m+n}\left[\sum_{i=1}^n \chi^2\right] - \overline{\chi}^2} \\
+\end{align*}
+
+\subsection{Chapter 7 - Exercise 5}
+\paragraph{Let $x$ and $y$ be two distinct points. Find $\operatorname{Cov}\left(\hat{F}_{n}(x), \hat{F}_{n}(y)\right)$.}
+\subsection{Chapter 7 - Exercise 6}
+
+\section{Homework for October 29}
+\subsection{Custom exercise}
+Let \(N=50\), \(Y_1, \ldots, Y_n\) are i.i.d. \(\mathcal{N}(0,1)\).
+Let \(X_i = e^{Y_i}\).\\
+Let \(\theta = \operatorname{skewness}(X) = (e+2)\sqrt{e-1}\) (\(X\) is log normal distributed) \\
+\paragraph{Compute the 3 types of normal confidence intervals for \(\theta\).}
+\paragraph{Repeat the experiment to check how often \(\theta\) belongs to the confidence intervals.}
+
+
+\section{Homework for November 5, 2021}
+\subsection{Chapter 9 - Exercise 1}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim \operatorname{Gamma}(\alpha, \beta)$. Find the method of moments estimator for $\alpha$ and $\beta$.}
+From tables, we have that:
+\begin{equation*}
+    \begin{cases}
+        \E [X_i] = \frac{\alpha}{\beta} \\
+        Var (X_i) = \frac{\alpha}{\beta^2}
+    \end{cases}
+\end{equation*}
+Equating with empirical expected value and empirical variance respectively.
+\begin{align*}
+             &
+    \begin{cases}
+        \frac{1}{n}\sum_{i=1}^n X_i = \E [X_i] \\
+        \frac{1}{n}\sum_{i=1}^n (\bar X - X_i)^2 = Var (X_i)
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \frac{1}{n}\sum_{i=1}^n X_i = \frac{\hat\alpha}{\hat\beta} \\
+        \frac{1}{n}\sum_{i=1}^n (\bar X - X_i)^2 = \frac{\hat\alpha}{\hat\beta^2}
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \hat\alpha = \frac{\hat\beta}{n}\sum_{i=1}^n X_i \\
+        \frac{1}{n}\sum_{i=1}^n (\bar X - X_i)^2 = \frac{\hat\alpha}{\hat\beta^2}
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \hat\alpha = \frac{\hat\beta}{n}\sum_{i=1}^n X_i \\
+        \frac{1}{n}\sum_{i=1}^n (\bar X - X_i)^2 = \frac{1}{\hat\beta^2} \frac{\hat\beta}{n}\sum_{i=1}^n X_i
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \hat\alpha = \frac{\hat\beta}{n}\sum_{i=1}^n X_i \\
+        \frac{1}{n}\sum_{i=1}^n (\bar X - X_i)^2 = \frac{1}{\hat\beta n}\sum_{i=1}^n X_i
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \hat\alpha = \frac{\beta}{n}\sum_{i=1}^n X_i \\
+        \hat\beta = \frac{\sum_{i=1}^n X_i}{\sum_{i=1}^n (\bar X - X_i)^2}
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \hat\alpha = \frac{1}{n}\frac{\left[\sum_{i=1}^n X_i\right]^2}{\sum_{i=1}^n (\bar X - X_i)^2} \\
+        \hat\beta = \frac{\sum_{i=1}^n X_i}{\sum_{i=1}^n (\bar X - X_i)^2}
+    \end{cases} \\
+\end{align*}
+
+
+\subsection{Chapter 9 - Exercise 2}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim$ Uniform $(a, b)$ where $a$ and $b$ are unknown parameters and $a<b$.}
+\begin{itemize}
+    \item (a) Find the method of moments estimators for $a$ and $b$.
+    \item (b) Find the MLE $\hat{a}$ and $\hat{b}$.
+    \item (c) Let $\tau=\int x d F(x)$. Find the MLE of $\tau$.
+    \item (d) Let $\hat{\tau}$ be the MLE of $\tau$. Let $\widetilde{\tau}$ be the nonparametric plug-in estimator of $\tau=\int x d F(x)$. Suppose that $a=1, b=3$, and $n=10$. Find the MSE of $\hat{\tau}$ by simulation. Find the MSE of $\widetilde{\tau}$ analytically. Compare.
+\end{itemize}
+
+\paragraph{(a) Find the method of moments estimators for $a$ and $b$.\\}
+We compute the first order of moments:
+\begin{align}
+    \nonumber
+    \E[X_1]
+     & = \int_a^b x f(x) dx                            \\
+    \nonumber
+     & = \frac{1}{b-a} \int_a^b x dx                   \\
+    \nonumber
+     & = \frac{1}{b-a} \left[ \frac{x^2}{2}\right]_a^b \\
+    \nonumber
+     & = \frac{1}{b-a} \frac{b^2 - a^2}{2}             \\
+    \label{ch9 ex2: first moment}
+     & = \frac{a + b}{2}
+\end{align}
+Now compute the second order of moments:
+\begin{align}
+    \nonumber
+    \E[X_1^2]
+     & = \int_{a}^{b} x^2 f (x) dx                                                          \\
+    \nonumber
+     & = \int_{a}^{b} x^2 \frac{1}{b-a} dx                                                  \\
+    \nonumber
+     & = \frac{1}{b-a} \left[ \frac{x^3}{3} \right]_{a}^{b}                                 \\
+    \nonumber
+     & = \frac{1}{b-a} \left[ \frac{b^3 - a^3}{3} \right]                                   \\
+    \nonumber
+     & = \frac{1}{b-a} \left[\frac{\left(b - a\right)\left(a^2 + ab + b^2\right)}{3}\right] \\
+    \label{ch9 ex2: second moment}
+     & = \frac{a^2 + ab + b^2}{3}
+\end{align}
+Now on the one hand we equate \eqref{ch9 ex2: first moment} with \(\hat{\mu_1} := \frac{1}{n} \sum_{i=1}^n X_i\). On the other hand, we equate \eqref{ch9 ex2: second moment} with \(\hat{\mu_2} := \frac{1}{n}\sum_{i=1}^n X_i^2\). Therefore we get a system of equations:
+\begin{align}
+    \nonumber
+     & \begin{cases}
+        \hat\mu_1 = \frac{a + b}{2} \\
+        \hat\mu_2 = \frac{a^2 + ab + b^2}{3}
+    \end{cases} \\
+    \nonumber
+     & \begin{cases}
+        b = 2\hat\mu_1 - a \\
+        3\hat\mu_2 = a^2 + a\left[2\hat\mu_1 - a\right] + \left[2\hat\mu_1 - a\right]^2
+    \end{cases} \\
+    \nonumber
+     & \begin{cases}
+        b = 2\hat\mu_1 - a \\
+        3\hat\mu_2 = a^2 + 2\hat\mu_1 a - a^2 + 4\hat\mu_1^2 - 4\hat\mu_1 a + a^2
+    \end{cases} \\
+    \label{ch9 ex2: system solve a}
+     & \begin{cases}
+        b = 2\hat\mu_1 - a \\
+        a^2 - 2\hat\mu_1 a + (4\hat\mu_1^2 - 3\hat\mu_2) = 0
+    \end{cases}
+\end{align}
+Then, the second equation of \eqref{ch9 ex2: system solve a} yields:
+\begin{align*}
+    a_1
+     & = \frac{2\hat\mu_1 - \sqrt{(2\hat\mu_1)^2 - 4\left(4\hat\mu_1^2 - 3\hat\mu_2\right)}}{2} \\
+     & = \hat\mu_1 - \sqrt{\hat\mu_1^2 - 4\hat\mu_1^2 + 3\hat\mu_2}                             \\
+     & = \hat\mu_1 - \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)}                               \\
+\end{align*}
+and
+\begin{align*}
+    a_1
+     & = \frac{2\hat\mu_1 + \sqrt{(2\hat\mu_1)^2 - 4\left(4\hat\mu_1^2 - 3\hat\mu_2\right)}}{2} \\
+     & = \hat\mu_1 + \sqrt{\hat\mu_1^2 - 4\hat\mu_1^2 + 3\hat\mu_2}                             \\
+     & = \hat\mu_1 + \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)}                               \\
+\end{align*}
+Let \(b_1, b_2\) be associated with \(a_1, a_2\) respectively. Then the first equation of \eqref{ch9 ex2: system solve a} becomes:
+\begin{align*}
+     & \begin{cases}
+        b_1 := 2\hat\mu_1 - \left(\hat\mu_1 - \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)}\right) \\
+        b_2 := 2\hat\mu_1 - \left(\hat\mu_1 + \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)}\right)
+    \end{cases} \\
+     & \begin{cases}
+        b_1 := \hat\mu_1 + \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)} \\
+        b_2 := \hat\mu_1 - \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)} \\
+    \end{cases} \\
+\end{align*}
+Since \(b_2 > a_2\), which is impossible by the exercise, we have that the method of moment estimators are:
+\[
+    \begin{cases}
+        a = \hat\mu_1 - \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)} \\
+        b = \hat\mu_1 + \sqrt{3\left(\hat\mu_2 - \hat\mu_1^2\right)}
+    \end{cases}
+\]
+
+
+\paragraph{(b) Find the MLE $\hat{a}$ and $\hat{b}$.\\}
+Let \(\theta := \left(a,b\right) \in \Theta \subseteq \R^2\). We define \(\L\) the likelihood function as follows:
+\begin{align*}
+    \L (\theta)
+     & = f(X_1, \ldots, X_n \mid \theta)  \\
+     & = \prod_{i=1}^n f(X_i \mid \theta) \\
+\end{align*}
+Now we want to find \(\hat\theta := (\hat a, \hat b)\) the argument maximizing the likelihood function
+\begin{align*}
+    \hat\theta
+     & := (\hat a, \hat b)                \\
+     & := \arg \max_\Theta \L(\theta)     \\
+     & = \arg \max_\Theta \log \L(\theta) \\
+\end{align*}
+therefore we have
+\begin{align*}
+    \log \L(\theta)
+     & = \log \prod_{i=1}^n f(X_i \mid \theta) \\
+     & = \sum_{i=1}^n \log f(X_i \mid (a,b))   \\
+     & = \sum_{i=1}^n \log \frac{1}{b-a}       \\
+     & = -n \log (b-a)                         \\
+\end{align*}
+hence
+\begin{equation*}
+    \begin{cases}
+        \frac{\partial}{\partial a} \log \L (\theta) = \frac{n}{b-a}  \\
+        \frac{\partial}{\partial b} \log \L (\theta) = -\frac{n}{b-a} \\
+    \end{cases}
+\end{equation*}
+Now we have that
+\begin{align*}
+             & \begin{cases}
+        \frac{\partial}{\partial a} \log \L (\theta) > 0 \\
+        \frac{\partial}{\partial b} \log \L (\theta) < 0 \\
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \log \L (\theta) \text{ is increasing with respect to } a \\
+        \log \L (\theta) \text{ is decreasing with respect to } b \\
+    \end{cases}            \\
+    \implies &
+    \begin{cases}
+        \hat a = \min \left\{X_1, \ldots, X_n\right\} \\
+        \hat b = \max \left\{X_1, \ldots, X_n\right\} \\
+    \end{cases}            \\
+\end{align*}
+
+
+\paragraph{(c) Let $\tau=\int x d F(x)$. Find the MLE of $\tau$.\\}
+Let \(\theta := \tau \in \Theta \subseteq \R\). We have the following:
+\begin{align*}
+    \tau
+     & = \int x d F(x)               \\
+     & = \int x \frac{d F(x)}{dx} dx \\
+     & = \int x f(x) dx              \\
+     & = \E[X_1]                     \\
+     & = \frac{a + b}{2}             \\
+\end{align*}
+Hence
+\begin{equation*}
+    \hat\tau = \frac{\hat a + \hat b}{2}
+\end{equation*}
+
+
+
+\paragraph{(d) Let $\hat{\tau}$ be the MLE of $\tau$. Let $\widetilde{\tau}$ be the nonparametric plug-in estimator of $\tau=\int x d F(x)$. Suppose that $a=1, b=3$, and $n=10$. Find the MSE of $\hat{\tau}$ by simulation. Find the MSE of $\widetilde{\tau}$ analytically. Compare.\\}
+The MSE is defined by:
+\begin{align*}
+    MSE (\tilde \tau)
+     & := Var(\tilde\tau)   + bias^2 (\tilde \tau)                                          \\
+     & = \E[\tilde\tau^2] - \E[\tilde\tau]^2 + \left[\E[\tilde\tau] - \tilde\tau\right]^2   \\
+     & = \E[\bar X^2] - \E[\bar X]^2 + \underbrace{\left[\E[\bar X] - \bar X\right]^2}_{=0} \\
+     & = \frac{1}{n}\left[\frac{a^2 + ab + b^2}{3} - \left[\frac{a+b}{2}\right]^2\right]    \\
+     & = \frac{1}{n}\left[\frac{a^2 + ab + b^2}{3} - \frac{a^2 + 2ab + b^2}{4}\right]       \\
+     & = \frac{1}{n}\left[\frac{a^2 + ab + b^2 - 3a^2 - 6ab - 3b^2}{12}\right]              \\
+     & = \frac{1}{n}\left[\frac{4a^2 + 4ab + 4b^2 - 3a^2 - 6ab - 3b^2}{12}\right]           \\
+     & = \frac{1}{n}\left[\frac{a^2 -2ab + b^2}{12}\right]                                  \\
+     & = \frac{1}{n}\left[\frac{(a-b)^2}{12}\right]                                         \\
+     & = \frac{(a-b)^2}{12n}                                                                \\
+\end{align*}
+
+
+
+
+\end{document}
