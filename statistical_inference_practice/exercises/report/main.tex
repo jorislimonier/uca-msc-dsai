@@ -470,7 +470,36 @@ The MSE is defined by:
      & = \frac{(a-b)^2}{12n}                                                                \\
 \end{align*}
 
+\section{Preparation for mid-term}
+\subsection{Chapter 9 - Exercises 5}
 
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim$ Poisson $(\lambda)$. Find the method of moments estimator, the maximum likelihood estimator and the Fisher information $I(\lambda)$.}
+
+\subsection{Chapter 9 - Exercises 6}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim N(\theta, 1)$. Define
+$$
+Y_{i}=\left\{\begin{array}{ll}
+1 & \text { if } X_{i}>0 \\
+0 & \text { if } X_{i} \leq 0
+\end{array}\right.
+$$
+Let $\psi=\mathbb{P}\left(Y_{1}=1\right)$.}
+\paragraph{(a) Find the maximum likelihood estimator $\widehat{\psi}$ of $\psi$.}
+\paragraph{(b) Find an approximate 95 percent confidence interval for $\psi$.}
+\paragraph{(c) Define $\widetilde{\psi}=(1 / n) \sum_{i} Y_{i}$. Show that $\widetilde{\psi}$ is a consistent estimator of $\psi$.}
+\paragraph{(d) Compute the asymptotic relative efficiency of $\widetilde{\psi}$ to $\widehat{\psi}$. Hint: Use the delta method to get the standard error of the MLE. Then compute the standard error (i.e. the standard deviation) of $\widetilde{\psi}$.}
+\paragraph{(e) Suppose that the data are not really normal. Show that $\widehat{\psi}$ is not consistent. What, if anything, does $\widehat{\psi}$ converge to?}
+
+\subsection{Chapter 9 - Examples 20}
+\subsection{Chapter 9 - Examples 21}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim N\left(\theta, \sigma^{2}\right)$ where $\sigma^{2}$ is known. The score function is $s(X ; \theta)=(X-\theta) / \sigma^{2}$ and $s^{\prime}(X ; \theta)=-1 / \sigma^{2}$ so that $I_{1}(\theta)=1 / \sigma^{2} .$ The MLE is $\widehat{\theta}_{n}=\bar{X}_{n}$. According to Theorem 9.18, $\bar{X}_{n} \approx N\left(\theta, \sigma^{2} / n\right)$. In this case, the Normal approximation is actually exact.}
+
+\subsection{Chapter 9 - Examples 22}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim \operatorname{Poisson}(\lambda) .$ Then $\widehat{\lambda}_{n}=\bar{X}_{n}$ and some calculations show that $I_{1}(\lambda)=1 / \lambda$, so
+$$
+\widehat{\mathrm{se}}=\frac{1}{\sqrt{n I\left(\widehat{\lambda}_{n}\right)}}=\sqrt{\frac{\widehat{\lambda}_{n}}{n}}
+$$
+Therefore, an approximate $1-\alpha$ confidence interval for $\lambda$ is $\widehat{\lambda}_{n} \pm z_{\alpha / 2} \sqrt{\widehat{\lambda}_{n} / n}$.}
 
 
 \end{document}
