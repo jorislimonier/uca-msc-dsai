@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}Homework for October 7th 2021}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Exercise}{2}{subsection.1.1}%
-\contentsline {paragraph}{Is \(\hat \theta _n\) an unbiased estimator for \(\theta \) ?\\}{2}{section*.2}%
-\contentsline {paragraph}{If not, determine an unbiased one which is a funtion of \(\qopname \relax m{max}(X_1, \ldots , X_n)\)}{3}{section*.3}%
