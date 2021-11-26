@@ -473,17 +473,33 @@ The MSE is defined by:
 \section{Preparation for mid-term}
 \subsection{Chapter 9 - Exercises 5}
 
-\paragraph{Let $X_{1}, \ldots, X_{n} \sim$ Poisson $(\lambda)$. Find the method of moments estimator, the maximum likelihood estimator and the Fisher information $I(\lambda)$.}
+\paragraph{Let $X_{1}, \ldots, X_{n} \sim$ Poisson $(\lambda)$. Find the method of moments estimator, the maximum likelihood estimator and the Fisher information $I(\lambda)$.\\}
+
+We know that the first moment for a Poisson distribution $\mu_1 = \lambda$. We want to evaluate \(\hat\theta := \lambda\).
+We set \(\mu_1 = \bar{X}\), which gives:
+\begin{align*}
+     & \mu_1 = \bar{X}
+    \implies
+    \hat \theta = \bar{X}
+\end{align*}
+Now we want to find the maximum likelihood estimator.
+\begin{align*}
+    \L(\theta)
+     & = f(X_1, \ldots, X_n \mid \theta) \\
+     & = \prod_{i=1}^n f(X_i\mid \theta) \\
+     & = \prod_{i=1}^n \frac{\lambda^k e^{-\lambda}}{k!} \\
+\end{align*}
+[NOT FINISHED]
 
 \subsection{Chapter 9 - Exercises 6}
 \paragraph{Let $X_{1}, \ldots, X_{n} \sim N(\theta, 1)$. Define
-$$
-Y_{i}=\left\{\begin{array}{ll}
-1 & \text { if } X_{i}>0 \\
-0 & \text { if } X_{i} \leq 0
-\end{array}\right.
-$$
-Let $\psi=\mathbb{P}\left(Y_{1}=1\right)$.}
+    $$
+        Y_{i}=\left\{\begin{array}{ll}
+            1 & \text { if } X_{i}>0      \\
+            0 & \text { if } X_{i} \leq 0
+        \end{array}\right.
+    $$
+    Let $\psi=\mathbb{P}\left(Y_{1}=1\right)$.}
 \paragraph{(a) Find the maximum likelihood estimator $\widehat{\psi}$ of $\psi$.}
 \paragraph{(b) Find an approximate 95 percent confidence interval for $\psi$.}
 \paragraph{(c) Define $\widetilde{\psi}=(1 / n) \sum_{i} Y_{i}$. Show that $\widetilde{\psi}$ is a consistent estimator of $\psi$.}
@@ -496,10 +512,10 @@ Let $\psi=\mathbb{P}\left(Y_{1}=1\right)$.}
 
 \subsection{Chapter 9 - Examples 22}
 \paragraph{Let $X_{1}, \ldots, X_{n} \sim \operatorname{Poisson}(\lambda) .$ Then $\widehat{\lambda}_{n}=\bar{X}_{n}$ and some calculations show that $I_{1}(\lambda)=1 / \lambda$, so
-$$
-\widehat{\mathrm{se}}=\frac{1}{\sqrt{n I\left(\widehat{\lambda}_{n}\right)}}=\sqrt{\frac{\widehat{\lambda}_{n}}{n}}
-$$
-Therefore, an approximate $1-\alpha$ confidence interval for $\lambda$ is $\widehat{\lambda}_{n} \pm z_{\alpha / 2} \sqrt{\widehat{\lambda}_{n} / n}$.}
+    $$
+        \widehat{\mathrm{se}}=\frac{1}{\sqrt{n I\left(\widehat{\lambda}_{n}\right)}}=\sqrt{\frac{\widehat{\lambda}_{n}}{n}}
+    $$
+    Therefore, an approximate $1-\alpha$ confidence interval for $\lambda$ is $\widehat{\lambda}_{n} \pm z_{\alpha / 2} \sqrt{\widehat{\lambda}_{n} / n}$.}
 
 
 \end{document}
