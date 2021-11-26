@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+
+% \pagenumbering{roman}
+\begin{document}
+
+\newgeometry{width=150mm,top=25mm,bottom=25mm}
+
+% Inserting title page
+\import{./}{title}
+
+\tableofcontents
+
+\restoregeometry
+
+
+\section{Exercise 1}
+\subsection{Question (a)}
+\paragraph{Unbiasedness}
+First, we prove that \(\hat{F}_N (u)\) is unbiased, that is \(\E \left[ \hat{F}_N (u) \right] = F_N(u)\).
+\begin{align*}
+    \E \left[ \hat{F}_N (u) \right]
+     & = \E \left[ \frac{1}{N} \sum_{i=1}^N \1_{]-\infty, u]} (X_i) \right]                                            \\
+     &                                                                      & \textit{linearity of the expected value} \\
+     & = \frac{1}{N} \sum_{i=1}^N \E \left[\1_{]-\infty, u]} (X_i) \right]                                             \\
+     & = \frac{1}{N} \sum_{i=1}^N \P (X_i \leq u)                                                                      \\
+     &                                                                      & X_i \textit{ are i.i.d.}                 \\
+     & = \frac{1}{N} N \P (X_1 \leq u)                                                                                 \\
+     & = \P (X_1 \leq u)                                                                                               \\
+     & = F (u)                                                                                                         \\
+\end{align*}
+\paragraph{Consistency}
+Consistency of \(\hat{F}_N (u)\) comes from the law of large numbers: the empirical mean converges in probability for the true mean.
+
+\subsection{Question (b)}
+Let \(p_{\bar{u}} := \P(X_i \geq \bar{u})\). We have:
+\begin{align*}
+    p_{\bar{u}}
+     & := \P(X_i \geq \bar{u})                                                 \\
+     & = 1 - \P(X_i \leq \bar{u}) + \P(X_i = \bar{u})                          \\[-.3cm]
+     &                                                & F \textit{ continuous} \\
+     & = 1 - \P(X_i \leq \bar{u})                                              \\
+     & = 1 - F(\bar{u})                                                        \\
+\end{align*}
+Now we plug in our estimator for \(F (\bar{u})\):
+\[
+    \hat{p}_{\bar{u}} = 1 - \hat{F}_N (\bar u)
+\]
+
+\subsection{Question (c)}
+Let \(\alpha = 0.025\), therefore \(z_{1 - \alpha/2} \approx 1.96\).\\
+Let
+\[
+    \mu_{p_{\bar u}} := \frac{1}{N} \sum_{i=1}^N \hat{p}_{\bar{u}}
+\]
+and
+\[
+    \sigma_{p_{\bar u}} := \sqrt{\sum_{i=1}^N \left(\hat F_N (\bar{u}) - \mu_{p_{\bar u}}\right)^2}
+\]
+Then by the CLT, we have that:
+\begin{align*}
+    \P \left( z_{\alpha/2} < \frac{\hat p_{\bar u} - \mu_{p_{\bar u}}}{\sigma_{p_{\bar u}} / \sqrt{n-1}} < z_{1 - \alpha/2} \right) \approx 1 - \alpha
+\end{align*}
+
+\subsection{Question (d)}
+\begin{enumerate}
+    \item Let \(nb\_boot\) be the number of bootstrap replicates you want to perform
+    \item \(store\_boot = [\ ]\)
+    \item for \(b\) in 1, ..., \(nb\_boot\):
+          \begin{enumerate}
+              \item \(s\) := sample \(N\) times with replacement from \(\left\{X_1, \ldots, X_N\right\}\)
+              \item Compute \(\hat{F}_N^* (\bar u)\) on \(s\)
+              \item Compute \(\hat{p}_{\bar{u}}^* = 1 - \hat{F}_N^* (\bar u)\) from the \(\hat{F}_N^* (\bar u)\) that was just computed
+              \item Append \(\hat{p}_{\bar{u}}^*\) to \(store\_boot\)
+          \end{enumerate}
+    \item Define \(\alpha\) as desired.
+    \item Define \(\hat{p}_{\bar{u}, \alpha/2}^*\) as the \(\frac{\alpha}{2}\)-th fractile over \(store\_boot\)
+    \item Define \(\hat{p}_{\bar{u}, 1-\alpha/2}^*\) as the \(\frac{1-\alpha}{2}\)-th fractile over \(store\_boot\)
+    \item Define \(\hat{p}_{\bar{u}} = 1 - \hat{F}_N (\bar u)\).
+    \item The confidence interval is given by
+          \[
+              \left[ 2 \hat{p}_{\bar{u}} - \hat{p}_{\bar{u}, 1-\alpha/2}^* , 2 \hat{p}_{\bar{u}} - \hat{p}_{\bar{u}, \alpha/2}^* \right]
+          \]
+\end{enumerate}
+
+
+\section{Exercise 2}
+\subsection{Question (a)}
+\begin{align*}
+    \E \left[ X_i \right]
+     & = \int_{0}^{+ \infty} x f_\theta (x) dx                                                                      \\
+     & = \int_{0}^{+ \infty} x \theta e^{-\theta x} dx                                                              \\
+     &                                                                                        & \textit{(by parts)} \\
+     & = \left[ -x e^{-\theta x}\right]_{0}^{+\infty} - \int_{0}^{+ \infty} -e^{-\theta x} dx                       \\
+     & = \left[ 0-0 \right] + \frac{1}{-\theta} \left[e^{-\theta x}\right]_{0}^{+ \infty}                           \\
+     & = \frac{1}{-\theta} \left[0 - 1\right]                                                                       \\
+     & = \frac{1}{\theta}                                                                                           \\
+\end{align*}
+Therefore we choose \(\hat\theta_{MM} := 1/\bar{X}\), with \(\bar{X} := \frac{1}{N} \sum_{i=1}^{N}X_i\).
+
+\subsection{Question (b)}
+Recall that the likelihood function is given by:
+\[
+    \L (\theta) := \prod_{i=1}^N f_{\theta} \left( X_i \right)
+\]
+therefore in our case, we have \(\forall x \geq 0\):
+\begin{align*}
+    \L (\theta)
+     & := \prod_{i=1}^N f_{\theta} \left( X_i \right) \\
+     & = \prod_{i=1}^N \theta e^{-\theta X_i}         \\
+\end{align*}
+Now since \(\log : \R_{>0} \to \R\) is an increasing function, maximizing the likelihood or its logarithm are equivalent tasks. We have:
+\begin{align*}
+    \log \L (\theta)
+     & = \log\left[ \prod_{i=1}^N \theta e^{-\theta X_i} \right] \\
+     & = \sum_{i=1}^N \log \left[ \theta e^{-\theta X_i} \right] \\
+     & = \left[N \log \theta\right] - \theta \sum_{i=1}^N X_i    \\
+\end{align*}
+which we differentiate with respect to \(\theta\) and set to 0, in order to find the maximum likelihood estimator:
+\begin{align*}
+             & \left. \frac{\partial}{\partial \theta} \log \L (\theta) \right|_{\theta=\theta_{ML}} = 0                                                  \\
+    \implies & \left. \frac{\partial}{\partial \theta} \left[\left[N \log \theta\right] - \theta \sum_{i=1}^N X_i\right] \right|_{\theta=\theta_{ML}} = 0 \\
+    \implies & \frac{N}{\theta_{ML}} - \sum_{i=1}^N X_i = 0                                                                                               \\
+    \implies & \theta_{ML} = \frac{N}{\sum_{i=1}^N X_i}                                                                                                   \\
+    \implies & \theta_{ML} = 1/\bar{X}                                                                                                                    \\
+\end{align*}
+
+\subsection{Question (c)}
+We know that we have the following:
+\begin{equation}
+    I_N (\theta) = N \cdot I (\theta)
+\end{equation}
+with
+\begin{equation}
+    I(\theta) := -\E \left[ \frac{\partial^2}{\partial \theta^2} \log f_\theta(X) \right]
+\end{equation}
+We compute the components one after the other:
+\begin{align*}
+    \frac{\partial^2}{\partial \theta^2} \log f_\theta(X)
+     & = \frac{\partial}{\partial \theta} \left[(\log \theta) - \theta X \right] \\
+     & = \frac{1}{\theta} - X                                                    \\
+\end{align*}
+therefore:
+\begin{align*}
+    I(\theta)
+     & = -\E \left[ \frac{1}{\theta} - X \right]                                                                                                                    \\
+     & = -\int_0^{+\infty} \left[ \frac{1}{\theta} - x \right] f_{\theta}(x) dx                                                                                     \\
+     & = -\int_0^{+\infty} \left[ \frac{1}{\theta} - x \right] \theta e^{-\theta x} dx                                                                              \\
+     & = -\int_0^{+\infty} \left[ 1 - \theta x \right] e^{-\theta x} dx                                                                                             \\
+     &                                                                                                                                        & \textit{(by parts)} \\
+     & = \left[ (1-\theta x) \frac{-1}{\theta} e^{-\theta x}\right]_{0}^{+\infty}-\int_0^{+\infty} - \theta \frac{-1}{\theta}e^{-\theta x} dx                       \\
+     & = \left[ (x -\frac{1}{\theta}) e^{-\theta x}\right]_{0}^{+\infty}-\int_0^{+\infty} e^{-\theta x} dx                                                          \\
+     & = \left[ 0 - 0 \right] - \frac{-1}{\theta}\left[e^{-\theta x}\right]_0^{+\infty}                                                                                                   \\
+     & = -\frac{1}{\theta}\left[0 - 1\right]                                                                                                   \\
+     & = \frac{1}{\theta}                                                                                                   \\
+\end{align*}
+thus \(I_N (\theta) = \frac{N}{\theta}\).
+\end{document}
