@@ -21,3 +21,5 @@ param_est = np.dot(df.index, df["counts"]) / df["counts"].sum()
 df["poisson_pmf"] = stats.poisson.pmf(df.index, param_est)
 df.loc[11, "poisson_pmf"] = 1 - stats.poisson.cdf(10, param_est)
 df.sum()
+# %%
+df
