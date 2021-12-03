@@ -485,8 +485,8 @@ We set \(\mu_1 = \bar{X}\), which gives:
 Now we want to find the maximum likelihood estimator.
 \begin{align*}
     \L(\theta)
-     & = f(X_1, \ldots, X_n \mid \theta) \\
-     & = \prod_{i=1}^n f(X_i\mid \theta) \\
+     & = f(X_1, \ldots, X_n \mid \theta)                 \\
+     & = \prod_{i=1}^n f(X_i\mid \theta)                 \\
      & = \prod_{i=1}^n \frac{\lambda^k e^{-\lambda}}{k!} \\
 \end{align*}
 [NOT FINISHED]
@@ -516,6 +516,61 @@ Now we want to find the maximum likelihood estimator.
         \widehat{\mathrm{se}}=\frac{1}{\sqrt{n I\left(\widehat{\lambda}_{n}\right)}}=\sqrt{\frac{\widehat{\lambda}_{n}}{n}}
     $$
     Therefore, an approximate $1-\alpha$ confidence interval for $\lambda$ is $\widehat{\lambda}_{n} \pm z_{\alpha / 2} \sqrt{\widehat{\lambda}_{n} / n}$.}
+
+\section{In class exercise December 3, 2021}
+\subsection{Exercise 1}
+\paragraph{Let \(X_1, \ldots, X_N \sim \mathcal{N}(\mu, \sigma^2)\) with \(\mu\) given.}
+\paragraph{i) Compute \(\hat{\sigma}_{ML}\) and estimator \(se(\hat{\sigma}_{ML})\)}
+\begin{align*}
+    \log \L(\sigma^2)
+     & = \sum_{i=1}^N \log f_\sigma (X_i)                                                                                     \\
+     & = \sum_{i=1}^N \left[\log \frac{1}{\sigma \sqrt{2 \pi}}\right] e^{-\frac{1}{2} \left(\frac{X - \mu}{\sigma}\right)^2}  \\
+     & = \left[N \log \frac{1}{\sigma \sqrt{2 \pi}}\right] - \frac{1}{2} \sum_{i=1}^N \left(\frac{X_i - \mu}{\sigma}\right)^2 \\
+     & = - N (\log \sigma \sqrt{2 \pi}) - \frac{1}{2} \sum_{i=1}^N \left(\frac{X_i - \mu}{\sigma}\right)^2                    \\
+     & = - N (\log \sigma  + \log \sqrt{2 \pi}) - \frac{1}{2} \sum_{i=1}^N \left(\frac{X_i - \mu}{\sigma}\right)^2            \\
+\end{align*}
+
+\begin{align*}
+    \frac{\partial}{\partial \sigma} \log \L(\sigma^2)
+     & = \frac{\partial}{\partial \sigma} \left[ - N (\log \sigma  + \log \sqrt{2 \pi}) - \frac{1}{2} \sum_{i=1}^N \left(\frac{X_i - \mu}{\sigma}\right)^2 \right] \\
+     & = - \frac{N}{\sigma} - \frac{1}{2} \sum_{i=1}^n \left(X_i - \mu\right)^2 \frac{\partial}{\partial \sigma} \sigma^{-2}                                       \\
+     & = - \frac{N}{\sigma} - \frac{1}{2} \sum_{i=1}^n \left(X_i - \mu\right)^2 (-2)\sigma^{-3}                                                                    \\
+     & = - \frac{N}{\sigma} +\sum_{i=1}^n \left(X_i - \mu\right)^2 \sigma^{-3}                                                                                     \\
+\end{align*}
+
+\begin{align*}
+             & \frac{\partial}{\partial \hat \sigma_{ML}} \log \L(\hat \sigma_{ML}^2) = 0                    \\
+    \implies & - \frac{N}{\hat \sigma_{ML}} +\sum_{i=1}^n \left(X_i - \mu\right)^2 \hat \sigma_{ML}^{-3} = 0 \\
+    \implies & \hat \sigma_{ML}^{-2} = \frac{N}{\sum_{i=1}^n \left(X_i - \mu\right)^2}                       \\
+    \implies & \hat \sigma_{ML}^{2} = \frac{\sum_{i=1}^n \left(X_i - \mu\right)^2}{N}                        \\
+    \implies & \hat \sigma_{ML} = \sqrt{\frac{\sum_{i=1}^n \left(X_i - \mu\right)^2}{N}}                     \\
+\end{align*}
+
+\begin{align*}
+    se (\hat \sigma_{ML}) & = \frac{1}{I_N (\sigma)}
+\end{align*}
+\begin{align*}
+    \frac{\partial^2}{\partial \sigma^2} \left[ \log \L (\sigma) \right]
+     & = \frac{\partial}{\partial \sigma} \left[ - \frac{N}{\sigma} +\sum_{i=1}^n \left(X_i - \mu\right)^2 \sigma^{-3} \right] \\
+     & =  \frac{N}{\sigma^2} -3 \sum_{i=1}^n \left(X_i - \mu\right)^2 \sigma^{-4}                                              \\
+\end{align*}
+\begin{align*}
+    I_N(\sigma)
+     & = - \E \left[ \frac{\partial^2}{\partial \sigma^2} \log \L (\sigma) \right]                            \\
+     & = - \E \left[ \frac{N}{\sigma^2} -3 \sum_{i=1}^n \left(X_i - \mu\right)^2 \sigma^{-4} \right]          \\
+     & = - \frac{N}{\sigma^2} - \frac{-3}{\sigma^{4}} \sum_{i=1}^n \E \left[ \left(X_i - \mu\right)^2 \right] \\
+     & = - \frac{N}{\sigma^2} - \frac{-3}{\sigma^{4}} \sum_{i=1}^n Var \left[ X_i ^2 \right]                  \\
+     & = - \frac{N}{\sigma^2} - \frac{-3}{\sigma^{4}} \sum_{i=1}^n \sigma^2                                   \\
+     & = - \frac{N}{\sigma^2} - \frac{-3N}{\sigma^{2}}                                                        \\
+     & = \frac{2N}{\sigma^{2}}                                                                                \\
+\end{align*}
+
+Thus 
+\[
+    se(\hat \sigma_{ML}) = \frac{1}{\sqrt{I_N (\sigma)}} = \frac{\sigma}{\sqrt{2N}}
+\]
+
+\paragraph{ii) Compute \(\hat{\sigma}_{ML}\) and estimator \(se(\hat{\sigma}_{ML})\)}
 
 
 \end{document}
