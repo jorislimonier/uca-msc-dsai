@@ -1,11 +1,13 @@
 ---
-title: "Exercise 2"
+title: "Processing large datasets with R - exam: Exercise 2"
 author: "Joris LIMONIER"
 output: html_document
 ---
 
 ```{r}
 library(dplyr)
+library(ggplot2)
+library(gridExtra)
 ```
 
 ## Part 1
@@ -42,50 +44,211 @@ ncol(winter)
 sort_total <- winter %>% arrange(Total, NOC)
 head(sort_total)
 ```
+
 ## Part 3
 
 ```{r}
+print_stat <- function() {
+    print(sum(is.na(sort_total)))
+    print(summary(sort_total))
+}
+print_stat()
 
+plot_desc <- function(
+    x, y, fill=sort_total$Rank,
+    x_label="NOC", y_label
+){
+    ggplot(sort_total, aes(reorder(x, -y, sum), y, fill=fill)) +
+    geom_col() +
+    scale_x_discrete(guide=guide_axis(angle=45)) +
+    xlab(x_label) +
+    ylab(y_label)
+}
+p_total <- plot_desc(
+    sort_total$NOC,
+    sort_total$Total,
+    y_label="Total"
+)
+p_gold <- plot_desc(
+    sort_total$NOC,
+    sort_total$Gold,
+    y_label="Gold"
+)
+p_silver <- plot_desc(
+    sort_total$NOC,
+    sort_total$Silver,
+    y_label="Silver"
+)
+p_bronze <- plot_desc(
+    sort_total$NOC,
+    sort_total$Bronze,
+    y_label="Bronze"
+)
+grid.arrange(p_total, p_gold, nrow=2)
+grid.arrange(p_silver, p_bronze, nrow=2)
 ```
 
 ## Part 4
 
+### Question 4a
+
 ```{r}
+for (column in c("Gold", "Silver", "Bronze", "Total")) {
+    print(
+        paste(
+            column,
+            "-> median:",
+            median(sort_total[[column]])
+        )
+    )
+}
+```
+
+### Question 4b
+
+```{r}
+for (column in c("Gold", "Silver", "Bronze", "Total")) {
+    print(
+        paste(
+            column,
+            "-> mean:",
+            mean(sort_total[[column]])
+        )
+    )
+}
+for (column in c("Gold", "Silver", "Bronze", "Total")) {
+    print(
+        paste(
+            column,
+            "-> total:",
+            sum(sort_total[[column]])
+        )
+    )
+}
 
 ```
 
 ## Part 6
 
 ```{r}
+winter_group_region <- winter %>%
+    group_by(Region)
 
 ```
 
-### Question 1a
+### Question 6a
 
 ```{r}
+winter_group_region <- winter %>%
+    group_by(Region)
 
+print("median:")
+winter_group_region %>%
+    summarise(
+        median(Gold),
+        median(Silver),
+        median(Bronze),
+        median(Total)
+    )
+
+print("mean:")
+winter_group_region %>%
+    summarise(
+        mean(Gold),
+        mean(Silver),
+        mean(Bronze),
+        mean(Total)
+    )
+
+print("total:")
+winter_group_region %>%
+    summarise(
+        sum(Gold),
+        sum(Silver),
+        sum(Bronze),
+        sum(Total)
+    )
 ```
 
-### Question 1b
+### Question 6b
 
 ```{r}
+winter_group_region <- winter %>%
+    group_by(Region)
 
+print("total:")
+winter_group_region %>%
+    summarise(
+        sum(Gold),
+        sum(Silver),
+        sum(Bronze),
+        sum(Total)
+    )
+
+# Question 6b
+
+max_total_mean <- winter_group_region %>%
+    summarise(mean_total = mean(Total)) %>%
+    arrange(desc(mean_total)) %>%
+    filter(row_number() == 1)
+max_total_mean
+
+region_max_total_mean <- max_total_mean$Region
+print(
+    paste(
+        "Region with maximum mean total medals:",
+        region_max_total_mean
+    )
+)
 ```
 
-### Question 1c
+### Question 6c
 
 ```{r}
+nb_countries_north_am <- nrow(
+    winter %>%
+        filter(Region == region_max_total_mean)
+)
 
+print(
+    paste(
+        "Number of countries in region",
+        region_max_total_mean,
+        ": ",
+        nb_countries_north_am
+    )
+)
 ```
 
-### Question 1d
+### Question 6d
 
 ```{r}
+nb_countries_eur <- nrow(
+    winter %>%
+        filter(Region == "EUROPE")
+)
 
+print(
+    paste(
+        "Number of countries in region EUROPE: ",
+        nb_countries_eur
+    )
+)
 ```
 
-### Question 1e
+### Question 6e
 
 ```{r}
+max_nb_total <- winter %>%
+    arrange(desc(Total)) %>%
+    filter(row_number() == 1)
 
+print(
+    paste(
+        "The maximum number of medals won is",
+        max_nb_total$Total,
+        "medals won by",
+        max_nb_total$NOC
+    )
+)
 ```
