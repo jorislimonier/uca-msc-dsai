@@ -1,7 +1,8 @@
-\documentclass{article}
+\documentclass[oneside, 10pt]{article}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsfonts}
 \usepackage{mathrsfs}
 \usepackage{graphicx}
 \usepackage{lmodern}
@@ -10,7 +11,7 @@
   colorlinks=true,
   linkcolor=blue, 
 }
-\usepackage[a4paper, total={15.8cm, 26cm}]{geometry}
+\usepackage[a4paper]{geometry}
 
 
 \renewcommand{\P}{\mathbb{P}}
@@ -18,20 +19,39 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\thetahat}{\hat\theta}
 \newcommand{\ie}{\textit{i.e. }}
+\newcommand{\eg}{\textit{e.g. }}
 \newcommand{\so}{\ensuremath{\mathcal{S}_1} }
 \newcommand{\st}{\ensuremath{\mathcal{S}_2} }
 \newcommand{\mco}{\ensuremath{\mathcal{MC}_1} }
 \newcommand{\mct}{\ensuremath{\mathcal{MC}_2} }
 \newcommand{\mdft}{\ensuremath{\mathcal{MDFT}} }
+\newcommand{\das}{\ensuremath{\mathcal{DAS}} }
+\newcommand{\dae}{\ensuremath{\mathcal{DAE}} }
 
-\title{Report of ``Think Fast and Slow in AI", by Francesca ROSSI}
+\title{Seminar: Report of two speeches}
 \author{Joris LIMONIER}
-\date{November 17, 2021}
+\date{Submission: December 5, 2021}
 
 \begin{document}
-\maketitle
+
 \pagenumbering{gobble}
-\vspace{.5cm}
+\maketitle
+
+\vspace{2cm}
+\section*{Introduction}
+This article contains a report for each of the two following talks:
+\begin{itemize}
+  \item \textit{Think Fast and Slow in AI}, by Francesca ROSSI
+  \item \textit{Self-supervised detection and analysis of cars in roadside Distributed Acoustic Sensing data}, by Martijn VAN DEN ENDE
+\end{itemize}
+Each of the reports is one page long, as required by the examiner.
+
+\newpage
+\pagenumbering{arabic}
+
+\newgeometry{hmargin=3cm, vmargin=3cm}
+
+\section{Think Fast and Slow in AI.}
 Francesca ROSSI is an Italian IBM researcher focusing on ethics in Artificial Intelligence (AI). Her talk ``Think Fast and Slow in AI" is named after the book \textit{Thinking, Fast and Slow}, by Daniel KAHNEMAN. This book, as well as \textit{Sapiens} (HARARI), \textit{Society of Mind} (MINSKY) and \textit{Rethinking Consciousness} (GRAZIANO) are four pillars of the theory about Human minds. The framework used in this field dates back to Descartes who separated, in the 17th century, intuitive and conscious reasoning. However, it was brought back to life by Posner and Synder in 1975 and was reformulated to a more recent description by Kahneman, who introduced the so-called System 1 (\so)and System 2 (\st).
 
 \so is fast, unconscious, automatic, error prone and is responsible for everyday decisions. \st on the other hand is slow, conscious, effortful, reliable and responsible for complex decisions. It may appear that these systems work in opposite manners, but they are actually complementary, as we shall show below. \so quickly reacts in a local and parrallel fashion, almost like a reflex, whereas \st takes time to analyze and consider its environment before performing a more accurate response. It is important to understand that the border between the two systems is blurred. Some actions may initially be managed by \so, before moving onto \st once they become more natural, more intuitive. Complex arithmetic operations for example require a lot of cognitive intensity at first, but may become routine given enough practice.
@@ -44,6 +64,23 @@ What we presented is actually a simplified model and more sophisticated ones exi
 
 The \so- \st framework is an interesting framework, not only because it works in practice, but also because it models the way of thinking of the human mind. Both this framework and its more sophisticated counterpart, the \mdft, arise from natural concepts in cognitive theory. Another field inspired by cognitive and neural theory is deep learning. Merging the \so- \st framework with deep learning seems to be an interesting idea. Maybe it could lead to more explainability in the deep learning so-called ``black-box'', and therefore to improvements with respect to fairness in AI?
 
+\newpage
+
+\section{Self-supervised detection and analysis of cars in roadside Distributed Acoustic Sensing data.} Martijn VAN DEN ENDE is a Dutch researcher at Université Côte d'Azur, with interests in Physics-Based Machine Learning.
+
+In  his talk, the speaker introduces Distributed Acoustic Sensing ( \das), which is a novel sensing technology that can he uses for road traffic analysis, using existing telecommunication cables. \das relies on vibration analysis to detect cars and measure their speed. As a result and on a more global scale, it is possible to determine the number of cars passing through a road segment at a given time, whether there an accident occured, or even enforce speed limits in a continuous manner (rather than with fixed-location radars or section radars, which disregard speeds within the section).
+
+The signal received is of the form of so-called \das channels, which can be stacked in order to get an idea of what happens as time passes. Philosophically, this approach is similar to showing several images successively in order to produce a video. Each channel shows inpulses that shift as you move through the channels. These inpulses denote the vibrations emitted by cars and therefore give a way to track them.
+
+However, the speaker details some challenges faced when working with \das signal. Although it is fairly easy for a human to ``see" the inpulse in a \das signal, computers have a harder time doing so. There are existing techniques that work well when cars are well-isolated, but they generally fail to generalize to crowded environments, such as urban landscapes or high-intensity commute times. The speaker proposes a self-supervised Deep Learning method ``Deconvolution Auto-Encoder" (\dae) that takes into account the previous spatio-temporal information about a vehicule (through \das signal analysis) in order to predict its movement and speed. The innovation of this technique lays in the signal deconvolution, since the deconvolved signal is then analyzed with traditional beamforming techniques (\ie signal processing techniques that can deduce informations such as speed and position from a deconvolved signal).
+
+The \dae deconvolution process starts with a set of \das channels, which contains one (or more, in the real world but we simplify for this explanation) inpulse, \ie a ``wave'', each. It outputs for each \das channel the moment at which the inpulse occurs (\ie when the car passes). In the training phase, the output is then reconvolved and compared to the initial (true) \das channels in order to train the neural network. 
+
+The results obtained by \dae, although probably slightly cherry-picked, as in most presentations, are superior to the state-of-the-art ``FISTA'' technique. This statement holds true on true positive, false positive and false negative counts. \dae shows even stronger results when the environment is noisy, be it because of noise \textit{per se}, or because there are multiple cars driving in both directions at the same time. These scenarios reflect the real world more accurately, which is an even stronger point in favor of \dae.
+
+The speaker's presentation was part of the ``AI for smart cities'' part of the SophIA conference, which the speaker mentions in his talk. Because of the robustness of his method over traditional, state-of-the-art deconvolution methods, \dae can see future applications in smart cities. Problems related to heavy-traffic (\eg commute) periods could be partially solved. In a discussion I had with the speaker after his talk, he mentioned potential applications in communications with GPS systems in order to minimize such traffic jams. Furthermore, his method is faster than the state-of-the art: about 30 seconds to deconvolve a 24 hours \das dataset, against 3 hours for FISTA to deconvolve the same dataset.
+
+In conclusion, this new deconvolution technique seems promising and could find applications in smart cities, speed limit enforcement or traffic improvement, among others. The fact that it is not only non-negligibly faster (more than 400 times) than other state-of-the-art methods, but also more precise and robust gives it a practical advantage for real world settings.
 
 
 
