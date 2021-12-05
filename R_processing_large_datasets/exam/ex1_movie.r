@@ -2,6 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
+# EXERCISE 1
 # Part 1
 # Question 1a
 movies <- read.csv("datasets_exam/movies.csv")

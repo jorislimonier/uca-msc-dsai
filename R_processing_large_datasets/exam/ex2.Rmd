@@ -1,0 +1,91 @@
+---
+title: "Exercise 2"
+author: "Joris LIMONIER"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
+
+## Part 1
+
+### Question 1a
+
+```{r}
+winter <- read.csv("datasets_exam/winter_olympic.csv")
+```
+
+### Question 1b
+
+```{r}
+head(winter)
+```
+
+### Question 1c
+
+```{r}
+colnames(winter)
+```
+
+### Question 1d
+
+```{r}
+dim(winter)
+nrow(winter)
+ncol(winter)
+```
+
+## Part 2
+
+```{r}
+sort_total <- winter %>% arrange(Total, NOC)
+head(sort_total)
+```
+## Part 3
+
+```{r}
+
+```
+
+## Part 4
+
+```{r}
+
+```
+
+## Part 6
+
+```{r}
+
+```
+
+### Question 1a
+
+```{r}
+
+```
+
+### Question 1b
+
+```{r}
+
+```
+
+### Question 1c
+
+```{r}
+
+```
+
+### Question 1d
+
+```{r}
+
+```
+
+### Question 1e
+
+```{r}
+
+```
