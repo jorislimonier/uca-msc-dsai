@@ -29,6 +29,3 @@ px.bar(data.sort_values("start_time", ascending=False), x="teacher", y="start_ti
 
 
 # %%
-
-
-
