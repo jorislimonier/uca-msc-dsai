@@ -1,4 +1,3 @@
-setwd("/home/joris/Documents/uca-msc-dsai/R_processing_large_datasets/exam")
 source("./ex1_movie.r", local = TRUE)
 
 # Exercise 6
