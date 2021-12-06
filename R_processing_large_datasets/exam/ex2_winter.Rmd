@@ -129,13 +129,6 @@ for (column in c("Gold", "Silver", "Bronze", "Total")) {
 ```
 
 ## Part 6
-
-```{r}
-winter_group_region <- winter %>%
-    group_by(Region)
-
-```
-
 ### Question 6a
 
 ```{r}
@@ -173,20 +166,6 @@ winter_group_region %>%
 ### Question 6b
 
 ```{r}
-winter_group_region <- winter %>%
-    group_by(Region)
-
-print("total:")
-winter_group_region %>%
-    summarise(
-        sum(Gold),
-        sum(Silver),
-        sum(Bronze),
-        sum(Total)
-    )
-
-# Question 6b
-
 max_total_mean <- winter_group_region %>%
     summarise(mean_total = mean(Total)) %>%
     arrange(desc(mean_total)) %>%
