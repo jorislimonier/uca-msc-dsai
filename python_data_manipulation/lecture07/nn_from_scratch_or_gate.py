@@ -71,10 +71,7 @@ class NN_xor():
 
         # Update weights
         self.W -= self.learn_rate * dloss_dw
-        print(f"shape of b: {self.b.shape}")
-        print(f"{self.learn_rate} {dloss_db.shape} {self.learn_rate * np.sum(dloss_db)}")
         self.b = self.b - self.learn_rate * np.sum(dloss_db)
-        print(f"shape of b: {self.b}")
 
 
 # %%
