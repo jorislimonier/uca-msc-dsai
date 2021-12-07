@@ -1,5 +1,3 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
 # %%
 import numpy as np
 
@@ -7,7 +5,7 @@ import numpy as np
 # ### Generate data
 # %% [markdown]
 # ### Forward pass
-# 
+#
 # The dimensions are as follows:
 # $$\underbrace{y}_{(n \times 1)} = \underbrace{X}_{(n \times p)} \underbrace{W}_{(p \times 1)} + \underbrace{b}_{(n \times 1)}$$
 # %% [markdown]
@@ -23,19 +21,22 @@ import numpy as np
 # - $$\hat{y} := \sigma(z)$$
 
 # %%
-class NN_binary():
-    def __init__(self, n_obs=3, n_features=2):
+
+
+class NN_or():
+    def __init__(self, n_obs=5, n_features=2):
         self.n_obs = n_obs
         self.n_features = n_features
         self.X = self.generate_data()
-        self.y_true = np.logical_or(self.X[:,0], self.X[:,1]).astype(int).reshape(-1, 1)
+        self.y_true = np.logical_or(
+            self.X[:, 0], self.X[:, 1]).astype(int).reshape(-1, 1)
 
         self.learn_rate = 10**-1
         self.W = np.random.randn(self.X.shape[1], 1)
-        self.b = np.random.randn(n_obs, 1)
+        self.b = np.random.randn(1)
 
     def generate_data(self):
-        np.random.seed(42)
+        np.random.seed(43)
         return np.random.randint(0, 2, size=(self.n_obs, self.n_features))
 
     @staticmethod
@@ -58,7 +59,7 @@ class NN_binary():
         self.y_hat = self.sigmoid(self.z)
 
     def backprop(self):
-        # Perform backpropagation
+        "Perform backpropagation"
 
         # Compute derivatives to update weights
         dloss_dyhat = self.loss_deriv(self.y_true, self.y_hat)
@@ -70,21 +71,24 @@ class NN_binary():
 
         # Update weights
         self.W -= self.learn_rate * dloss_dw
-        self.b -= self.learn_rate * dloss_db
+        self.b = self.b - self.learn_rate * np.sum(dloss_db)
 
 
 # %%
-nnb = NN_binary(n_obs=3, n_features=2)
-
+nn = NN_or(n_obs=7, n_features=2)
 for epoch in range(10001):
-    nnb.forward_pass()
-    nnb.backprop()
+    nn.forward_pass()
+    nn.backprop()
     if epoch % 2000 == 0:
-        print(f"{nnb.y_hat}") # print predictions
-print(f"---\ntarget: \n{nnb.y_true}")
-
+        print(f"{nn.y_hat}")  # print predictions
+print(f"---\ntarget: \n{nn.y_true}")
 
 # %%
+nn.X, nn.y_true
 
-
-
+# %%
+to_pred = np.array([[0, 1], [1, 1], [1, 0], [0, 0]])
+z = to_pred @ nn.W + nn.b
+y_hat = nn.sigmoid(z)
+to_pred, y_hat, np.logical_or(to_pred[:,0], to_pred[:,1]).astype(int)
+# %%
