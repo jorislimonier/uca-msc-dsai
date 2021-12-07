@@ -282,18 +282,21 @@ np.minimum(
 # %% [markdown]
 # ## 6.2 Fairness metrics for the German dataset
 
+# %% [markdown]
+# ### Load German data
 # %%
-german_data = np.loadtxt('German.txt')
-display(pd.DataFrame(german_data))
+german_data = pd.read_csv("German.txt", sep="\t")
+
+display(df)
+
+# %%
 
 i_prot = 40  # the protected features corresponds with column 40 from the txt file
 n_sample = 500  # we define our training sample size
 C_param = 5
 
 # We eliminate the first column that correspond to labels and the protected feature
-display(german_data.shape)
 X_german = np.delete(german_data, [0, i_prot], 1)
-display(X_german.shape)
 
 y_german = german_data[:, 0]  # labels
 x_bias_german = german_data[:, i_prot]  # protected feature
