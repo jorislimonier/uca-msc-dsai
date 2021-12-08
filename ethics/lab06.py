@@ -1,5 +1,6 @@
 # %%
-import importlib
+import lab06_part3_compas
+import importlib  # reimport class from scratch on each run
 import lab06_part2_german
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
@@ -287,7 +288,7 @@ np.minimum(
 # %% [markdown]
 # ### Load German data
 # %%
-
+importlib.reload(lab06_part2_german)
 german_female = lab06_part2_german.German(i_prot=40)
 
 # %% [markdown]
@@ -303,7 +304,6 @@ german_female.fairness_table
 # %% [markdown]
 # **7-** Does this classifier satisfy the 80%-rule?
 # Yes it does, because the disparate impact is $85.64\%$, which is greater than $80\%$.
-
 
 
 # %% [markdown]
@@ -323,7 +323,7 @@ german_male.fairness_table
 #
 # %% [markdown]
 # **10-** Which conclusion do you obtain comparing the tables from 6 and 8?
-# 
+#
 # When the "male divorced/separated" column is chosen as a protected class, the disparate impact is about $100\%$, which means that the positive predictive rate for protected and non-protected are about the same.
 #
 # When the "female divorced/separated/married" is chosen as a protected class on the other hand, we see that the disparate impact is further away from one, therefore it appears that the predicted value is partly based on the sensitive feature.
@@ -367,137 +367,23 @@ get_ipython().run_cell_magic('R', '', 'df <- dplyr::select(raw_data, age, c_char
 # %% [markdown]
 # Now we import the same libraries as in the previous labs.
 
-# %%
-# we import all the required libraries
-SEED = 1122334455
-seed(SEED)  # set the random seed so that the random permutations can be reproduced again
-np.random.seed(SEED)
-
 # %% [markdown]
 # We first read the filtered data.
 
 # %%
-df = pd.read_csv("propublica_ext.csv")
+importlib.reload(lab06_part3_compas)
 
+compas = lab06_part3_compas.Compas()
+df = compas.data
 # We calculate the number of objects in the dataset
-print("Size of the dataset: %d" % len(df.index))
-
-
-# %%
-for col in df:
-    print(df[col].unique())
-
-# %% [markdown]
-# We need to binarize all the categorical features we considered in the dataset:
-
-# %%
-df = (
-    pd.read_csv("propublica_ext.csv")
-    # We first binarize the categorical feature c_charge_degree
-    .assign(c_charge=lambda x: x['c_charge_degree'].replace({'F': 1, 'M': 0}))
-    # race
-    .assign(african_american=lambda x: x['race'].replace({'Other': 0, 'African-American': 1, 'Caucasian': 0, 'Hispanic': 0, 'Asian': 0, 'Native American': 0}))
-    .assign(caucasian=lambda x: x['race'].replace({'Other': 0, 'African-American': 0, 'Caucasian': 1, 'Hispanic': 0, 'Asian': 0, 'Native American': 0}))
-    .assign(native_american=lambda x: x['race'].replace({'Other': 0, 'African-American': 0, 'Caucasian': 0, 'Hispanic': 0, 'Asian': 0, 'Native American': 1}))
-    .assign(hispanic=lambda x: x['race'].replace({'Other': 0, 'African-American': 0, 'Caucasian': 0, 'Hispanic': 1, 'Asian': 0, 'Native American': 0}))
-    .assign(asian=lambda x: x['race'].replace({'Other': 0, 'African-American': 0, 'Caucasian': 0, 'Hispanic': 0, 'Asian': 1, 'Native American': 0}))
-    .assign(other=lambda x: x['race'].replace({'Other': 1, 'African-American': 0, 'Caucasian': 0, 'Hispanic': 0, 'Asian': 0, 'Native American': 0}))
-    # age_cat
-    .assign(less_than_25=lambda x: x['age_cat'].replace({'Greater than 45': 0, '25 - 45': 0, 'Less than 25': 1}))
-    .assign(between_25_45=lambda x: x['age_cat'].replace({'Greater than 45': 0, '25 - 45': 1, 'Less than 25': 0}))
-    .assign(greater_than_25=lambda x: x['age_cat'].replace({'Greater than 45': 1, '25 - 45': 0, 'Less than 25': 0}))
-    # score_text
-    .assign(score_low=lambda x: x['score_text'].replace({'Low': 1, 'Medium': 0, 'High': 0}))
-    .assign(score_medium=lambda x: x['score_text'].replace({'Low': 0, 'Medium': 1, 'High': 0}))
-    .assign(score_high=lambda x: x['score_text'].replace({'Low': 0, 'Medium': 0, 'High': 1}))
-    # sex
-    .assign(Male=lambda x: x['sex'].replace({'Male': 1, 'Female': 0}))
-
-)
-DeleteList = ['c_charge_degree', 'race', 'age_cat',
-              'score_text', 'sex', 'c_jail_in', 'c_jail_out']
-df = df.drop(DeleteList, axis=1)
-# We calculate the number of objects in the dataset
-print("Dataset with %d" % df.shape[0],
-      "objects and %d" % df.shape[1], "variables")
-
-df.head()
+compas.predict()
 
 # %% [markdown]
 # Actually, our dataset is only composed of 23 variables, since we do not include the first column as variable, and the variable "two_year_recid" is the binary label to predict.
 #
-# We then define our data and our label:
-#
-
-# %%
-display(df.columns)
-
-# %% [markdown]
 # We now select from this list only the variables we want to consider in our classification problem and the corresponding labels:
 
 # %%
-# Here is a way to select these columns using the column names
-
-#feature_columns = ['Number_of_Priors', 'score_factor','Age_Above_FourtyFive', 'Age_Below_TwentyFive', 'African_American','Asian', 'Hispanic', 'Native_American', 'Other', 'Female',       'Misdemeanor']
-
-feature_columns = ['age', 'priors_count', 'days_b_screening_arrest',
-                   'juv_fel_count',
-                   'juv_misd_count', 'juv_other_count', 'is_violent_recid', 'c_charge',
-                   'less_than_25', 'between_25_45', 'greater_than_25',
-                   'Male']
-
-
-data = df[feature_columns].values
-y = df['two_year_recid'].values
-df = df.assign(COMPAS_Decision=lambda x: x['score_low'].replace({0: 1, 1: 0}))
-y_compas = df['COMPAS_Decision'].values
-
-
-# %%
-# We load the libraries for the SVM
-
-
-# shuffle the data
-# n_samples=data.shape[0]
-#perm = list(range(0,n_samples))
-# shuffle(perm)
-#data = data[perm]
-#y = y[perm]
-# y_compas=y_compas[perm]
-
-
-# Create train and validation set
-#train_x, test_x, train_y, test_y = train_test_split(data, y, test_size=0.1, shuffle=True, stratify=y, random_state=42)
-
-svm_clf = SVC(kernel="linear", C=1.0)
-svm_clf.fit(data, y)
-
-y_pred = svm_clf.predict(data)
-
-
-#svm_clf = SVC(kernel="linear", C=1.0)
-#svm_clf.fit(train_x, train_y)
-
-# ytrain_pred=svm_clf.predict(train_x)
-# ytest_pred=svm_clf.predict(test_x)
-
-
-# %%
-b_recid = df[df['african_american'] == 1]
-w_recid = df[df['caucasian'] == 1]
-print(
-    ' Accuracy SVM (All):  \t %.2f' % (
-        metrics.accuracy_score(y, y_pred)*100), "%\n",
-    'Accuracy SVM (Black):\t %.2f' % (metrics.accuracy_score(
-        y_pred[df['african_american'] == 1], b_recid['two_year_recid'])*100), "%\n",
-    'Accuracy SVM (White):\t %.2f' % (metrics.accuracy_score(
-        y_pred[df['caucasian'] == 1], w_recid['two_year_recid'])*100), "%\n",
-
-)
-
-pd.crosstab(y_pred, df['two_year_recid'], rownames=[
-            'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')
-
 FPR_s = pd.crosstab(y_pred, df['two_year_recid'], rownames=[
                     'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
 FNR_s = pd.crosstab(y_pred, df['two_year_recid'], rownames=['Predicted recividism'], colnames=[
