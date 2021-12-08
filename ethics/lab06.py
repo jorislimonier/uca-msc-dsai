@@ -290,6 +290,7 @@ np.minimum(
 importlib.reload(lab06_part2_german)
 
 german = lab06_part2_german.German(40)
+print(german.eq_opp)
 
 # %%
 german_data = np.loadtxt('German.txt')
