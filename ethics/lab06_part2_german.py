@@ -30,38 +30,104 @@ class German():
 
     @property
     def eq_opp(self):
+        TP_prot = self.y_pred_train[np.all(
+            [self.prot_train == 1, self.y_train == 1], axis=0)].sum()
+        pos_prot = np.all(
+            [self.prot_train == 1, self.y_train == 1], axis=0).sum()
+
+        TPR_prot = TP_prot / pos_prot
+
         TP_non_prot = self.y_pred_train[np.all(
             [self.prot_train == 0, self.y_train == 1], axis=0)].sum()
         pos_non_prot = np.all(
             [self.prot_train == 0, self.y_train == 1], axis=0).sum()
 
         TPR_non_prot = TP_non_prot / pos_non_prot
-
-        TP_prot = self.y_pred_train[np.all(
-            [self.prot_train == 1, self.y_train == 1], axis=0)].sum()
-        pos_prot = np.all(
-            [self.prot_train == 1, self.y_train == 1], axis=0).sum()
-        
-        TPR_prot = TP_prot / pos_prot
         
         return np.abs(TPR_non_prot - TPR_prot)
 
     @property
     def pred_eq(self):
-        pass
+        FP_non_prot = self.y_pred_train[np.all(
+            [self.prot_train == 0, self.y_train == 0], axis=0)].sum()
+        neg_non_prot = np.all(
+            [self.prot_train == 0, self.y_train == 0], axis=0).sum()
+
+        FPR_non_prot = FP_non_prot / neg_non_prot
+
+        FP_prot = self.y_pred_train[np.all(
+            [self.prot_train == 1, self.y_train == 0], axis=0)].sum()
+        neg_prot = np.all(
+            [self.prot_train == 1, self.y_train == 0], axis=0).sum()
+
+        FPR_prot = FP_prot / neg_prot
+
+        return np.abs(FPR_non_prot - FPR_prot)
 
     @property
     def eq_odds(self):
-        pass
+        return self.eq_opp + self.pred_eq
 
     @property
     def pred_par(self):
-        pass
+        TP_non_prot = self.y_train[np.all(
+            [self.prot_train == 0, self.y_pred_train == 1], axis=0)].sum()
+        PP_non_prot = np.all(
+            [self.prot_train == 0, self.y_pred_train == 1], axis=0).sum()
+
+        PPV_non_prot = TP_non_prot / PP_non_prot
+
+        TP_prot = self.y_train[np.all(
+            [self.prot_train == 1, self.y_pred_train == 1], axis=0)].sum()
+        PP_prot = np.all(
+            [self.prot_train == 1, self.y_pred_train == 1], axis=0).sum()
+
+        PPV_prot = TP_prot / PP_prot
+
+        return np.abs(PPV_prot - PPV_non_prot)
 
     @property
     def stat_par(self):
-        pass
+        PP_prot = self.y_pred_train[np.all(
+            [self.prot_train == 1], axis=0)].sum()
+        prot = np.all([self.prot_train == 1], axis=0).sum()
+
+        PPR_prot = PP_prot / prot
+
+        PP_non_prot = self.y_pred_train[np.all(
+            [self.prot_train == 0], axis=0)].sum()
+        non_prot = np.all([self.prot_train == 0], axis=0).sum()
+
+        PPR_non_prot = PP_non_prot / non_prot
+
+        return np.abs(PPR_prot - PPR_non_prot)
 
     @property
     def disp_imp(self):
-        pass
+        PP_prot = self.y_pred_train[np.all(
+            [self.prot_train == 1], axis=0)].sum()
+        prot = np.all([self.prot_train == 1], axis=0).sum()
+
+        PPR_prot = PP_prot / prot
+
+        PP_non_prot = self.y_pred_train[np.all(
+            [self.prot_train == 0], axis=0)].sum()
+        non_prot = np.all([self.prot_train == 0], axis=0).sum()
+
+        PPR_non_prot = PP_non_prot / non_prot
+
+        return np.minimum(PPR_prot / PPR_non_prot, PP_non_prot / PPR_prot)
+
+    @property
+    def fairness_table(self):
+        data = {
+            "Equal Opportunity": self.eq_opp,
+            "Predictive Equality": self.pred_eq,
+            "Equalized Odds": self.eq_odds,
+            "Predictive Parity": self.pred_par,
+            "Statistical Parity": self.stat_par,
+            "Disparate Impact": self.disp_imp
+        }
+        df = pd.DataFrame(data, index=["German Dataset"])
+        df.columns = [col + " (%)" for col in df.columns]
+        return round(df, 4) * 100
