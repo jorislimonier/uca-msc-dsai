@@ -287,54 +287,47 @@ np.minimum(
 # %% [markdown]
 # ### Load German data
 # %%
-importlib.reload(lab06_part2_german)
 
-german = lab06_part2_german.German(40)
-print(german.eq_opp)
-
-# %%
-german_data = np.loadtxt('German.txt')
-i_prot = 40  # the protected features corresponds with column 40 from the txt file
-n_sample = 500  # we define our training sample size
-C_param = 5
-
-# We eliminate the first column that correspond to labels and the protected feature
-X_german = np.delete(german_data, [0, i_prot], 1)
-display(pd.DataFrame(X_german).iloc[:, 38:42])
-y_german = german_data[:, 0]  # labels
-x_bias_german = german_data[:, i_prot]  # protected feature
-display(x_bias_german)
-# Now let us consider a training set
-X_G = X_german[1:n_sample, :]
-y_G = y_german[1:n_sample]
-x_bias_G = x_bias_german[1:n_sample]
-
-
-# SVM Classifier model
-# the hyperparameter C control the margin violations
-# smaller C leads to more margin violations but wider margin
-
-svm_clf = SVC(kernel="linear", C=float(C_param))
-svm_clf.fit(X_G, y_G)
-
-y_pred_G = svm_clf.predict(X_G)
-
+german_female = lab06_part2_german.German(i_prot=40)
 
 # %% [markdown]
 # ### Questions:
 # In the code before, we set i_prot=40, which means we consider the protected feature being "female divorced/separated/married". Under this choice:
 #
+# %% [markdown]
 # **6-** Provide a table with the accuracy and the 6 fairness metrics.
 #
+# %%
+german_female.fairness_table
+
+# %% [markdown]
 # **7-** Does this classifier satisfy the 80%-rule?
+# Yes it does, because the disparate impact is $85.64\%$, which is greater than $80\%$.
+
+
+
+# %% [markdown]
+
+# Now choose as protected feature being "male divorced/separated", i.e., `i_prot=39`. Under this choice:
 #
-# Now choose as protected feature being "male divorced/separated", i.e., i_prot=39. Under this choice:
-#
+# %% [markdown]
 # **8-** Provide a table with the 6 fairness metrics.
 #
+# %%
+german_male = lab06_part2_german.German(i_prot=39)
+german_male.fairness_table
+
+# %% [markdown]
 # **9-** Does this classifier satisfy the 80%-rule?
+# Yes it does, because the disparate impact is $100.65\%$, which is greater than $80\%$.
 #
+# %% [markdown]
 # **10-** Which conclusion do you obtain comparing the tables from 6 and 8?
+# 
+# When the "male divorced/separated" column is chosen as a protected class, the disparate impact is about $100\%$, which means that the positive predictive rate for protected and non-protected are about the same.
+#
+# When the "female divorced/separated/married" is chosen as a protected class on the other hand, we see that the disparate impact is further away from one, therefore it appears that the predicted value is partly based on the sensitive feature.
+
 # %% [markdown]
 # <h2> 6.3 The COMPAS dataset. What happens if we change the choice of variables?</h2>
 #

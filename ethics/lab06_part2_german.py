@@ -43,7 +43,7 @@ class German():
             [self.prot_train == 0, self.y_train == 1], axis=0).sum()
 
         TPR_non_prot = TP_non_prot / pos_non_prot
-        
+
         return np.abs(TPR_non_prot - TPR_prot)
 
     @property
@@ -115,7 +115,7 @@ class German():
         non_prot = np.all([self.prot_train == 0], axis=0).sum()
 
         PPR_non_prot = PP_non_prot / non_prot
-
+        
         return np.minimum(PPR_prot / PPR_non_prot, PP_non_prot / PPR_prot)
 
     @property
