@@ -1,4 +1,6 @@
 # %%
+import importlib
+import lab06_part2_german
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
@@ -285,22 +287,22 @@ np.minimum(
 # %% [markdown]
 # ### Load German data
 # %%
-german_data = pd.read_csv("German.txt", sep="\t")
+importlib.reload(lab06_part2_german)
 
-display(df)
+german = lab06_part2_german.German(40)
 
 # %%
-
+german_data = np.loadtxt('German.txt')
 i_prot = 40  # the protected features corresponds with column 40 from the txt file
 n_sample = 500  # we define our training sample size
 C_param = 5
 
 # We eliminate the first column that correspond to labels and the protected feature
 X_german = np.delete(german_data, [0, i_prot], 1)
-
+display(pd.DataFrame(X_german).iloc[:, 38:42])
 y_german = german_data[:, 0]  # labels
 x_bias_german = german_data[:, i_prot]  # protected feature
-
+display(x_bias_german)
 # Now let us consider a training set
 X_G = X_german[1:n_sample, :]
 y_G = y_german[1:n_sample]
