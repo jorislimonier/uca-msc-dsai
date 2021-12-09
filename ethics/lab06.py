@@ -403,30 +403,28 @@ metrics.accuracy_score(compas.data[compas.data["caucasian"] == 1]["two_year_reci
 #
 
 # %%
-conf_mat_compas = compas.confusion_matrix_compas()
-FP_compas = conf_mat_compas[0][1]
-NN_compas = conf_mat_compas[0].sum()
-FPR_compas = FP_compas / NN_compas
+conf_mat_compas = compas.confusion_matrix_compas("columns")
+display(conf_mat_compas)
+FPR_compas = conf_mat_compas[0][1]
 print(f"FPR_compas: {FPR_compas}")
 
 # %% [markdown]
 # **15-** Provide the FNR for the COMPAS dataset.
 #
 # %%
-FN_compas = conf_mat_compas[1][0]
-PP_compas = conf_mat_compas[1].sum()
-FNR_compas = FN_compas / PP_compas
+FNR_compas = conf_mat_compas[1][0]
 print(f"FNR_compas: {FNR_compas}")
-
 
 
 # %%
 # For the COMPAS:
-FPR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=['Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
-FNR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=['Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[1][0].astype('float')
+conf_mat_compas_black = compas.confusion_matrix_compas_black("columns")
+FPR_compas_black = conf_mat_compas_black[0][1]
+FNR_compas_black = conf_mat_compas_black[1][0]
+display(conf_mat_compas_black)
+print(f"FPR compas black: {FPR_compas_black}")
+print(f"FNR compas black: {FNR_compas_black}")
 
-print("FPR of Black %.2f" % (FPR_b*100), "%")
-print("FNR of Black %.2f" % (FNR_b*100), "%")
 
 # %% [markdown]
 # ## Questions:
@@ -434,16 +432,35 @@ print("FNR of Black %.2f" % (FNR_b*100), "%")
 # For the COMPAS classifier:
 #
 # **16-** Calculate the FPR for white defendants.
-#
+# %%
+
+conf_mat_compas_white = compas.confusion_matrix_compas_white(
+    normalize="columns")
+FPR_compas_white = conf_mat_compas_white[0][1]
+
+print(f"FPR compas white: {FPR_compas_white}")
+# %% [markdown]
 # **17-** Calculate the FNR for white defendants.
 #
-# **18-** Replace **x** by the right number in the two following statement:
+# %%
+FNR_compas_white = conf_mat_compas_white[1][0]
+
+print(f"FNR compas white: {FNR_compas_white}")
+# %% [markdown]
+# **18-** Replace **x** by the right number in the following statement:
 #
-# "FPR of Black is **x** times greater than for White"
+# %%
+print(
+    f"FPR of Black is {FPR_compas_black / FPR_compas_white} times the FPR of White")
+
 #
-# **19-** Replace **x** by the right number in the two following statement:
+# %% [markdown]
+# **19-** Replace **x** by the right number in the following statement:
 #
 # "FNR of Black is **x** times smaller than for White"
+# %%
+print(
+    f"FNR of Black is {FNR_compas_black / FNR_compas_white} times the FNR of White")
 #
 #
 

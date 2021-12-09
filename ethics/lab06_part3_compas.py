@@ -58,22 +58,23 @@ class Compas():
         self.data = self.data.assign(
             COMPAS_Decision=lambda x: x["score_low"].replace({0: 1, 1: 0}))
         self.y_compas = self.data["COMPAS_Decision"]
-        random_state = np.random.randint(2)
+
+        random_state = np.random.randint(10**9) # get same random state for all splits
         self.X_train, self.X_test = train_test_split(self.X,
-                                                     train_size=.8,
-                                                     shuffle=False,
+                                                     train_size=.7,
+                                                     shuffle=True,
                                                      random_state=random_state)
         self.y_train, self.y_test = train_test_split(self.y,
-                                                     train_size=.8,
-                                                     shuffle=False,
+                                                     train_size=.7,
+                                                     shuffle=True,
                                                      random_state=random_state)
         self.y_compas_train, self.y_compas_test = train_test_split(self.y_compas,
-                                                                   train_size=.8,
-                                                                   shuffle=False,
+                                                                   train_size=.7,
+                                                                   shuffle=True,
                                                                    random_state=random_state)
         self.data_train, self.data_test = train_test_split(self.data,
-                                                           train_size=.8,
-                                                           shuffle=False,
+                                                           train_size=.7,
+                                                           shuffle=True,
                                                            random_state=random_state)
 
     def predict_svm(self):
@@ -113,12 +114,28 @@ class Compas():
                                             w_recid["two_year_recid"])
         }
         self.race_acc_svm = pd.DataFrame(accuracies, index=["SVM accuracy"])
-        display(pd.crosstab(b_recid['COMPAS_Decision'],
-                    b_recid['two_year_recid'], 
-                    rownames=['Predicted recividism'], 
-                    colnames=['Actual recividism'], 
-                    normalize='columns'))
 
-    def confusion_matrix_compas(self):
-        return pd.crosstab(self.data["COMPAS_Decision"],
-                           self.data["two_year_recid"])
+    def confusion_matrix_compas(self, normalize=False):
+        return pd.crosstab(self.data['COMPAS_Decision'],
+                           self.data['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
+
+    def confusion_matrix_compas_black(self, normalize=False):
+        "Confusion  matrix for black defendents"
+        b_recid = self.data_test[self.data_test["african_american"] == 1]
+        return pd.crosstab(b_recid['COMPAS_Decision'],
+                           b_recid['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
+
+    def confusion_matrix_compas_white(self, normalize=False):
+        "Confusion  matrix for white defendents"
+        w_recid = self.data_test[self.data_test["caucasian"] == 1]
+        return pd.crosstab(w_recid['COMPAS_Decision'],
+                           w_recid['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
