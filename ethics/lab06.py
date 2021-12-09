@@ -378,10 +378,8 @@ compas = lab06_part3_compas.Compas()
 df = compas.data
 # We calculate the number of objects in the dataset
 compas.predict()
-compas.display_prediction_metrics()
+compas.display_prediction_metrics_svm()
 
-# %%
-compas.X_test
 # %% [markdown]
 # Actually, our dataset is only composed of 23 variables, since we do not include the first column as variable, and the variable "two_year_recid" is the binary label to predict.
 #
@@ -394,13 +392,18 @@ compas.X_test
 # ## Questions:
 #
 # **11-** Provide the accuracy for the COMPAS dataset.
-#
+# %%
+
+# %% [markdown]
 # **12-** Provide the accuracy for black defendants for the COMPAS dataset.
 #
+# %% [markdown]
 # **13-** Provide the accuracy for white defendants for the COMPAS dataset.
 #
+# %% [markdown]
 # **14-** Provide the FPR for the COMPAS dataset.
 #
+# %% [markdown]
 # **15-** Provide the FNR for the COMPAS dataset.
 #
 #

@@ -81,32 +81,26 @@ class Compas():
         svm_clf.fit(self.X_train, self.y_train)
         self.y_pred = svm_clf.predict(self.X_train)
 
-    def display_prediction_metrics(self):
+    def display_prediction_metrics_svm(self):
+        "Display prediction metrics from the svm classifier"
         b_recid = self.data_train[self.data_train["african_american"] == 1]
         w_recid = self.data_train[self.data_train["caucasian"] == 1]
-        print(
-            f"""
-            Accuracy SVM (All):\t {metrics.accuracy_score(self.y_train, self.y_pred)}\n
-            Accuracy SVM (Black):\t {metrics.accuracy_score(self.y_pred[self.data_train["african_american"] == 1], 
-                                        b_recid["two_year_recid"])}\n
-            Accuracy SVM (White):\t {metrics.accuracy_score(self.y_pred[self.data_train["caucasian"] == 1], 
-                                        w_recid["two_year_recid"])}
-            """
-        )
+        metrics_data = {
+            "All": metrics.accuracy_score(self.y_train, self.y_pred),
+            "Black": metrics.accuracy_score(self.y_pred[self.data_train["african_american"] == 1],
+                                                           b_recid["two_year_recid"]),
+            "White": metrics.accuracy_score(self.y_pred[self.data_train["caucasian"] == 1],
+                                                           w_recid["two_year_recid"])
+        }
+        display(pd.DataFrame(metrics_data, index=["SVM accuracy"]))
 
-        display(pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
-                            rownames=['Predicted recividism'],
-                            colnames=['Actual recividism'],
-                            normalize='columns'))
+        conf_mat = pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
+                               rownames=['Predicted recividism'],
+                               colnames=['Actual recividism'],
+                               normalize='columns')
+        FPR_s = conf_mat[0][1]
+        FNR_s = conf_mat[1][0]
 
-        FPR_s = pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
-                            rownames=['Predicted recividism'],
-                            colnames=['Actual recividism'],
-                            normalize='columns')
-        FNR_s = pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
-                            rownames=['Predicted recividism'],
-                            colnames=['Actual recividism'],
-                            normalize='columns')
-
-        display(f"FPR SVM", FPR_s)
-        display(f"FNR SVM", FNR_s)
+        display(conf_mat)
+        print(f"FPR SVM = {FPR_s}")
+        print(f"FNR SVM = {FNR_s}")
