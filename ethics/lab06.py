@@ -158,9 +158,6 @@ print("Accuracy: %.1f" % (metrics.accuracy_score(y_syn, y_pred)*100), "%")
 # %% [markdown]
 # We first implement the equal opportunity metric:
 
-# %% [markdown]
-# Let us now implement the equal opportunity metric:
-
 # %%
 
 
@@ -643,4 +640,3 @@ compas.fairness_table_svm
 # - Predictive Parity
 # - Statistical Parity
 # - Disparate Impact
-
