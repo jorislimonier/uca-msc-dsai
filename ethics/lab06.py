@@ -480,6 +480,9 @@ FNR_svm_black = conf_mat_svm_black[1][0]
 print(f"FPR SVM Black {FPR_svm_black}")
 print(f"FNR SVM Black {FNR_svm_black}")
 
+# %%
+compas.data_test[compas.data_test["caucasian"] == 1]
+compas.confusion_matrix_svm_white(normalize=False).values.sum()
 # %% [markdown]
 # ## Questions:
 #
@@ -611,38 +614,33 @@ print(f"""
 # %% [markdown]
 # **28-** Calculate the 6 fairness metrics for the COMPAS classifier.
 #
+# %%
+
+compas.fairness_table_compas
+
 
 # %% [markdown]
 # **29-** Calculate the 6 fairness metrics for the SVM classifier.
 #
+# %%
+
+compas.fairness_table_svm
 
 # %% [markdown]
 # **30-** As a future (or actual) data scientist, which solution would you choose for **this** specific problem? Justify your answer.
 #
+# I would choose SVM over COMPAS because it beats COMPAS in:
+# - Accuracy for all
+# - Accuracy for black
+# - Accuracy for white
+# - FPR for all
+# - FPR for black
+# - FPR for white
+# - The ratio mentioned in question 26
+# - Equal Opportunity
+# - Predictive Equality
+# - Equalized Odds
+# - Predictive Parity
+# - Statistical Parity
+# - Disparate Impact
 
-# %% [markdown]
-# $$
-# \begin{array}{cc}
-# & \text{SVM }&\text{COMPAS }\\
-# &\begin{array}{cccc}
-# \hline \hline
-# &\text { All } & \text { Black } & \text { White }\\
-# \hline
-# \text{Accuracy}& &  &  \\
-# \text{FPR}& &  &  \\
-# \text{FNR}& &  &  \\
-# \hline
-# \end{array}
-# &\begin{array}{cccc}
-# \hline \hline
-# &\text { All } & \text { Black } & \text { White }\\
-# \hline
-# \text{Accuracy}& &  &  \\
-# \text{FPR}& &  &  \\
-# \text{FNR}& &  &  \\
-# \hline
-# \end{array}\\
-# \end{array}
-# $$
-#
-#

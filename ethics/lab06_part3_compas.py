@@ -179,3 +179,171 @@ class Compas():
                            rownames=['Predicted recividism'],
                            colnames=['Actual recividism'],
                            normalize=normalize)
+
+    # SVM fairness metrics
+    @property
+    def eq_opp_svm(self):
+        conf_mat_white = self.confusion_matrix_svm_white(normalize="columns")
+        conf_mat_black = self.confusion_matrix_svm_black(normalize="columns")
+        TPR_white = conf_mat_white[1][1]
+        TPR_black = conf_mat_black[1][1]
+        return np.abs(TPR_white - TPR_black)
+
+    @property
+    def pred_eq_svm(self):
+        conf_mat_white = self.confusion_matrix_svm_white(normalize="columns")
+        conf_mat_black = self.confusion_matrix_svm_black(normalize="columns")
+        FPR_white = conf_mat_white[0][1]
+        FPR_black = conf_mat_black[0][1]
+        return np.abs(FPR_white - FPR_black)
+
+    @property
+    def eq_odds_svm(self):
+        return self.eq_opp_svm + self.pred_eq_svm
+
+    @property
+    def pred_par_svm(self):
+        conf_mat_white = self.confusion_matrix_svm_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_svm_black(normalize=False)
+
+        TP_white = conf_mat_white[1][1]
+        TP_black = conf_mat_black[1][1]
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        PPV_white = TP_white / PP_white
+        PPV_black = TP_black / PP_black
+        return np.abs(PPV_white - PPV_black)
+
+    @property
+    def stat_par_svm(self):
+        conf_mat_white = self.confusion_matrix_svm_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_svm_black(normalize=False)
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        white = conf_mat_white.values.sum()
+        black = conf_mat_black.values.sum()
+
+        PPR_white = PP_white / white
+        PPR_black = PP_black / black
+
+        return np.abs(PPR_white - PPR_black)
+
+    @property
+    def disp_imp_svm(self):
+        conf_mat_white = self.confusion_matrix_svm_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_svm_black(normalize=False)
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        white = conf_mat_white.values.sum()
+        black = conf_mat_black.values.sum()
+
+        PPR_white = PP_white / white
+        PPR_black = PP_black / black
+
+        return np.min([PPR_white / PPR_black, PPR_black / PPR_white])
+
+    # COMPAS fairness metrics
+    @property
+    def eq_opp_compas(self):
+        conf_mat_white = self.confusion_matrix_compas_white(
+            normalize="columns")
+        conf_mat_black = self.confusion_matrix_compas_black(
+            normalize="columns")
+
+        TPR_white = conf_mat_white[1][1]
+        TPR_black = conf_mat_black[1][1]
+
+        return np.abs(TPR_white - TPR_black)
+
+    @property
+    def pred_eq_compas(self):
+        conf_mat_white = self.confusion_matrix_compas_white(normalize="columns")
+        conf_mat_black = self.confusion_matrix_compas_black(normalize="columns")
+        FPR_white = conf_mat_white[0][1]
+        FPR_black = conf_mat_black[0][1]
+        return np.abs(FPR_white - FPR_black)
+
+    @property
+    def eq_odds_compas(self):
+        return self.eq_opp_compas + self.pred_eq_compas
+
+    @property
+    def pred_par_compas(self):
+        conf_mat_white = self.confusion_matrix_compas_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_compas_black(normalize=False)
+
+        TP_white = conf_mat_white[1][1]
+        TP_black = conf_mat_black[1][1]
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        PPV_white = TP_white / PP_white
+        PPV_black = TP_black / PP_black
+        return np.abs(PPV_white - PPV_black)
+
+    @property
+    def stat_par_compas(self):
+        conf_mat_white = self.confusion_matrix_compas_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_compas_black(normalize=False)
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        white = conf_mat_white.values.sum()
+        black = conf_mat_black.values.sum()
+
+        PPR_white = PP_white / white
+        PPR_black = PP_black / black
+
+        return np.abs(PPR_white - PPR_black)
+
+    @property
+    def disp_imp_compas(self):
+        conf_mat_white = self.confusion_matrix_compas_white(normalize=False)
+        conf_mat_black = self.confusion_matrix_compas_black(normalize=False)
+
+        PP_white = conf_mat_white.iloc[1].sum()
+        PP_black = conf_mat_black.iloc[1].sum()
+
+        white = conf_mat_white.values.sum()
+        black = conf_mat_black.values.sum()
+
+        PPR_white = PP_white / white
+        PPR_black = PP_black / black
+
+        return np.min([PPR_white / PPR_black, PPR_black / PPR_white])
+
+    @property
+    def fairness_table_svm(self):
+        data = {
+            "Equal Opportunity": self.eq_opp_svm,
+            "Predictive Equality": self.pred_eq_svm,
+            "Equalized Odds": self.eq_odds_svm,
+            "Predictive Parity": self.pred_par_svm,
+            "Statistical Parity": self.stat_par_svm,
+            "Disparate Impact": self.disp_imp_svm
+        }
+        df = pd.DataFrame(data, index=["SVM"])
+        df.columns = [col + " (%)" for col in df.columns]
+        return round(df, 4) * 100
+
+    @property
+    def fairness_table_compas(self):
+        data = {
+            "Equal Opportunity": self.eq_opp_compas,
+            "Predictive Equality": self.pred_eq_compas,
+            "Equalized Odds": self.eq_odds_compas,
+            "Predictive Parity": self.pred_par_compas,
+            "Statistical Parity": self.stat_par_compas,
+            "Disparate Impact": self.disp_imp_compas
+        }
+        df = pd.DataFrame(data, index=["COMPAS"])
+        df.columns = [col + " (%)" for col in df.columns]
+        return round(df, 4) * 100
