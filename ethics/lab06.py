@@ -365,61 +365,69 @@ get_ipython().run_cell_magic('R', '', 'library(dplyr)\n#You can choose your favo
 get_ipython().run_cell_magic('R', '', 'df <- dplyr::select(raw_data, age, c_charge_degree, race, age_cat, score_text, sex, priors_count, \n                    days_b_screening_arrest, decile_score, is_recid, two_year_recid, c_jail_in, c_jail_out,\n                    juv_fel_count,juv_misd_count,juv_other_count,is_violent_recid) %>% \n        filter(days_b_screening_arrest <= 30) %>%\n        filter(days_b_screening_arrest >= -30) %>%\n        filter(is_recid != -1) %>%\n        filter(is_violent_recid != -1) %>%\n        filter(c_charge_degree != "O") %>%\n        filter(score_text != \'N/A\')\nwrite.csv(df,"propublica_ext.csv")\n\nnrow(df)')
 
 
-# %% [markdown]
-# Now we import the same libraries as in the previous labs.
-
-# %% [markdown]
-# We first read the filtered data.
-
 # %%
 importlib.reload(lab06_part3_compas)
 
 compas = lab06_part3_compas.Compas()
 df = compas.data
 # We calculate the number of objects in the dataset
-compas.predict()
-compas.display_prediction_metrics_svm()
-
-# %% [markdown]
-# Actually, our dataset is only composed of 23 variables, since we do not include the first column as variable, and the variable "two_year_recid" is the binary label to predict.
-#
-# We now select from this list only the variables we want to consider in our classification problem and the corresponding labels:
-
-# %%
+compas.predict_svm()
 
 
 # %% [markdown]
 # ## Questions:
+# **Metrics below are computed with a train-test split, therefore might slightly differ from teacher's results**
 #
 # **11-** Provide the accuracy for the COMPAS dataset.
 # %%
+metrics.accuracy_score(
+    compas.data["two_year_recid"], compas.data["COMPAS_Decision"])
 
 # %% [markdown]
 # **12-** Provide the accuracy for black defendants for the COMPAS dataset.
 #
+# %%
+metrics.accuracy_score(compas.data[compas.data["african_american"] == 1]["two_year_recid"],
+                       compas.data[compas.data["african_american"] == 1]["COMPAS_Decision"])
+
+
 # %% [markdown]
 # **13-** Provide the accuracy for white defendants for the COMPAS dataset.
 #
+# %%
+metrics.accuracy_score(compas.data[compas.data["caucasian"] == 1]["two_year_recid"],
+                       compas.data[compas.data["caucasian"] == 1]["COMPAS_Decision"])
+
 # %% [markdown]
 # **14-** Provide the FPR for the COMPAS dataset.
 #
+
+# %%
+conf_mat_compas = compas.confusion_matrix_compas()
+FP_compas = conf_mat_compas[0][1]
+NN_compas = conf_mat_compas[0].sum()
+FPR_compas = FP_compas / NN_compas
+print(f"FPR_compas: {FPR_compas}")
+
 # %% [markdown]
 # **15-** Provide the FNR for the COMPAS dataset.
 #
-#
+# %%
+FN_compas = conf_mat_compas[1][0]
+PP_compas = conf_mat_compas[1].sum()
+FNR_compas = FN_compas / PP_compas
+print(f"FNR_compas: {FNR_compas}")
+
+
 
 # %%
 # For the COMPAS:
-FPR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=[
-                    'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
-FNR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=[
-                    'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[1][0].astype('float')
+FPR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=['Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
+FNR_b = pd.crosstab(b_recid['COMPAS_Decision'], b_recid['two_year_recid'], rownames=['Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[1][0].astype('float')
 
 print("FPR of Black %.2f" % (FPR_b*100), "%")
 print("FNR of Black %.2f" % (FNR_b*100), "%")
 
-# %% [markdown]
-# Accuracy
 # %% [markdown]
 # ## Questions:
 #
