@@ -340,7 +340,7 @@ warnings.filterwarnings('ignore')
 
 
 # %%
-get_ipython().run_cell_magic('R', '', 'library(dplyr)\n#You can choose your favorite option:\n#a)Download the dataset and access it locally\n# raw_data <- read.csv("./compas-scores-two-years.csv") \n#b)Access the dataset directly from the repository\nraw_data <- read.csv("https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv")\nnrow(raw_data)\ncolnames(raw_data)')
+get_ipython().run_cell_magic('R', '', 'library(dplyr)\n#You can choose your favorite option:\n#a)Download the dataset and access it locally \n#b)Access the dataset directly from the repository\nraw_data <- read.csv("https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv")\nnrow(raw_data)\ncolnames(raw_data)')
 
 # %% [markdown]
 # Note: if you obtain the following error: "UsageError: Cell magic `%%R` not found."
@@ -362,7 +362,8 @@ get_ipython().run_cell_magic('R', '', 'library(dplyr)\n#You can choose your favo
 #
 
 # %%
-get_ipython().run_cell_magic('R', '', 'df <- dplyr::select(raw_data, age, c_charge_degree, race, age_cat, score_text, sex, priors_count, \n                    days_b_screening_arrest, decile_score, is_recid, two_year_recid, c_jail_in, c_jail_out,\n                    juv_fel_count,juv_misd_count,juv_other_count,is_violent_recid) %>% \n        filter(days_b_screening_arrest <= 30) %>%\n        filter(days_b_screening_arrest >= -30) %>%\n        filter(is_recid != 0) %>%\n        filter(is_violent_recid != 0) %>%\n        filter(c_charge_degree != "O") %>%\n        filter(score_text != \'N/A\')\nwrite.csv(df,"propublica_ext.csv")\n\nnrow(df)')
+get_ipython().run_cell_magic('R', '', 'df <- dplyr::select(raw_data, age, c_charge_degree, race, age_cat, score_text, sex, priors_count, \n                    days_b_screening_arrest, decile_score, is_recid, two_year_recid, c_jail_in, c_jail_out,\n                    juv_fel_count,juv_misd_count,juv_other_count,is_violent_recid) %>% \n        filter(days_b_screening_arrest <= 30) %>%\n        filter(days_b_screening_arrest >= -30) %>%\n        filter(is_recid != -1) %>%\n        filter(is_violent_recid != -1) %>%\n        filter(c_charge_degree != "O") %>%\n        filter(score_text != \'N/A\')\nwrite.csv(df,"propublica_ext.csv")\n\nnrow(df)')
+
 
 # %% [markdown]
 # Now we import the same libraries as in the previous labs.
