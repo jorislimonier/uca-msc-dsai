@@ -377,20 +377,16 @@ compas = lab06_part3_compas.Compas()
 df = compas.data
 # We calculate the number of objects in the dataset
 compas.predict()
+compas.display_prediction_metrics()
 
+# %%
+compas.X_test
 # %% [markdown]
 # Actually, our dataset is only composed of 23 variables, since we do not include the first column as variable, and the variable "two_year_recid" is the binary label to predict.
 #
 # We now select from this list only the variables we want to consider in our classification problem and the corresponding labels:
 
 # %%
-FPR_s = pd.crosstab(y_pred, df['two_year_recid'], rownames=[
-                    'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
-FNR_s = pd.crosstab(y_pred, df['two_year_recid'], rownames=['Predicted recividism'], colnames=[
-                    'Actual recividism'], normalize='columns')[1][0].astype('float')
-
-print("FPR SVM %.2f" % (FPR_s*100), "%")
-print("FNR SVM %.2f" % (FNR_s*100), "%")
 
 
 # %% [markdown]

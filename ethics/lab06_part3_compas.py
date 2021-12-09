@@ -54,28 +54,59 @@ class Compas():
                            "between_25_45", "greater_than_25", "Male"]
         self.X = self.data.copy()
         self.X = self.X[feature_columns]
-        self.y = self.data["two_year_recid"].values
+        self.y = self.data["two_year_recid"]
         self.data = self.data.assign(
             COMPAS_Decision=lambda x: x["score_low"].replace({0: 1, 1: 0}))
-        self.y_compas = self.data["COMPAS_Decision"].values
-
-        self.X_train, self.X_test, self.y_train, self.y_test, self.y_compas_train, self.y_compas_test, self.data_train, self.data_test = train_test_split(
-            self.X, self.y, self.y_compas, self.data, train_size=.8, shuffle=False)
+        self.y_compas = self.data["COMPAS_Decision"]
+        random_state = np.random.randint(2)
+        self.X_train, self.X_test = train_test_split(self.X,
+                                                     train_size=.999,
+                                                     shuffle=False,
+                                                     random_state=random_state)
+        self.y_train, self.y_test = train_test_split(self.y,
+                                                     train_size=.999,
+                                                     shuffle=False,
+                                                     random_state=random_state)
+        self.y_compas_train, self.y_compas_test = train_test_split(self.y_compas,
+                                                                   train_size=.999,
+                                                                   shuffle=False,
+                                                                   random_state=random_state)
+        self.data_train, self.data_test = train_test_split(self.data,
+                                                           train_size=.999,
+                                                           shuffle=False,
+                                                           random_state=random_state)
 
     def predict(self):
         svm_clf = SVC(kernel="linear", C=1.0)
         svm_clf.fit(self.X_train, self.y_train)
-        self.y_pred = svm_clf.predict(self.X_test)
+        self.y_pred = svm_clf.predict(self.X_train)
 
-        b_recid = self.data_test[self.data_test["african_american"] == 1]
-        w_recid = self.data_test[self.data_test["caucasian"] == 1]
+    def display_prediction_metrics(self):
+        b_recid = self.data_train[self.data_train["african_american"] == 1]
+        w_recid = self.data_train[self.data_train["caucasian"] == 1]
         print(
-            f"Accuracy SVM (All):  \t {metrics.accuracy_score(self.y_test, self.y_pred)*100} \n"
-            f"""Accuracy SVM (Black):\t {metrics.accuracy_score(
-                self.y_pred[self.data_test["african_american"] == 1], b_recid["two_year_recid"])*100}\n""",
-            f"""Accuracy SVM (White):\t {metrics.accuracy_score(
-                self.y_pred[self.data_test["caucasian"] == 1], w_recid["two_year_recid"])*100}""",
+            f"""
+            Accuracy SVM (All):\t {metrics.accuracy_score(self.y_train, self.y_pred)}\n
+            Accuracy SVM (Black):\t {metrics.accuracy_score(self.y_pred[self.data_train["african_american"] == 1], 
+                                        b_recid["two_year_recid"])}\n
+            Accuracy SVM (White):\t {metrics.accuracy_score(self.y_pred[self.data_train["caucasian"] == 1], 
+                                        w_recid["two_year_recid"])}
+            """
         )
 
-        display(pd.crosstab(self.y_pred, self.data_test['two_year_recid'], rownames=[
-            'Predicted recividism'], colnames=['Actual recividism'], normalize='columns'))
+        display(pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
+                            rownames=['Predicted recividism'],
+                            colnames=['Actual recividism'],
+                            normalize='columns'))
+
+        FPR_s = pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
+                            rownames=['Predicted recividism'],
+                            colnames=['Actual recividism'],
+                            normalize='columns')
+        FNR_s = pd.crosstab(self.y_pred, self.data_train['two_year_recid'],
+                            rownames=['Predicted recividism'],
+                            colnames=['Actual recividism'],
+                            normalize='columns')
+
+        display(f"FPR SVM", FPR_s)
+        display(f"FNR SVM", FNR_s)
