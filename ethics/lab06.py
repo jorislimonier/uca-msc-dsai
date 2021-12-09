@@ -380,24 +380,28 @@ compas.predict_svm()
 #
 # **11-** Provide the accuracy for the COMPAS dataset.
 # %%
-metrics.accuracy_score(
+acc_compas = metrics.accuracy_score(
     compas.data["two_year_recid"], compas.data["COMPAS_Decision"])
+
+print(f"acc_compas: {acc_compas}")
 
 # %% [markdown]
 # **12-** Provide the accuracy for black defendants for the COMPAS dataset.
 #
 # %%
-metrics.accuracy_score(compas.data[compas.data["african_american"] == 1]["two_year_recid"],
-                       compas.data[compas.data["african_american"] == 1]["COMPAS_Decision"])
+acc_compas_black = metrics.accuracy_score(compas.data[compas.data["african_american"] == 1]["two_year_recid"],
+                                          compas.data[compas.data["african_american"] == 1]["COMPAS_Decision"])
 
+print(f"acc_compas_black: {acc_compas_black}")
 
 # %% [markdown]
 # **13-** Provide the accuracy for white defendants for the COMPAS dataset.
 #
 # %%
-metrics.accuracy_score(compas.data[compas.data["caucasian"] == 1]["two_year_recid"],
-                       compas.data[compas.data["caucasian"] == 1]["COMPAS_Decision"])
+acc_compas_white = metrics.accuracy_score(compas.data[compas.data["caucasian"] == 1]["two_year_recid"],
+                                          compas.data[compas.data["caucasian"] == 1]["COMPAS_Decision"])
 
+print(f"acc_compas_white: {acc_compas_white}")
 # %% [markdown]
 # **14-** Provide the FPR for the COMPAS dataset.
 #
@@ -470,11 +474,11 @@ print(
 # %%
 # For the SVM:
 conf_mat_svm_black = compas.confusion_matrix_svm_black(normalize="columns")
-FPR_SVM_black = conf_mat_svm_black[0][1]
-FNR_SVM_black = conf_mat_svm_black[1][0]
+FPR_svm_black = conf_mat_svm_black[0][1]
+FNR_svm_black = conf_mat_svm_black[1][0]
 
-print(f"FPR SVM Black {FPR_SVM_black}")
-print(f"FNR SVM Black {FNR_SVM_black}")
+print(f"FPR SVM Black {FPR_svm_black}")
+print(f"FNR SVM Black {FNR_svm_black}")
 
 # %% [markdown]
 # ## Questions:
@@ -485,17 +489,17 @@ print(f"FNR SVM Black {FNR_SVM_black}")
 #
 # %%
 conf_mat_svm_white = compas.confusion_matrix_svm_white(normalize="columns")
-FPR_SVM_white = conf_mat_svm_white[0][1]
+FPR_svm_white = conf_mat_svm_white[0][1]
 
-print(f"FPR_SVM_white {FPR_SVM_white}")
+print(f"FPR_SVM_white {FPR_svm_white}")
 
 # %% [markdown]
 # **21-** Calculate the FNR for white defendants.
 #
 # %%
-FNR_SVM_white = conf_mat_svm_white[1][0]
+FNR_svm_white = conf_mat_svm_white[1][0]
 
-print(f"FNR_SVM_white {FNR_SVM_white}")
+print(f"FNR_SVM_white {FNR_svm_white}")
 
 
 # %% [markdown]
@@ -504,32 +508,118 @@ print(f"FNR_SVM_white {FNR_SVM_white}")
 #
 # %%
 print(
-    f"FPR of Black is {FPR_SVM_black / FPR_SVM_white} times the FPR of White")
+    f"FPR of Black is {FPR_svm_black / FPR_svm_white} times the FPR of White")
 
 # %% [markdown]
 # **23-** Replace **x** by the right number in the following statement:
 #
 # %%
 print(
-    f"FNR of Black is {FNR_SVM_black / FNR_SVM_white} times the FNR of White")
+    f"FNR of Black is {FNR_svm_black / FNR_svm_white} times the FNR of White")
 
 
 # %% [markdown]
 # ## Questions:
 #
+# %% [markdown]
 # **24-** Fill in the following table:
 #
+# %%
+acc_svm = metrics.accuracy_score(compas.y_test, compas.y_pred)
+
+acc_svm_black = metrics.accuracy_score(compas.y_test[compas.data_test["african_american"] == 1],
+                                       compas.y_pred[compas.data_test["african_american"] == 1])
+
+acc_svm_white = metrics.accuracy_score(compas.y_test[compas.data_test["caucasian"] == 1],
+                                       compas.y_pred[compas.data_test["caucasian"] == 1])
+
+conf_mat_svm = compas.confusion_matrix_svm("columns")
+
+FPR_svm = conf_mat_svm[0][1]
+FNR_svm = conf_mat_svm[1][0]
+
+
+# %%
+
+recap_table_data = {
+    "svm_all": [acc_svm, FPR_svm, FNR_svm],
+    "svm_black": [acc_svm_black, FPR_svm_black, FNR_svm_black],
+    "svm_white": [acc_svm_white, FPR_svm_white, FNR_svm_white],
+    "compas_all": [acc_compas, FPR_compas, FNR_compas],
+    "compas_black": [acc_compas_black, FPR_compas_black, FNR_compas_black],
+    "compas_white": [acc_compas_white, FPR_compas_white, FNR_compas_white]
+}
+index = ["Accuracy", "FPR", "FNR"]
+recap_table = pd.DataFrame(recap_table_data, index=index)
+print("Recap table (proportions):")
+display(recap_table)
+
+print("Recap table (percentages):")
+recap_table_percent = recap_table.copy()
+recap_table_percent = round(recap_table_percent, 4)*100
+recap_table_percent.columns = [
+    col+" (%)" for col in recap_table_percent.columns]
+display(recap_table_percent)
+
+# %% [markdown]
 # **25-** Which is the best solution in terms of accuracy? Is it fair (in terms of accuracy)?
 #
+# %%
+print(f"""
+    Since the accuracy for the SVM ({acc_svm}) is greater than the accuracy
+    of COMPAS ({acc_compas}), we conclude that the SVM is the best solution
+    in terms of accuracy.
+    The SVM is fair in terms of accuracy since the accuracy of the SVM for black people
+    ({acc_compas_black}) and for white people ({acc_compas_white}), although not exactly
+    equal, are fairly close.
+    """)
+
+# %% [markdown]
 # **26-** Which is the best solution in terms of FPR? Based on answers 18 and 22, which solution is more fair (in terms of FPR)?
-#
+# %%
+print(f"""
+    Since the FPR for the SVM ({FPR_svm}) is lower than the FPR
+    of COMPAS ({FPR_compas}), we conclude that the SVM is the best solution in terms
+    of FPR.
+    As we saw in question 22, the FPR of the SVM for black people ({FPR_svm_black})
+    is {FPR_svm_black / FPR_svm_white} times the FPR for white people ({FPR_svm_white}).
+    On the other hand, the FPR of COMPAS for black people ({FPR_compas_black})
+    is {FPR_compas_black / FPR_compas_white} times the FPR for white people ({FPR_compas_white}).
+    Since the ratio is smaller (closer to 1) for COMPAS than for the SVM, we conclude
+    that COMPAS is more fair in terms of FPR.
+    """)
+
+
+# %% [markdown]
 # **27-** Which is the best solution in terms of FNR? Based on answers 19 and 23, which solution is more fair (in terms of FNR)?
 #
+
+# %%
+print(f"""
+    Since the FNR for the SVM ({FNR_svm}) is higher than the FNR
+    of COMPAS ({FNR_compas}), we conclude that COMPAS is the best solution in terms
+    of FNR.
+    As we saw in question 23, the FNR of the SVM for black people ({FNR_svm_black})
+    is {FNR_svm_black / FNR_svm_white} times the FNR for white people ({FNR_svm_white}).
+    On the other hand, the FNR of COMPAS for black people ({FNR_compas_black})
+    is {FNR_compas_black / FNR_compas_white} times the FNR for white people ({FNR_compas_white}).
+    Since the ratio is larger (closer to 1) for the SVM than for COMPAS, we conclude that
+    the SVM is more fair in terms of FNR.
+    """)
+
+
+# %% [markdown]
 # **28-** Calculate the 6 fairness metrics for the COMPAS classifier.
 #
+
+# %% [markdown]
 # **29-** Calculate the 6 fairness metrics for the SVM classifier.
 #
+
+# %% [markdown]
 # **30-** As a future (or actual) data scientist, which solution would you choose for **this** specific problem? Justify your answer.
+#
+
 # %% [markdown]
 # $$
 # \begin{array}{cc}
