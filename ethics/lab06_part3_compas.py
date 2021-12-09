@@ -59,7 +59,10 @@ class Compas():
             COMPAS_Decision=lambda x: x["score_low"].replace({0: 1, 1: 0}))
         self.y_compas = self.data["COMPAS_Decision"]
 
-        random_state = np.random.randint(10**9) # get same random state for all splits
+        # get same random state for all splits
+        random_state = np.random.randint(10**9)
+
+        # perform splits
         self.X_train, self.X_test = train_test_split(self.X,
                                                      train_size=.7,
                                                      shuffle=True,
@@ -115,15 +118,17 @@ class Compas():
         }
         self.race_acc_svm = pd.DataFrame(accuracies, index=["SVM accuracy"])
 
+    # COMPAS confusion matrices
     def confusion_matrix_compas(self, normalize=False):
-        return pd.crosstab(self.data['COMPAS_Decision'],
-                           self.data['two_year_recid'],
+        "Confusion  matrix for all defendents, according to the decision given by COMPAS"
+        return pd.crosstab(self.data_test['COMPAS_Decision'],
+                           self.data_test['two_year_recid'],
                            rownames=['Predicted recividism'],
                            colnames=['Actual recividism'],
                            normalize=normalize)
 
     def confusion_matrix_compas_black(self, normalize=False):
-        "Confusion  matrix for black defendents"
+        "Confusion  matrix for black defendents, according to the decision given by COMPAS"
         b_recid = self.data_test[self.data_test["african_american"] == 1]
         return pd.crosstab(b_recid['COMPAS_Decision'],
                            b_recid['two_year_recid'],
@@ -132,9 +137,44 @@ class Compas():
                            normalize=normalize)
 
     def confusion_matrix_compas_white(self, normalize=False):
-        "Confusion  matrix for white defendents"
+        "Confusion  matrix for white defendents, according to the decision given by COMPAS"
         w_recid = self.data_test[self.data_test["caucasian"] == 1]
         return pd.crosstab(w_recid['COMPAS_Decision'],
+                           w_recid['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
+
+    # SVM confusion matrices
+    def confusion_matrix_svm(self, normalize=False):
+        """Confusion  matrix for all defendents,
+        according to the decision given by the SVM classifier
+        """
+        return pd.crosstab(self.y_pred,
+                           self.data_test['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
+
+    def confusion_matrix_svm_black(self, normalize=False):
+        """Confusion  matrix for black defendents,
+        according to the decision given by the SVM classifier
+        """
+        b_recid = self.data_test[self.data_test["african_american"] == 1]
+        y_pred_black = self.y_pred[self.data_test["african_american"] == 1]
+        return pd.crosstab(y_pred_black,
+                           b_recid['two_year_recid'],
+                           rownames=['Predicted recividism'],
+                           colnames=['Actual recividism'],
+                           normalize=normalize)
+
+    def confusion_matrix_svm_white(self, normalize=False):
+        """Confusion  matrix for white defendents,
+        according to the decision given by the SVM classifier
+        """
+        w_recid = self.data_test[self.data_test["caucasian"] == 1]
+        y_pred_white = self.y_pred[self.data_test["caucasian"] == 1]
+        return pd.crosstab(y_pred_white,
                            w_recid['two_year_recid'],
                            rownames=['Predicted recividism'],
                            colnames=['Actual recividism'],

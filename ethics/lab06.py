@@ -422,6 +422,9 @@ conf_mat_compas_black = compas.confusion_matrix_compas_black("columns")
 FPR_compas_black = conf_mat_compas_black[0][1]
 FNR_compas_black = conf_mat_compas_black[1][0]
 display(conf_mat_compas_black)
+
+# slightly different from what the teacher gets, but same order of magnitude
+# Probably only due to train_test_split
 print(f"FPR compas black: {FPR_compas_black}")
 print(f"FNR compas black: {FNR_compas_black}")
 
@@ -466,13 +469,12 @@ print(
 
 # %%
 # For the SVM:
-FPR_b = pd.crosstab(y_pred[df['african_american'] == 1], b_recid['two_year_recid'], rownames=[
-                    'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[0][1]
-FNR_b = pd.crosstab(y_pred[df['african_american'] == 1], b_recid['two_year_recid'], rownames=[
-                    'Predicted recividism'], colnames=['Actual recividism'], normalize='columns')[1][0].astype('float')
+conf_mat_svm_black = compas.confusion_matrix_svm_black(normalize="columns")
+FPR_SVM_black = conf_mat_svm_black[0][1]
+FNR_SVM_black = conf_mat_svm_black[1][0]
 
-print("FPR of Black %.2f" % (FPR_b*100), "%")
-print("FNR of Black %.2f" % (FNR_b*100), "%")
+print(f"FPR SVM Black {FPR_SVM_black}")
+print(f"FNR SVM Black {FNR_SVM_black}")
 
 # %% [markdown]
 # ## Questions:
@@ -481,15 +483,37 @@ print("FNR of Black %.2f" % (FNR_b*100), "%")
 #
 # **20-** Calculate the FPR for white defendants.
 #
+# %%
+conf_mat_svm_white = compas.confusion_matrix_svm_white(normalize="columns")
+FPR_SVM_white = conf_mat_svm_white[0][1]
+
+print(f"FPR_SVM_white {FPR_SVM_white}")
+
+# %% [markdown]
 # **21-** Calculate the FNR for white defendants.
 #
-# **22-** Replace **x** by the right number in the two following statement:
+# %%
+FNR_SVM_white = conf_mat_svm_white[1][0]
+
+print(f"FNR_SVM_white {FNR_SVM_white}")
+
+
+# %% [markdown]
+# **22-** Replace **x** by the right number in the following statement:
 #
-# "FPR of Black is **x** times greater than for White"
 #
-# **23-** Replace **x** by the right number in the two following statement:
+# %%
+print(
+    f"FPR of Black is {FPR_SVM_black / FPR_SVM_white} times the FPR of White")
+
+# %% [markdown]
+# **23-** Replace **x** by the right number in the following statement:
 #
-# "FNR of Black is **x** times smaller than for White"
+# %%
+print(
+    f"FNR of Black is {FNR_SVM_black / FNR_SVM_white} times the FNR of White")
+
+
 # %% [markdown]
 # ## Questions:
 #
