@@ -33,7 +33,6 @@ x_val, y_val = x[val_idx], y[val_idx]
 
 # %%
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 # %%
 fig, axs = plt.subplots(1,2,figsize=(12,5))
