@@ -565,12 +565,65 @@ Now we want to find the maximum likelihood estimator.
      & = \frac{2N}{\sigma^{2}}                                                                                \\
 \end{align*}
 
-Thus 
+Thus
 \[
     se(\hat \sigma_{ML}) = \frac{1}{\sqrt{I_N (\sigma)}} = \frac{\sigma}{\sqrt{2N}}
 \]
 
 \paragraph{ii) Compute \(\hat{\sigma}_{ML}\) and estimator \(se(\hat{\sigma}_{ML})\)}
+
+\section{Homework for December 10, 2021}
+\subsection{Chapter 9 - Exercise 3}
+
+3. Let $X_{1}, \ldots, X_{n} \sim N\left(\mu, \sigma^{2}\right)$. \\
+Let $\tau$ be the $.95$ percentile, i.e. $\mathbb{P}(X<\tau)=$ $0.95$ \\
+(a) Find the MLE of $\tau$. \\
+(b) Find an expression for an approximate $1-\alpha$ confidence interval for $\tau$. \\
+(c) Suppose the data are: \\
+$$
+    \begin{array}{rrrrrr}
+        3.23 & -2.50 & 1.88  & -0.68 & 4.43  & 0.17 \\
+        1.03 & -0.07 & -0.01 & 0.76  & 1.76  & 3.18 \\
+        0.33 & -0.31 & 0.30  & -0.61 & 1.52  & 5.43 \\
+        1.54 & 2.28  & 0.42  & 2.33  & -1.03 & 4.00 \\
+        0.39 &       &       &       &       &
+    \end{array}
+$$
+Find the MLE $\widehat{\tau}$. Find the standard error using the delta method. Find the standard error using the parametric bootstrap.
+
+\subsubsection{(a)}
+\begin{align*}
+             & \P \left( X_i < \tau \right) = 0.95                                                                         \\
+    \implies &
+    \P \left( \underbrace{\frac{X_i - \mu}{\sigma}}_{:=Z \sim \mathcal{N}(0,1)} < \frac{\tau - \mu}{\sigma} \right) = 0.95 \\
+    \implies &
+    \underbrace{\P \left( Z < \frac{\tau - \mu}{\sigma} \right)}_{:= \Phi (\frac{\tau - \mu}{\sigma})} = 0.95              \\
+    \implies &
+    \Phi \left(\frac{\tau - \mu}{\sigma}\right) = 0.95                                                                     \\
+    \implies &
+    \frac{\tau - \mu}{\sigma} = \Phi^{-1}\left(0.95\right)                                                                 \\
+    \implies &
+    \tau = \sigma \Phi^{-1}\left(0.95\right) + \mu                                                                         \\
+    \implies &
+    \hat \tau_{ML} = \hat\sigma_{ML} \Phi^{-1}\left(0.95\right) + \hat\mu_{ML}                                             \\
+\end{align*}
+
+\subsubsection{(b)}
+Let \(\tau = \sigma \Phi^{-1}\left(0.95\right) + \mu := g(\mu, \sigma)\), so \(\hat\tau_{ML} = g(\hat\mu_{ML}, \hat\sigma_{ML})\), by equivariance of ML.
+
+Therefore:
+\begin{align*}
+    \hat\tau_{ML} - \tau
+     & = g(\hat\mu_{ML}, \hat\sigma_{ML}) - g(\mu, \sigma)       \\
+     & \approx \nabla g(\mu, \sigma) \left[ (\hat\mu_{ML}, \hat\sigma_{ML}) - (\mu, \sigma) \right]
+\end{align*}
+
+\subsubsection{(c)}
+
+
+
+\subsection{Chapter 9 - Exercise 5}
+
 
 
 \end{document}
