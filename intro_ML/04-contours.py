@@ -1,6 +1,12 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # %%
+import cv2
+import matplotlib.pyplot as plt
+from skimage.feature import corner_harris, corner_peaks
+from skimage.filters import sobel
+import os
+from scipy import ndimage
 from IPython import get_ipython
 
 # %% [markdown]
@@ -23,9 +29,9 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 # %%
 #img = data.coffee()
 img = data.chelsea()
-#img = io.imread('/home/lingrand/Ens/SSII/Cours8-contours/carreNoir.png') #data.coffee()
+# img = io.imread('/home/lingrand/Ens/SSII/Cours8-contours/carreNoir.png') #data.coffee()
 # you can save an image to an image file
-#io.imsave("coffee.png",img)
+# io.imsave("coffee.png",img)
 
 
 # %%
@@ -49,32 +55,31 @@ ax[1].title.set_text('a cat')
 # ## Smoothing using convolution
 # %% [markdown]
 # We will start to use a simple method of 2D convolution: <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.convolve.html">scipy.ndimage.convolve</a>.
-# 
+#
 # Gaussian smoothing is approximated by a convolution with the kernel $\frac{1}{16}\begin{pmatrix} 1 & 2 & 1\\ 2 & 4 & 2 \\ 1 & 2 & 1 \end{pmatrix}$.
-# 
+#
 # This convolution only deals with a single channel. We thus need to apply this function on each channel and then recompose another image.
 
 # %%
-from scipy import ndimage
 
 
 # %%
-lissGauss3x3 = np.array([[1,2,1],[2,4,2],[1,2,1]])
-r = ndimage.convolve(img[:,:,0],lissGauss3x3)
-g = ndimage.convolve(img[:,:,1],lissGauss3x3)
-b = ndimage.convolve(img[:,:,2],lissGauss3x3)
-imgLisse = np.dstack((r,g,b))
+lissGauss3x3 = np.array([[1, 2, 1], [2, 4, 2], [1, 2, 1]])
+r = ndimage.convolve(img[:, :, 0], lissGauss3x3)
+g = ndimage.convolve(img[:, :, 1], lissGauss3x3)
+b = ndimage.convolve(img[:, :, 2], lissGauss3x3)
+imgLisse = np.dstack((r, g, b))
 plt.imshow(imgLisse)
 
 # %% [markdown]
 # Strange colors ... What's the problem ? How to improve ?
 
 # %%
-lissGauss3x3 = np.array([[1,2,1],[2,4,2],[1,2,1]])/16
-r = ndimage.convolve(img[:,:,0],lissGauss3x3)
-g = ndimage.convolve(img[:,:,1],lissGauss3x3)
-b = ndimage.convolve(img[:,:,2],lissGauss3x3)
-imgLisse = np.dstack((r,g,b))
+lissGauss3x3 = np.array([[1, 2, 1], [2, 4, 2], [1, 2, 1]])/16
+r = ndimage.convolve(img[:, :, 0], lissGauss3x3)
+g = ndimage.convolve(img[:, :, 1], lissGauss3x3)
+b = ndimage.convolve(img[:, :, 2], lissGauss3x3)
+imgLisse = np.dstack((r, g, b))
 plt.imshow(imgLisse)
 
 # %% [markdown]
@@ -82,35 +87,36 @@ plt.imshow(imgLisse)
 # %% [markdown]
 # ## Edges by first derivative
 # %% [markdown]
-# A well-know detector is the one by Sobel. Have a look on the edges long x-axis and y-axis before composing the final result. 
+# A well-know detector is the one by Sobel. Have a look on the edges long x-axis and y-axis before composing the final result.
 
 # %%
-sobelx = np.array([[1,0,-1],[2,0,-2],[1,0,-1]])/4.0
-sobely = np.array([[1,2,1],[0,0,0],[-1,-2,-1]])/4.0
+sobelx = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])/4.0
+sobely = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])/4.0
 
-r = ndimage.convolve(img[:,:,0],sobelx)
-g = ndimage.convolve(img[:,:,1],sobelx)
-b = ndimage.convolve(img[:,:,2],sobelx)
-imgSobelx = np.dstack((r,g,b))
+r = ndimage.convolve(img[:, :, 0], sobelx)
+g = ndimage.convolve(img[:, :, 1], sobelx)
+b = ndimage.convolve(img[:, :, 2], sobelx)
+imgSobelx = np.dstack((r, g, b))
 plt.imshow(imgSobelx)
 print("min = ", imgSobelx.min())
 print("max = ", r.max())
-print(imgSobelx[100,400,:])
+print(imgSobelx[100, 400, :])
 
 # %% [markdown]
 # If you are note sure of the result, try your detector on a simple image composed of a black square on a white background.
 
 # %%
-import os
-img = io.imread(os.getcwd() + '/black_square.png') 
+img = io.imread(os.getcwd() + '/black_square.png')
 plt.imshow(img)
 
 
 # %%
-sobel_mag = ndimage.sobel(img[:,:,0], axis=0)
-print(type(sobel_mag), sobel_mag.shape,type(sobel_mag[0][0]),sobel_mag.min(), sobel_mag.max())
-plt.imshow(sobel_mag, cmap = plt.cm.gray)
-plt.imshow(np.abs(ndimage.sobel(img[:,:,0],axis=0)),cmap=plt.cm.gray) # ou axis =1
+sobel_mag = ndimage.sobel(img[:, :, 0], axis=0)
+print(type(sobel_mag), sobel_mag.shape, type(
+    sobel_mag[0][0]), sobel_mag.min(), sobel_mag.max())
+plt.imshow(sobel_mag, cmap=plt.cm.gray)
+# ou axis =1
+plt.imshow(np.abs(ndimage.sobel(img[:, :, 0], axis=0)), cmap=plt.cm.gray)
 
 # %% [markdown]
 # Why do you obtain only a single horizontal edge ?
@@ -118,7 +124,7 @@ plt.imshow(np.abs(ndimage.sobel(img[:,:,0],axis=0)),cmap=plt.cm.gray) # ou axis 
 # And what about to write the code from scratch ?
 
 # %%
-img[:,:,0].shape
+img[:, :, 0].shape
 
 
 # %%
@@ -151,11 +157,10 @@ print(imgSobelx[100, 100, :])
 # Let's forger ndimage for Sobel edges and take a look to scikit-image.
 
 # %%
-from skimage.filters import sobel
 
 
 # %%
-sobelx = sobel(img,axis=1) # or axis = 0
+sobelx = sobel(img, axis=1)  # or axis = 0
 print(sobelx.min(), sobelx.max())
 plt.imshow(np.abs(sobelx))
 print(type(sobelx[0][0][0]))
@@ -172,9 +177,10 @@ plt.imshow(sobel_mag)
 # %%
 # for you
 img = data.coffee()
-print(img[:,:,1].shape)
+print(img[:, :, 1].shape)
 plt.imshow(img)
-sobel_mag = np.sqrt(sobel(img[:,:,1], axis=0)**2 + sobel(img[:,:,1], axis=1)**2)/math.sqrt(2)
+sobel_mag = np.sqrt(sobel(img[:, :, 1], axis=0) **
+                    2 + sobel(img[:, :, 1], axis=1)**2)/math.sqrt(2)
 
 # %% [markdown]
 # Test also othe edge detectors using first derivatives such as, for example, <a href="https://scikit-image.org/docs/dev/api/skimage.filters.html?highlight=sobel#skimage.filters.prewitt">Prewitt</a>.
@@ -214,15 +220,13 @@ sobel_mag = np.sqrt(sobel(img[:,:,1], axis=0)**2 + sobel(img[:,:,1], axis=1)**2)
 # Let's start with Harris:
 
 # %%
-from skimage.feature import corner_harris, corner_peaks
 
 
 # %%
-pts=corner_peaks(corner_harris(img[:,:,1]), min_distance=1)
-print( pts.shape[0], ' points found')
-import matplotlib.pyplot as plt
+pts = corner_peaks(corner_harris(img[:, :, 1]), min_distance=1)
+print(pts.shape[0], ' points found')
 plt.imshow(img, cmap='gray')
-plt.scatter(y=pts[:,0],x=pts[:,1],c='r',s=10)
+plt.scatter(y=pts[:, 0], x=pts[:, 1], c='r', s=10)
 plt.show()
 
 # %% [markdown]
@@ -230,25 +234,22 @@ plt.show()
 # %% [markdown]
 # ### SIFT
 # %% [markdown]
-# Let's try the SIFT detector and descriptor. We will use the OpenCV implementation. 
+# Let's try the SIFT detector and descriptor. We will use the OpenCV implementation.
 
 # %%
 # if necessary installation :
 #            !pip install opencv-contrib-python
 
-import cv2
 print(cv2.__version__)
 
 
 # %%
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 sift = cv2.SIFT_create()
-kp,des = sift.detectAndCompute(gray,None)
-cv2.drawKeypoints(gray,kp,img,flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+kp, des = sift.detectAndCompute(gray, None)
+cv2.drawKeypoints(
+    gray, kp, img, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 plt.imshow(img)
 
 
 # %%
-
-
-

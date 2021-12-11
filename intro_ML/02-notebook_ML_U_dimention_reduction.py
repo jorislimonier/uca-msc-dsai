@@ -1,6 +1,7 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # %%
+from keras.datasets import cifar10
 from IPython import get_ipython
 
 # %% [markdown]
@@ -21,12 +22,12 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 
 # %% [markdown]
 # ## the lab
-# 
+#
 # You can choose one of the following data sets:
 # - **MNIST:** The MNIST database of handwritten digits, available from this page, has a training set of 60,000 examples, and a test set of 10,000 examples.
 # - **Fashion MNIST:** Fashion-MNIST is a dataset of Zalando's article images—consisting of a training set of 60,000 examples and a test set of 10,000 examples.
-# - **CIFAR10:** The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. 
-# 
+# - **CIFAR10:** The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images.
+#
 # The following cells allow you to load each of the data sets.
 
 # %%
@@ -83,7 +84,6 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # %%
-from keras.datasets import cifar10
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 print(X_train.shape, X_test.shape)
 
@@ -94,16 +94,16 @@ target = y_test
 # For a better understanding, let's create a dictionary that will have class names
 # with their corresponding categorical class labels.
 label_dict = {
- 0: 'airplane',
- 1: 'automobile',
- 2: 'bird',
- 3: 'cat',
- 4: 'deer',
- 5: 'dog',
- 6: 'frog',
- 7: 'horse',
- 8: 'ship',
- 9: 'truck',
+    0: 'airplane',
+    1: 'automobile',
+    2: 'bird',
+    3: 'cat',
+    4: 'deer',
+    5: 'dog',
+    6: 'frog',
+    7: 'horse',
+    8: 'ship',
+    9: 'truck',
 }
 
 # %% [markdown]
@@ -122,7 +122,7 @@ print('Output classes : ', classes)
 # - Draw the first and last image of the data set with its label.
 
 # %%
-plt.figure(figsize=[5,5])
+plt.figure(figsize=[5, 5])
 
 # Display the first image
 plt.subplot(121)
@@ -140,14 +140,14 @@ print(plt.title("(Label: " + str(label_dict[target[-1][0]]) + ")"))
 # - Let's quickly check the maximum and minimum values of the images and <b>``normalize``</b> the pixels between 0 and 1 inclusive.
 
 # %%
-print("Before normalization:", np.min(data),np.max(data))
+print("Before normalization:", np.min(data), np.max(data))
 if np.amax(data) == 255:
     data = data / 255
-print("After normalization: ", np.min(data),np.max(data))
+print("After normalization: ", np.min(data), np.max(data))
 
 # %% [markdown]
 # - Next, you will create a DataFrame that will hold the pixel values of the images along with their respective labels in a row-column format.
-# 
+#
 # - But before that, let's reshape the image dimensions to one (flatten the images).
 
 # %%
@@ -168,7 +168,7 @@ data_flat.shape
 
 # %% [markdown]
 # ### Data visualization using PCA
-# 
+#
 # - Next, you will create the PCA method and pass the number of components as two and apply ``fit_transform`` on the training data (without the label), this can take few seconds since there are a lot of samples
 
 # %%
@@ -192,7 +192,8 @@ df.columns
 
 
 # %%
-df_pca = pd.DataFrame(x_pca, columns=[f"pca_vect{i}" for i in range(x_pca.shape[1])])
+df_pca = pd.DataFrame(
+    x_pca, columns=[f"pca_vect{i}" for i in range(x_pca.shape[1])])
 df_pca["y"] = df["label"]
 
 # %% [markdown]
@@ -205,12 +206,12 @@ pca.explained_variance_ratio_[:n_pca_vectors].sum()
 
 # %% [markdown]
 # Well, it looks like a decent amount of information was retained by the principal components 1 and 2, given that the data was projected from a lot of dimensions to a mere two principal components.
-# 
+#
 # Its time to visualize the dataset in a two-dimensional space. Remember that there is some semantic class overlap in this dataset which means that a frog can have a slightly similar shape of a cat or a deer with a dog; especially when projected in a two-dimensional space. The differences between them might not be captured that well.
-# 
+#
 
 # %%
-plt.figure(figsize=(16,10))
+plt.figure(figsize=(16, 10))
 sns.scatterplot(
     x=df_pca.pca_vect0, y=df_pca.pca_vect1,
     hue="y",
@@ -222,12 +223,12 @@ sns.scatterplot(
 
 # %% [markdown]
 # From the above figure, you can observe that some variation was captured by the principal components since there is some structure in the points when projected along the two principal component axis. The points belonging to the same class are close to each other, and the points or images that are very different semantically are further away from each other.
-# 
-# 
-# 
+#
+#
+#
 # %% [markdown]
 # ### Data visualization using tSNE
-# 
+#
 # Now you will do the same exercise using the t-SNE algorithm. Scikit-learn has an implementation of t-SNE available, and you can check its documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html). It provides a wide variety of tuning parameters for t-SNE, and the most notable ones are:
 # - **n_components** (default: 2): Dimension of the embedded space.
 # - **perplexity** (default: 30): The perplexity is related to the number of nearest neighbors that are used in other manifold learning algorithms. Consider selecting a value between 5 and 50.
@@ -235,7 +236,7 @@ sns.scatterplot(
 # - **learning_rate** (default: 200.0): The learning rate for t-SNE is usually in the range (10.0, 1000.0).
 # - **nc** (default: 1000): Maximum number of iterations for the optimization. Should be at least 250.
 # - **method** (default: ‘barnes_hut’): Barnes-Hut approximation runs in O(NlogN) time. method=’exact’ will run on the slower, but exact, algorithm in O(N^2) time.
-# 
+#
 # Be careful: t-SNE takes much longer to run on the same data sample size than PCA.
 
 # %%
@@ -249,7 +250,7 @@ x_tsne = tsne.fit_transform(data_flat)
 df_tsne = pd.DataFrame(x_tsne)
 
 # %% [markdown]
-# Its time to visualize the dataset in a two-dimensional space. 
+# Its time to visualize the dataset in a two-dimensional space.
 
 # %%
 plt.scatter(df_tsne[0], df_tsne[1], s=1)
@@ -263,7 +264,7 @@ plt.scatter(df_tsne[0], df_tsne[1], s=1)
 
 # %% [markdown]
 # ### Data visualization using LDA
-# 
+#
 # Do the same whith LDA projection
 
 # %%
@@ -274,5 +275,3 @@ plt.scatter(df_tsne[0], df_tsne[1], s=1)
 
 # %%
 '''your code here'''
-
-
