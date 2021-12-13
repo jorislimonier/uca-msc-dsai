@@ -22,6 +22,7 @@ from nltk.tokenize import word_tokenize
 import numpy as np
 import pandas as pd
 from IPython import get_ipython
+import nltk
 
 # %% [markdown]
 # # Case Study: Sentiment Analysis
@@ -122,7 +123,8 @@ TRAIN.head(10)
 
 # %%
 # Tokenized the reviews
-# nltk.download('punkt') # If nltk requires to download 'punkt' depending on your installation
+# If nltk requires to download 'punkt' depending on your installation
+nltk.download('punkt')
 reviews_tokenized = [word_tokenize(review) for review in TRAIN['Reviews']]
 for sentence in reviews_tokenized[:10]:
     print('%s \n' % sentence)
