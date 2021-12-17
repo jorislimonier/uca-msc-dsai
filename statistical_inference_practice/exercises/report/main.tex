@@ -614,7 +614,7 @@ Let \(\tau = \sigma \Phi^{-1}\left(0.95\right) + \mu := g(\mu, \sigma)\), so \(\
 Therefore:
 \begin{align*}
     \hat\tau_{ML} - \tau
-     & = g(\hat\mu_{ML}, \hat\sigma_{ML}) - g(\mu, \sigma)       \\
+     & = g(\hat\mu_{ML}, \hat\sigma_{ML}) - g(\mu, \sigma)                                          \\
      & \approx \nabla g(\mu, \sigma) \left[ (\hat\mu_{ML}, \hat\sigma_{ML}) - (\mu, \sigma) \right]
 \end{align*}
 
@@ -622,8 +622,151 @@ Therefore:
 
 
 
-\subsection{Chapter 9 - Exercise 5}
+\section{Simple Linear Regression Exercises}
+
+\subsection{Exercise 1}
+\subsubsection{(a)}
+Recall how the OLS estimator
+$$
+    \hat{\beta}=\left(X^{T} X\right)^{-1} X^{T} Y
+$$
+is computed and show that the fitted values $\hat{Y}$ are obtained as
+$$
+    \hat{Y}=X\left(X^{T} X\right)^{-1} X^{T} Y
+$$
+
+\subsubsection{(b)}
+(b) Show that that $\hat{\beta}$ is an unbiased estimator of $\beta$ and compute its variance.
+\begin{align*}
+    \E [\hat \beta]
+     & = \E \left[ \left(X^{T} X\right)^{-1} X^{T} Y \right]                     \\
+     & = \left(X^{T} X\right)^{-1} X^{T} \E \left[ Y \right]                     \\
+     & = \left(X^{T} X\right)^{-1} X^{T} \E \left[ X \beta + \varepsilon \right] \\
+     & = \left(X^{T} X\right)^{-1} X^{T} X \E \left[ \beta \right]               \\
+     & = \left(X^{T} X\right)^{-1} X^{T} X \E \left[ \beta \right]               \\
+     & =  \beta                                                                  \\
+\end{align*}
+So \(\hat \beta\) is unbiased.
+
+\begin{align*}
+    Var(\hat \beta)
+     & = \E \left[ \left( \hat \beta - \E[\hat \beta ]\right) \left( \hat \beta - \E[\hat \beta]\right)^T \right]                            \\
+     & = \E \left[ \left( \hat \beta - \beta \right) \left( \hat \beta - \beta \right)^T \right]                                             \\
+     & = \E \left[ \left( \left(X^T X \right)^{-1} X^T \varepsilon \right) \left( \left(X^T X \right)^{-1} X^T \varepsilon \right)^T \right] \\
+     & = \E \left[ \left(X^T X \right)^{-1} X^T \varepsilon \varepsilon^T X \left(\left(X^T X \right)^{-1} \right)^T \right]                 \\
+     & = \left(X^T X \right)^{-1} X^T \cdot \E \left[ \varepsilon \varepsilon^T \right] \cdot X \left(\left(X^T X \right)^{-1} \right)^T     \\
+     & = \left(X^T X \right)^{-1} X^T \cdot \sigma^2 I_n \cdot X \left(X^T X \right)^{-1}                                                    \\
+     & = \sigma^2 \left(X^T X \right)^{-1}                                                                                                   \\
+\end{align*}
+
+\subsubsection{(c)}
+We now introduce the matrix $P_{1}:=X\left(X^{T} X\right)^{-1} X^{T}$ and show that it is a projection matrix ${ }^{1}$ In order to do that
+
+\paragraph{1. Show that $P_{1}$ is symmetric.}
+\begin{align*}
+    P_1^T
+     & = \left[ X\left(X^{T} X\right)^{-1} X^{T} \right]^T \\
+     & = X\left(X^{T} X\right)^{-1^T} X^{T}                \\
+     & = X\left(X^{T} X\right)^{-1} X^{T}                  \\
+     & = P_1                                               \\
+\end{align*}
+
+\paragraph{2. Show that $P_{1}^{2}=P_{1}$.}
+\begin{align*}
+    P_1^2
+     & = \left[ X\left(X^{T} X\right)^{-1} X^{T} \right]^2                  \\
+     & =  X\left(X^{T} X\right)^{-1} X^{T} X\left(X^{T} X\right)^{-1} X^{T} \\
+     & =  X\left(X^{T} X\right)^{-1} X^{T}                                  \\
+     & =  P_1                                                               \\
+\end{align*}
+
+\subsubsection{(d)}
+\paragraph{Prove that $X \hat{\beta}=X \beta+P_{1} \varepsilon$}
+
+\begin{align*}
+    X \hat \beta
+     & = X \left(X^T X \right)^{-1} X^T Y                                    \\
+     & = X \left(X^T X \right)^{-1} X^T \left( X \beta + \varepsilon \right) \\
+     & = X \beta + X \left(X^T X \right)^{-1} X^T \varepsilon                \\
+     & = X \beta + P_1 \varepsilon                                           \\
+\end{align*}
 
 
+\subsubsection{(e)}
+\paragraph{Show that the OLS residuals $\hat{\varepsilon}:=Y-X \hat{\beta}$ are obtained as
+    $$
+        \hat{\varepsilon}=\left(I_{n}-P_{1}\right) Y
+    $$}
+
+\begin{align*}
+    \hat{\varepsilon}
+     & := Y-X \hat{\beta} \\
+\end{align*}
+
+\subsubsection{(f)}
+\paragraph{Prove that the matrix $P_{2}:=\left(I_{n}-P_{1}\right)$ is also a projection matrix and show that $P_{1} P_{2}=0_{n}$.}
+
+    \subsubsection{(g)}
+    \paragraph{Show that $\hat{\varepsilon}=P_{2} \varepsilon$.}
+
+    \begin{align*}
+        \hat \varepsilon
+         & = y - \hat y                             \\
+         & = y - X \left(X^T X \right)^{-1} X^T y   \\
+         & = \left[ I - P_1 \right] y               \\
+         & = P_2 y                                  \\
+         & = P_2 \left(X \beta + \varepsilon\right) \\
+         & = P_2 \varepsilon                        \\
+    \end{align*}
+
+
+    \paragraph{Show that \(\E[\hat \varepsilon] = 0\)}
+
+    \begin{align*}
+        \E[\hat \varepsilon]
+         & = \E \left[ P_2 \varepsilon \right] \\
+         & = P_2 \E \left[ \varepsilon \right] \\
+         & = 0                                 \\
+    \end{align*}
+
+    \paragraph{Compute \(Var(\hat \varepsilon)\)}
+
+    \begin{align*}
+        Var(\hat \varepsilon)
+         & = \E \left[\hat \varepsilon \hat \varepsilon^T\right] \\
+         & = P_2 \E \left[\varepsilon \varepsilon^T\right] P_2^T \\
+         & = P_2 \sigma^2 P_2^T                                  \\
+         & =\sigma^2 P_2 P_2^T                                   \\
+         & =\sigma^2 P_2                                         \\
+    \end{align*}
+
+
+    \begin{align*}
+        Cov(\hat \beta, \hat \varepsilon)
+         & = \E\left[ \left(\hat \beta - \E \left[\hat \beta \right]\right) \left(\hat \varepsilon - \E \left[\hat \varepsilon \right]\right)^T\right] \\
+         & = \E\left[ \left(\hat \beta - \beta\right) \left( P_2 \varepsilon\right)^T\right]                                                           \\
+         & = \E\left[ \left( X X \right)^{-1} X^T \left( P_2 \varepsilon\right)^T\right]                                                               \\
+         & \vdots                                                                                                                                      \\
+         & = 0
+    \end{align*}
+
+    \subsection{Exercise 2}
+
+    Let
+    \begin{equation}
+        \label{eqn: eq1}
+        \sum_{i=1}^{n} \hat{\varepsilon}_{i}^{2}=\|\hat{\varepsilon}\|^{2}=\sum_{k=1}^{n-p} Z_{k}^{2},
+    \end{equation}
+    where $Z_{k} \sim \mathcal{N}\left(0, \sigma^{2}\right)$ and are all independent.
+
+\subsubsection{(a)}
+\paragraph{Modify \eqref{eqn: eq1} is such a way to obtain a sum of independent standard (unit variance) Gaussian random variables.}
+
+\begin{align*}
+    \|\hat \varepsilon\|^2
+     & = \sum_{k=1}^{n-p} Z_k^2 \\
+     & = \sigma^2 \underbrace{\sum_{k=1}^{n-p} \frac{Z_k^2}{\sigma^2}}_{\sim \mathcal{N}(0, 1)} \\
+\end{align*}
+Hence \( \| \varepsilon \|^2 \sim \sigma \chi^2_{n-p} \)
 
 \end{document}
