@@ -9,7 +9,7 @@ Classes:
 
   <ul>
   <details>
-    <summary> Refreshers </summary>
+    <summary> Refreshers :heavy_check_mark: </summary>
     <ul>
       <li> Algorithmics </li>
       <li> Basic tools </li>
@@ -20,7 +20,7 @@ Classes:
   </details>
 
   <details>
-    <summary> Semester 1 </summary>
+    <summary> Semester 1 :heavy_check_mark: </summary>
     <ul>
       <li> Data Visualization </li>
       <li> Ethics </li>
