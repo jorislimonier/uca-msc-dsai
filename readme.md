@@ -5,39 +5,51 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
 Classes:
 
 <details open>
-<summary> Year 1 (2021 - 2022) </summary>
-  
-  <ul>
-  <details>
-  <summary> Refreshers </summary>
+  <summary> Year 1 (2021 - 2022) </summary>
 
   <ul>
-    <li> Algorithmics </li>
-    <li> Basic tools </li>
-    <li> Linear Algebra </li>
-    <li> Probabilities </li>
-    <li> Research Methods </li>
-  </ul>
+  <details>
+    <summary> Refreshers </summary>
+    <ul>
+      <li> Algorithmics </li>
+      <li> Basic tools </li>
+      <li> Linear Algebra </li>
+      <li> Probabilities </li>
+      <li> Research Methods </li>
+    </ul>
+  </details>
+
+  <details>
+    <summary> Semester 1 </summary>
+    <ul>
+      <li> Data Visualization </li>
+      <li> Ethics </li>
+      <li> Intro to Machine Learning </li>
+      <li> Python Data Manipulation </li>
+      <li> R Processing Large Datasets </li>
+      <li> Seminar </li>
+      <li> Statistical Inference Practice </li>
+      <li> Statistical Inference Theory </li>
+    </ul>
   </details>
 
   <details open>
-  <summary> Semester 1 </summary>
-  <ul>
-    <li> Data Visualization </li>
-    <li> Ethics </li>
-    <li> Intro to Machine Learning </li>
-    <li> Python Data Manipulation </li>
-    <li> R Processing Large Datasets </li>
-    <li> Seminar </li>
-    <li> Statistical Inference Practice </li>
-    <li> Statistical Inference Theory </li>
-  </ul>
+    <summary> Semester 2 </summary>
+    <ul>
+      <li> Case Study </li>
+      <li> Introduction to Deep Learning </li>
+      <li> Machine Learning Algorithms </li>
+      <li> Model Selection and Resampling </li>
+      <li> Optimization for Data Science </li>
+      <li> Statistical Learning Theory </li>
+      <li> Web of Data </li>
+    </ul>
   </details>
-
+  
   <details>
-  <summary> Semester 2 </summary>
+    <summary> Internship </summary>
   </details>
-</ul>
+  </ul>
 </details>
 
 <details open>
@@ -45,14 +57,14 @@ Classes:
 <ul>
 
   <details>
-  <summary> Semester 1 </summary>
+  <summary> Semester 3 </summary>
   <ul>
   <li></li>
   </ul>
   </details>
   <details>
 </li>
-  <summary> Semester 2 </summary>
+  <summary> Semester 4 </summary>
   </details>
 </ul>
 </details>
