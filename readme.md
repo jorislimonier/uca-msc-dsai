@@ -34,7 +34,7 @@ Classes:
   </details>
 
   <details open>
-    <summary> Semester 2 </summary>
+    <summary> Semester 2 :construction: </summary>
     <ul>
       <li> Case Study </li>
       <li> Introduction to Deep Learning </li>
