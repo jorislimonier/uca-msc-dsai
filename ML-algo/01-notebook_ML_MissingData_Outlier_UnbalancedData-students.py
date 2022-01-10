@@ -399,6 +399,60 @@ print(f"Test set score: {grid_miss_val.score(X_test, y_test)}")
 #
 # Submit your work in the form of an executable and commented notebook at lms.univ-cotedazur.fr
 
+# %%
+
+
+class mySamplerClass(BaseEstimator):
+    def __init__(self, conta=0.1):
+        self.conta = conta
+
+    def fit_resample(self, X, y):
+        iforest = IsolationForest(
+            n_estimators=300,
+            max_samples="auto",
+            contamination=self.conta,
+        )
+        outliers = iforest.fit_predict(X, y)
+
+        X_filtered = X[outliers == 1]
+        y_filtered = y[outliers == 1]
+
+        return X_filtered, y_filtered
+
+
+# %%
+pipeline_outlier = Pipeline(
+    [
+        ("missing_data", myTransformer(strategy="most_frequent")),
+        ("outlier", None),
+        ("clf", myPredictor(penalty="none")),
+    ]
+)
+
+parameters_outlier = [
+    {
+        "outlier": [mySamplerClass()],
+        "outlier__conta": np.linspace(0.015, 0.18, 5),
+    },
+]
+
+grid_outlier = GridSearchCV(
+    estimator=pipeline_outlier,
+    param_grid=parameters_outlier,
+    cv=2,
+    scoring="f1_micro",
+    refit=True,
+    verbose=3,
+)
+grid_outlier.fit(X_train, y_train)
+# %%
+# %%
+print(
+    f"Best: {round(grid_outlier.best_score_, ndigits=2)} using {grid_outlier.best_params_}"
+)
+print(f"Test set score: {grid_outlier.score(X_test, y_test)}")
+
+
 # %% [markdown]
 # ## Unbalance dataset
 #
