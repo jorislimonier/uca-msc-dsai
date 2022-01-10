@@ -9,8 +9,9 @@
 # ## Imports and Dataset
 
 # %%
-# import warnings
-# warnings.filterwarnings('ignore')
+import warnings
+
+warnings.filterwarnings("ignore")
 
 # %%
 from tqdm import tqdm
@@ -282,7 +283,13 @@ pipeline
 # %%
 # GridSearch with pipeline
 grid = GridSearchCV(
-    pipeline, parameters, cv=2, scoring="f1_micro", refit=True, verbose=2
+    pipeline,
+    parameters,
+    cv=2,
+    scoring="f1_micro",
+    refit=True,
+    verbose=3,
+    n_jobs=-1,
 )
 grid
 
@@ -330,11 +337,13 @@ pipeline_miss_val = Pipeline(
     ]
 )
 param_miss_val = [
+    # with removal of missing data
     {
         "missing_data": [mySampler()],
         "clf": [myPredictor()],
         "clf__penalty": ["l1", "l2", "none"],
     },
+    # with simpleImputer
     {
         "missing_data": [SimpleImputer()],
         "missing_data__strategy": ["mean", "most_frequent"],
@@ -350,6 +359,7 @@ grid_miss_val = GridSearchCV(
     scoring="f1_micro",
     refit=True,
     verbose=3,
+    n_jobs=-1,
 )
 grid_miss_val.fit(X_train, y_train)
 # %%
@@ -430,9 +440,14 @@ pipeline_outlier = Pipeline(
 )
 
 parameters_outlier = [
+    # Without taking any precautions
+    {
+        "outlier": [None],
+    },
+    # With Isolation Forest (IF)
     {
         "outlier": [mySamplerClass()],
-        "outlier__conta": np.linspace(0.015, 0.18, 5),
+        "outlier__conta": np.linspace(0.012, 0.2, 5),
     },
 ]
 
@@ -443,6 +458,7 @@ grid_outlier = GridSearchCV(
     scoring="f1_micro",
     refit=True,
     verbose=3,
+    n_jobs=-1,
 )
 grid_outlier.fit(X_train, y_train)
 # %%
@@ -470,3 +486,54 @@ print(f"Test set score: {grid_outlier.score(X_test, y_test)}")
 # Submit your work in the form of an executable and commented notebook at lms.univ-cotedazur.fr
 
 # %%
+
+pipeline_unbalanced = Pipeline(
+    [
+        ("missing_data", myTransformer(strategy="most_frequent")),
+        ("outlier", mySamplerClass(conta=0.0168)),
+        ("unbalance", None),
+        ("clf", myPredictor(penalty="none")),
+    ]
+)
+
+parameters_unbalanced = [
+    # Without taking any precautions
+    {
+        "unbalance": [None],
+    },
+    # With modification of the dataset by Over sampling or Under sampling or SMOTE
+    # and without modification of the dataset by weight
+    {
+        "unbalance": [RandomUnderSampler()],
+        "unbalance__sampling_strategy": ["majority", "all", "auto"],
+    },
+    {
+        "unbalance": [RandomOverSampler()],
+        "unbalance__sampling_strategy": ["minority", "all", "auto"],
+    },
+    {
+        "unbalance": [SMOTE()],
+        "unbalance__k_neighbors": np.arange(2, 8),
+        "unbalance__sampling_strategy": ["minority", "all", "auto"]
+        + list(np.linspace(0.2, 0.8, 4)),
+    },
+]
+
+grid_unbalanced = GridSearchCV(
+    estimator=pipeline_unbalanced,
+    param_grid=parameters_unbalanced,
+    cv=2,
+    scoring="f1_micro",
+    refit=True,
+    verbose=3,
+    n_jobs=-1,
+)
+grid_unbalanced.fit(X_train, y_train)
+
+
+
+# %%
+print(
+    f"Best: {round(grid_unbalanced.best_score_, ndigits=2)} using {grid_unbalanced.best_params_}"
+)
+print(f"Test set score: {grid_unbalanced.score(X_test, y_test)}")
