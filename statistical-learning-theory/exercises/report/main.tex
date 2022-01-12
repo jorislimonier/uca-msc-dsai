@@ -1,0 +1,56 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\thetahat}{\hat\theta}
+\newcommand{\ie}{\textit{i.e. }}
+
+\title{Statistical inference practice}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Inclass exercise January 12, 2022}
+\subsection{Exercise 1}
+Show that
+\begin{equation}
+    \E \left[ \hat{\mathcal{R}}_S (h) \right] = \mathcal{R}_{D, f} (h)
+\end{equation}
+\begin{align*}
+    \E \left[ \hat{\mathcal{R}}_S (h) \right]
+     & = \E \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+     & = \frac{1}{n} \sum_{i=1}^n \E \left[ \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+     & = \frac{1}{n} \sum_{i=1}^n \P \left(h(x_i) \neq y_i \right)               \\
+     & = \frac{1}{n} n  \P \left(h(x_i) \neq y_i \right)                         \\
+     & = \P \left(h(x_i) \neq y_i \right)                                        \\
+     & = \P \left(h(x_i) \neq f(x) \right)                                       \\
+     & = \mathcal{R}_{D, f} (h)
+\end{align*}
+
+\subsection{Exercise 2}
+We must prove that the variance of \(\hat{\mathcal{R}}_S (h) \to 0\)
+\begin{align*}
+    Var \left[ \hat{\mathcal{R}}_S (h) \right]
+     & = Var \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right]   \\
+     & = Var \frac{1}{n^2} \left[ \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+\end{align*}
+
+Let the \(Z_i\) be defined as follows:
+\[\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{h(x_i) \neq f(x_i)} =: \frac{1}{n} \sum_{i=1}^{n} Z_i\]
+(not finished, see lecture 1 slides)
+
+\end{document}
