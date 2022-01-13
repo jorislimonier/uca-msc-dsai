@@ -1,0 +1,3 @@
+,accuracy
+RandomForestClassifier,0.4
+GradientBoostingClassifier,0.5
