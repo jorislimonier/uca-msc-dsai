@@ -369,17 +369,11 @@ img_dir = "test_images/"
 X_test['Images'] = [path+img_dir+img for img in test['Images']]
 print("Test size:", len(X_test))
 
-model = load('michel.joblib') 
+model = load('limonier.joblib') 
 y_pred = model.predict(X_train)
 print("ACC on train", accuracy_score(y_train, y_pred))
 y_pred = model.predict(X_test)
 print("ACC on test", accuracy_score(y_test, y_pred))
-
-# %%
-
-
-# %% [markdown]
-# 
 
 # %%
 

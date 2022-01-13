@@ -1,0 +1,24 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+
+% \pagenumbering{roman}
+\begin{document}
+
+\newgeometry{width=150mm,top=25mm,bottom=25mm}
+
+% Inserting title page
+\import{./}{title}
+
+
+\pagenumbering{roman}
+\tableofcontents
+
+\restoregeometry
+\pagenumbering{arabic}
+
+\section{Exploratory Data Analysis}
+
+\end{document}
