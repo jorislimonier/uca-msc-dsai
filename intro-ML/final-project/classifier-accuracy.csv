@@ -1,3 +1,11 @@
-,accuracy
-RandomForestClassifier,0.4
-GradientBoostingClassifier,0.5
+classifier,test_accuracy,accuracy
+MLPClassifier(),0.52,0.64
+SVC(),0.536,0.58
+RandomForestClassifier(),0.556,0.52
+GradientBoostingClassifier(),0.524,0.52
+GaussianNB(),0.496,0.52
+BernoulliNB(),0.52,0.5
+GaussianProcessClassifier(),0.488,0.46
+KNeighborsClassifier(),0.536,0.44
+AdaBoostClassifier(),0.508,0.42
+DecisionTreeClassifier(),0.528,0.36
