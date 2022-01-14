@@ -3,11 +3,12 @@
 
 % Importing settings from setup.sty
 \usepackage{setup}
+\usepackage{booktabs}
+% \usepackage{tabularx}
 
 % \pagenumbering{roman}
 \begin{document}
 
-\newgeometry{width=150mm,top=25mm,bottom=25mm}
 
 % Inserting title page
 \import{./}{title}
@@ -15,14 +16,42 @@
 
 \pagenumbering{roman}
 \tableofcontents
+\listoffigures
+\listoftables
 
-\restoregeometry
+% \restoregeometry
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
 \pagenumbering{arabic}
 
 \section{Exploratory Data Analysis}
 \section{Problem description}
 \section{Solution}
-XGBoost too slow.
+XGBoost is too slow.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{Classifier}        & \textbf{Accuracy} \\ \midrule
+        GradientBoostingClassifier & 0.629             \\
+        RandomForestClassifier     & 0.623             \\
+        AdaBoostClassifier         & 0.612             \\
+        MLPClassifier              & 0.602             \\
+        BernoulliNB                & 0.600             \\
+        GaussianNB                 & 0.567             \\
+        DecisionTreeClassifier     & 0.559             \\
+        SVC                        & 0.529             \\
+        KNeighborsClassifier       & 0.520             \\
+        GaussianProcessClassifier  & 0.509             \\
+        SGDClassifier              & 0.509             \\ \bottomrule
+    \end{tabular}
+    \caption{Accuracies of first prospect}
+\end{table}
+
 \section{Evaluation \& critical view}
 
 \end{document}
