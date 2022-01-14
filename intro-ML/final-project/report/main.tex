@@ -4,6 +4,8 @@
 % Importing settings from setup.sty
 \usepackage{setup}
 \usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
 % \usepackage{tabularx}
 
 % \pagenumbering{roman}
@@ -29,6 +31,35 @@
 
 \section{Exploratory Data Analysis}
 \section{Problem description}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ccl}
+        \toprule
+        \textbf{Type}                 && \multicolumn{1}{c}{\textbf{Column name}} \\ \midrule
+        \multirow{12}{*}{\textsc{categorical}} && Type          \\
+                                      && Gender        \\
+                                      && Breed         \\
+                                      && Color1        \\
+                                      && Color2        \\
+                                      && Color3        \\
+                                      && MaturitySize  \\
+                                      && FurLength     \\
+                                      && Vaccinated    \\
+                                      && Dewormed      \\
+                                      && Sterilized    \\
+                                      && Health        \\ \midrule
+        \textsc{numerical}                     && Age           \\
+                                      && Fee           \\ \midrule
+        \textsc{text}                          && Description   \\ \midrule
+        \textsc{image}                         && Images        \\ \bottomrule
+    \end{tabular}
+    \caption{Accuracies of first prospect}
+\end{table}
+
+
+
+
 \section{Solution}
 XGBoost is too slow.
 
