@@ -6,7 +6,15 @@
 \usepackage{booktabs}
 \usepackage{multicol}
 \usepackage{multirow}
-% \usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, shapes.multipart, arrows, positioning}
+\tikzstyle{data} = [ellipse, minimum width=1cm, minimum height=1.2cm,text centered, draw=black, fill=blue!20]
+\tikzstyle{preprocessing_container} = [rectangle split,rectangle split parts=7, rectangle split draw splits=false, rounded corners, text width=12cm, minimum height=5cm, draw=black, fill=orange!20]
+\tikzstyle{preprocessing} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, draw=black, fill=orange!50]
+\tikzstyle{classifier} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=magenta!30]
+\tikzstyle{result} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!40]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 
 % \pagenumbering{roman}
 \begin{document}
@@ -33,8 +41,9 @@
 The problem we are trying to solve consists of predicting whether an animal will be adopted from a shelter within 30 days, given several pieces of information on this animal. This problem is a clean and reduced version of a \href{https://www.kaggle.com/c/petfinder-adoption-prediction/overview}{Kaggle competition} dating back from 2019.
 
 \section{Exploratory Data Analysis}
-
-\begin{table}[h!]
+We would like to get some basic information of the data set before diving into the machine learning solution. \\
+The training set has shape \((8168 \times 16)\) and the test set has shape \((250 \times 16)\), where the column names and data types are summarized in Table \ref{table: column data type}. \\
+\begin{table}[!ht]
     \centering
     \begin{tabular}{ccccc}
         % \textbf{Type}                       &  & \multicolumn{1}{c}{\textbf{Column name}} \\ \midrule
@@ -49,14 +58,49 @@ The problem we are trying to solve consists of predicting whether an animal will
         \bottomrule
     \end{tabular}
     \caption{Data types per column}
-\end{table}
+    \label{table: column data type}
+\end{table} \\
+Overall, the data set is very clean as it contains 0 NaN values.
 
 
 
 
 \section{Solution}
+The solution consists of a pipeline of the following structure:
 
-\begin{table}[h!]
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm]
+    \node (start) [data] {Initial data};
+    \node [align=center](preprocessing_container) [preprocessing_container, below of=start, anchor=north] {
+        \nodepart[align=left]{one}Preprocessing
+        \nodepart{two}
+        \tikz{\node (categorical_preprocessor) [preprocessing] {Categorical Preprocessor}}
+        \nodepart{three}
+        \tikz{\node (numerical_preprocessor) [preprocessing] {Numerical Preprocessor}}
+        \nodepart{four}
+        \tikz{\node (text_preprocessor) [preprocessing] {Text Preprocessor}}
+        \nodepart{five}
+        \tikz{\node (image_preprocessor) [preprocessing] {Image Preprocessor}}
+        \nodepart{six}
+        \tikz{\node (nb_colors) [preprocessing] {Number of colors Transformer}}
+    };
+    \node (classifier) [classifier, below=1cm of preprocessing_container, anchor=north] {Classifier};
+    \node (result) [result, below=1cm of classifier, anchor=north] {Decision};
+
+    \draw [arrow] (start) -- (preprocessing_container);
+    % \draw [arrow] (preprocessing_container.two) -- (preprocessing_container.three);
+    % \draw [arrow] (numerical_preprocessor) -- (text_preprocessor);
+    % \draw [arrow] (text_preprocessor) -- (image_preprocessor);
+    % \draw [arrow] (image_preprocessor) -- (nb_colors);
+    % \draw [arrow] (nb_colors) -- (result);
+    \draw [arrow] (preprocessing_container) -- (classifier);
+    \draw [arrow] (classifier) -- (result);
+\end{tikzpicture}
+\end{center}
+
+
+
+\begin{table}[!ht]
     \centering
     \begin{tabular}{ccc}
         \toprule
