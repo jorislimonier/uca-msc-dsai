@@ -2,11 +2,11 @@ classifier,accuracy,test_accuracy
 GradientBoostingClassifier(),0.614,0.532
 BernoulliNB(),0.585,0.596
 GaussianNB(),0.562,0.564
-DecisionTreeClassifier(),0.526,0.468
+DecisionTreeClassifier(),0.531,0.48
 KNeighborsClassifier(),0.542,0.5
 AdaBoostClassifier(),0.586,0.524
-MLPClassifier(),0.608,0.584
+MLPClassifier(),0.616,0.544
 GaussianProcessClassifier(),0.522,0.512
 SVC(),0.53,0.5
-RandomForestClassifier(),0.624,0.572
-SGDClassifier(),0.502,0.532
+RandomForestClassifier(),0.619,0.572
+SGDClassifier(),0.52,0.536

@@ -6,6 +6,14 @@
 \usepackage{booktabs}
 \usepackage{multicol}
 \usepackage{multirow}
+\usepackage{glossaries}
+\makenoidxglossaries
+
+\newacronym{bof}{BOF}{Bag Of Features}
+\newacronym{tfidf}{TF-IDF}{Term Frequency-Inverse Document Frequency}
+\newacronym{sift}{SIFT}{Scale-Invariant Feature Transform}
+
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, shapes.multipart, arrows, positioning}
 \tikzstyle{data} = [ellipse, minimum width=1cm, minimum height=1.2cm,text centered, draw=black, fill=blue!20]
@@ -15,21 +23,17 @@
 \tikzstyle{result} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!40]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
-
 % \pagenumbering{roman}
 \begin{document}
 
-
 % Inserting title page
 \import{./}{title}
-
 
 \pagenumbering{roman}
 \tableofcontents
 \listoffigures
 \listoftables
 
-% \restoregeometry
 \newgeometry{
     left=25mm,
     right=25mm,
@@ -41,9 +45,10 @@
 The problem we are trying to solve consists of predicting whether an animal will be adopted from a shelter within 30 days, given several pieces of information on this animal. This problem is a clean and reduced version of a \href{https://www.kaggle.com/c/petfinder-adoption-prediction/overview}{Kaggle competition} dating back from 2019.
 
 \section{Exploratory Data Analysis}
+\label{sec: EDA}
 We would like to get some basic information of the data set before diving into the machine learning solution. \\
 The training set has shape \((8168 \times 16)\) and the test set has shape \((250 \times 16)\), where the column names and data types are summarized in Table \ref{table: column data type}. \\
-\begin{table}[!ht]
+\begin{table}[ht]
     \centering
     \begin{tabular}{ccccc}
         % \textbf{Type}                       &  & \multicolumn{1}{c}{\textbf{Column name}} \\ \midrule
@@ -63,44 +68,69 @@ The training set has shape \((8168 \times 16)\) and the test set has shape \((25
 Overall, the data set is very clean as it contains 0 NaN values.
 
 
+\section{Problem Solution}
+\subsection{Overview}
+The problem can be solved by using a pipeling, which is represented in Figure \ref{fig: pipeline complete}. The pipeline consists of two steps:
+\begin{itemize}
+    \item Data Pre-processing
+    \item Classification
+\end{itemize}
+We will detail these two steps in the following subsections.
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node (start) [data] {Initial data};
+        \node [align=center](preprocessing_container) [preprocessing_container, below of=start, anchor=north] {
+            \nodepart[align=left]{one}Preprocessor
+            \nodepart{two}
+            \tikz{\node (categorical_preprocessor) [preprocessing] {Categorical Preprocessor}}
+            \nodepart{three}
+            \tikz{\node (numerical_preprocessor) [preprocessing] {Numerical Preprocessor}}
+            \nodepart{four}
+            \tikz{\node (text_preprocessor) [preprocessing] {Text Preprocessor}}
+            \nodepart{five}
+            \tikz{\node (image_preprocessor) [preprocessing] {Image Preprocessor}}
+            \nodepart{six}
+            \tikz{\node (nb_colors) [preprocessing] {Number of colors Transformer}}
+        };
+        \node (classifier) [classifier, below=1cm of preprocessing_container, anchor=north] {Classifier};
+        \node (result) [result, below=1cm of classifier, anchor=north] {Decision};
+
+        \draw [arrow] (start) -- (preprocessing_container);
+        \draw [arrow] (preprocessing_container) -- (classifier);
+        \draw [arrow] (classifier) -- (result);
+    \end{tikzpicture}
+    \caption{Complete pipeline diagram}
+    \label{fig: pipeline complete}
+\end{figure}
+
+\subsection{Data Preprocessing}
+We saw in section \ref{sec: EDA} that the data is already fairly clean (\eg in terms of NA's). We still need to process the columns, which we do depending on the type of data they contain. As per Figure \ref{fig: pipeline complete}, we use:
+\begin{itemize}
+    \item A Categorical Preprocessor
+    \item A Numerical Preprocessor
+    \item A Text Preprocessor
+    \item A Image Preprocessor
+    \item A Transformer for the number of colors
+\end{itemize}
+We detail the above in their respective paragraphs.
+
+\paragraph{Categorical Preprocessor} The Categorical Preprocessor is composed of a OneHotEncoder, which encodes categorical features as a one-hot numeric array. That is, for each of the categories, we create a new column with 1 if the initial column is of that category and 0 otherwise.
+
+\paragraph{Numerical Preprocessor} The Numerical Preprocessor contains a StandardScaler. Its role is to center and scale each of the numerical variables in order to remove differences in orders of magnitude.
+
+\paragraph{Text Preprocessor} The Text Preprocessor contains a TfidfVectorizer, which converts the raw comments from our text feature to a matrix of \gls{tfidf} features. We used a CountVectorizer initially, but it gave worse results than the \gls{tfidf}, which is why we kept the latter. The CountVectorizer counts the occurences of each word in the \textit{Description} column. A possible explaination of why the TfidfVectorizer performs better is that the features it produces not-only contain information about the frequency of each term, but they also account for the frequency of each word within the whole document.
+
+\paragraph{Image Preprocessor} The Image Preprocessor consists of a custom  BOF\_extractor. It extracts \glspl{sift} and computes \gls{bof} on the images from the \textit{Images} column.
+
+\paragraph{Number of colors Transformer} The Number of colors Transformer uses FunctionTransformer to compute how many colors the animal has (\ie colors different from ``Unknown''). It then sets the number of colors as a feature.
 
 
-\section{Solution}
-The solution consists of a pipeline of the following structure:
+\subsection{Classification}
+\subsubsection{Select Models}
+We did not test XGBoost because is too slow.
 
-\begin{center}
-\begin{tikzpicture}[node distance=1.5cm]
-    \node (start) [data] {Initial data};
-    \node [align=center](preprocessing_container) [preprocessing_container, below of=start, anchor=north] {
-        \nodepart[align=left]{one}Preprocessing
-        \nodepart{two}
-        \tikz{\node (categorical_preprocessor) [preprocessing] {Categorical Preprocessor}}
-        \nodepart{three}
-        \tikz{\node (numerical_preprocessor) [preprocessing] {Numerical Preprocessor}}
-        \nodepart{four}
-        \tikz{\node (text_preprocessor) [preprocessing] {Text Preprocessor}}
-        \nodepart{five}
-        \tikz{\node (image_preprocessor) [preprocessing] {Image Preprocessor}}
-        \nodepart{six}
-        \tikz{\node (nb_colors) [preprocessing] {Number of colors Transformer}}
-    };
-    \node (classifier) [classifier, below=1cm of preprocessing_container, anchor=north] {Classifier};
-    \node (result) [result, below=1cm of classifier, anchor=north] {Decision};
-
-    \draw [arrow] (start) -- (preprocessing_container);
-    % \draw [arrow] (preprocessing_container.two) -- (preprocessing_container.three);
-    % \draw [arrow] (numerical_preprocessor) -- (text_preprocessor);
-    % \draw [arrow] (text_preprocessor) -- (image_preprocessor);
-    % \draw [arrow] (image_preprocessor) -- (nb_colors);
-    % \draw [arrow] (nb_colors) -- (result);
-    \draw [arrow] (preprocessing_container) -- (classifier);
-    \draw [arrow] (classifier) -- (result);
-\end{tikzpicture}
-\end{center}
-
-
-
-\begin{table}[!ht]
+\begin{table}[ht]
     \centering
     \begin{tabular}{ccc}
         \toprule
@@ -119,8 +149,14 @@ The solution consists of a pipeline of the following structure:
     \end{tabular}
     \caption{Accuracies of first prospect}
 \end{table}
-We did not test XGBoost because is too slow.
+
+\subsubsection{Fine-tune hyperparameters}
+
 
 \section{Evaluation \& critical view}
+
+\clearpage
+
+\printnoidxglossaries
 
 \end{document}
