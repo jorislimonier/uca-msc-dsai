@@ -29,39 +29,32 @@
     bottom=25mm}
 \pagenumbering{arabic}
 
-\section{Exploratory Data Analysis}
 \section{Problem description}
+The problem we are trying to solve consists of predicting whether an animal will be adopted from a shelter within 30 days, given several pieces of information on this animal. This problem is a clean and reduced version of a \href{https://www.kaggle.com/c/petfinder-adoption-prediction/overview}{Kaggle competition} dating back from 2019.
+
+\section{Exploratory Data Analysis}
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{ccl}
+    \begin{tabular}{ccccc}
+        % \textbf{Type}                       &  & \multicolumn{1}{c}{\textbf{Column name}} \\ \midrule
         \toprule
-        \textbf{Type}                 && \multicolumn{1}{c}{\textbf{Column name}} \\ \midrule
-        \multirow{12}{*}{\textsc{categorical}} && Type          \\
-                                      && Gender        \\
-                                      && Breed         \\
-                                      && Color1        \\
-                                      && Color2        \\
-                                      && Color3        \\
-                                      && MaturitySize  \\
-                                      && FurLength     \\
-                                      && Vaccinated    \\
-                                      && Dewormed      \\
-                                      && Sterilized    \\
-                                      && Health        \\ \midrule
-        \textsc{numerical}                     && Age           \\
-                                      && Fee           \\ \midrule
-        \textsc{text}                          && Description   \\ \midrule
-        \textsc{image}                         && Images        \\ \bottomrule
+        \multicolumn{2}{c}{\textsc{categorical}} & \textsc{numerical} & \textsc{text} & \textsc{image}          \\ \midrule
+        Type                                     & MaturitySize       & Age           & Description    & Images \\
+        Gender                                   & FurLength          & Fee                                     \\
+        Breed                                    & Vaccinated                                                   \\
+        Color1                                   & Dewormed                                                     \\
+        Color2                                   & Sterilized                                                   \\
+        Color3                                   & Health                                                       \\
+        \bottomrule
     \end{tabular}
-    \caption{Accuracies of first prospect}
+    \caption{Data types per column}
 \end{table}
 
 
 
 
 \section{Solution}
-XGBoost is too slow.
 
 \begin{table}[h!]
     \centering
@@ -82,6 +75,7 @@ XGBoost is too slow.
     \end{tabular}
     \caption{Accuracies of first prospect}
 \end{table}
+We did not test XGBoost because is too slow.
 
 \section{Evaluation \& critical view}
 
