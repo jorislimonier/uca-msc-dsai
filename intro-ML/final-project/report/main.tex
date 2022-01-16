@@ -12,6 +12,7 @@
 \newacronym{bof}{BOF}{Bag Of Features}
 \newacronym{tfidf}{TF-IDF}{Term Frequency-Inverse Document Frequency}
 \newacronym{sift}{SIFT}{Scale-Invariant Feature Transform}
+\newacronym{cv}{CV}{Cross-Validation}
 
 
 \usepackage{tikz}
@@ -30,7 +31,7 @@
 % Inserting title page
 \import{./}{title}
 
-\pagenumbering{roman}
+\pagenumbering{gobble}
 \tableofcontents
 \listoffigures
 \listoftables
@@ -142,7 +143,6 @@ Our approach for the Classification part separates in two parts
 
 \subsubsection{Select Models}
 The algorithms tested are presented in Table \ref{table: all algorithms and accuracies}. We computed their accuracy following GridSearchCV (on the train data), then computed their prediction on the test data. We did not test XGBoost because it was too slow.
-
 \begin{table}[H]
     \centering
     \begin{tabular}{ccc}
@@ -164,10 +164,11 @@ The algorithms tested are presented in Table \ref{table: all algorithms and accu
     \caption{Accuracies on first prospect}
     \label{table: all algorithms and accuracies}
 \end{table}
+As shown in Table \ref{table: all algorithms and accuracies}, the five best algorithms are RandomForestClassifier, BernoulliNB, GradientBoostingClassifier, AdaBoostClassifier and MLPClassifier. The next step is to select several hyperparameters for each of them and test them with GridSearchCV.
 
 \subsubsection{Fine-tune hyperparameters}
-As shown in Table \ref{table: all algorithms and accuracies}, the five best algorithms are GradientBoostingClassifier, RandomForestClassifier, AdaBoostClassifier, MLPClassifier and BernoulliNB. The next step is to select several hyperparameters for each of them and test them with GridSearchCV.
-\begin{table}[ht]
+We use GridSearchCV with 5-fold \gls{cv} to seek the best model over the parameters presented in Table \ref{table: hyperparameters tested}.
+\begin{table}
     \centering
     \begin{tabular}{ccc}
         \toprule
@@ -183,8 +184,8 @@ As shown in Table \ref{table: all algorithms and accuracies}, the five best algo
         \multirow{5}{*}{RandomForestClassifier}     & criterion               & gini, entropy                            \\
                                                     & max\_depth              & 100, 200, 300, 400, None                 \\
                                                     & min\_samples\_leaf      & 1, 2, 3, 4                               \\
-                                                    & min\_samples\_split     & 8, 10, 12                                \\
-                                                    & n\_estimators           & 60, 80, 100                              \\
+                                                    & min\_samples\_split     & 2, 4, 8, 10, 12                          \\
+                                                    & n\_estimators           & 60, 80, 100, 120                         \\
         \midrule
         \multirow{3}{*}{AdaBoostClassifier}         & n\_estimators           & 10, 20, 30, 50, 70                       \\
                                                     & learning\_rate          & 0.5, 0.6, 0.7, 0.8, 1., 1.2              \\
@@ -205,8 +206,34 @@ As shown in Table \ref{table: all algorithms and accuracies}, the five best algo
     \caption{Hyperparameters tested for the top 5 classifiers}
     \label{table: hyperparameters tested}
 \end{table}
+We get that the best model and parameters are the one presented in Table \ref{table: best hyperparameters}.
+\begin{table}
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+        \textsc{Classifier}                     & \textsc{Hyperparameter} & \textsc{Best value} \\
+        \midrule
+        \multirow{5}{*}{RandomForestClassifier} & criterion               & gini                   \\
+                                                & max\_depth              & 200                    \\
+                                                & min\_samples\_leaf      & 3                      \\
+                                                & min\_samples\_split     & 4                      \\
+                                                & n\_estimators           & 100                    \\
+        % RandomForestClassifier(max_depth=200, min_samples_leaf=3, min_samples_split=4)
+        \bottomrule
+    \end{tabular}
+    \caption{Best model and hyperparameters found}
+    \label{table: best hyperparameters}
+\end{table}
 
 \section{Evaluation \& critical view}
+The accuracy we obtain on the test set is \acc, which is clearly better than random, but it can certainly be improved. \\
+Here are some potential changes that may improve our score:
+\paragraph{Sentiment analysis} It is an option to perform sentiment analysis on the \textit{Description} column. The goal would be to predict how positive the descriptions are. We suspect that positive descriptions lead to higher chance of the animal being adopted.
+\paragraph{Price per breed} We could search for data linking the breed to their usual price in animal shelters. This would allow to determine if the animals are overpriced in this shelter compared to their usual market price.
+\paragraph{Get number of tweet per breed} Another option is to get the number of tweets containing the hashtag of each breed over the decade during which the data was collected (assuming the data is fairly recent and the data provider would indicate the collection period). This tweet-data would give a measure of how ``trendy'' certain animals were at the period of data collection.
+\paragraph{Find top celebrities' animals} Assuming that the data provider gives us the period (\eg the decade) of collection. Assuming that we get some geographical indication of where the data was collected (\eg the country, or even continent), we could find the, say, 100 most popular celebrities in this geographical area. This could include pop singers, presidents, actors, ... etc. Subsequently, for each breed, we could count how many of these celebrities own one. This would be yet another indication of popularity, which could help us with improving our accuracy.
+\paragraph{Google Trends} The same logic as the previous popularity-related potential improvements can also be applied using Google Trends.
+\paragraph{Work further with images} With more computing power (the image preprocessing on a basic laptop already takes very long as it is), we could try to do some further improvements on the image part of the classification.
 
 \clearpage
 
