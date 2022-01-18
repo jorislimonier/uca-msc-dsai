@@ -12,7 +12,7 @@ data.tail()
 # %%
 av_late = data.groupby("teacher").mean().sort_values(
     by="start_time", ascending=False)
-px.bar(data=av_late, y="start_time", color="start_time",
+px.bar(data_frame=av_late, y="start_time", color="start_time",
        color_continuous_scale="Bluered", barmode="group", title="Mean lateness",)
 
 
