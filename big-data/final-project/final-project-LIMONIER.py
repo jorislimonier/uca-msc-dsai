@@ -3,7 +3,9 @@ from pyspark.ml.feature import VectorAssembler, StringIndexer, OneHotEncoder
 from pyspark.ml import Pipeline
 from pyspark.ml.stat import Correlation
 from pyspark.sql.types import DoubleType
+from pyspark.sql.functions import isnan, when, count, col
 import pandas as pd
+import plotly.express as px
 
 # %%
 from pyspark.sql import SparkSession
@@ -22,6 +24,17 @@ df.show(2)
 
 # %% [markdown]
 # ## Exploratory Data Analysis
+# Show a summary of the data
+# %%
+df.summary().show()
+# %% [markdown]
+# Count the number of missing values
+# %%
+df.select([count(when(isnan(c), c)).alias(c) for c in df.columns]).show()
+
+# %% [markdown]
+# We have no missing value, life is beautiful.\
+# Let's see how many unique values are in each column.
 # %%
 for col in df.columns:
     unique_val = df.select(col).distinct().collect()
@@ -37,7 +50,7 @@ for col in df.columns:
 
 def drop_if_present(col):
     global df
-    if col in df.columns:  # avoid errors on notebook re-run
+    if col in df.columns:  # avoid errors on cell re-run
         df = df.drop(col)
 
 
@@ -56,10 +69,23 @@ print(len(unique_triples) == len(unique_ids) == 10)
 # So an `id` represents a unique camera in a unique location, therefore it has a unique pair (`latitude`, `longitude`).\
 # This means that the `latitude` and `longitude` columns are redundant, hence we can drop them.
 # %%
-print(df.columns)
 drop_if_present("latitude")
 drop_if_present("longitude")
-print(df.columns)
+
+# %%
+
+# %%
+NUM_COL = ["avg_vehicle_speed", "vehicle_flow_rate", "traffic_concentration"]
+for col in NUM_COL:
+    df = df.withColumn(col, df[col].cast("double"))
+
+df_num = df.select(NUM_COL).toPandas()
+for i in range(len(NUM_COL)):
+    for j in range(i):
+        col_x = NUM_COL[i]
+        col_y = NUM_COL[j]
+        px.scatter(df_num, col_x, col_y).show()
+
 
 # %%
 NUM_COL = ["avg_vehicle_speed", "vehicle_flow_rate", "traffic_concentration"]
@@ -69,12 +95,12 @@ for col in NUM_COL:
     df_corr = df_corr.withColumn(col, df_corr[col].cast("double"))
 print(df_corr.dtypes)
 num_vector_col = "corr_features"
-corr_assembler = VectorAssembler(inputCols=NUM_COL, outputCol=num_vector_col)
+corr_assembler = VectorAssembler(
+    inputCols=df_corr.columns, outputCol=num_vector_col)
 df_vect = corr_assembler.transform(df_corr).select(num_vector_col)
-df_vect.show(2)
-Correlation.corr(df_vect, num_vector_col)
+df_vect.toPandas()
+# Correlation.corr(df_vect, num_vector_col)
 
-# %%
 
 # %%
 CAT_COLS = ["direction", "traffic_status"]
