@@ -44,17 +44,22 @@ for col in df.columns:
         print(f"\tunique values: {unique_val}")
 
 # %% [markdown]
-# The only road is "B40", so we can drop it
+# We notice that, even though there is no proper missing value, the `traffic_status` column contains some (string) "unkown" values. We will have to deal with that later. \
+# We also notice that the only road is "B40", so we can drop it.
 # %%
 
 
-def drop_if_present(col):
+def drop_if_exists(col):
+    """
+    Drop the `col` column from `df` if it is in its columns.
+    This avoids errors on cell re-run.
+    """
     global df
-    if col in df.columns:  # avoid errors on cell re-run
+    if col in df.columns:
         df = df.drop(col)
 
 
-drop_if_present("road")
+drop_if_exists("road")
 # %% [markdown]
 # The number of unique values for `id`, `latitude` and `longitude` is the same (10). \
 # We strongly suspect that for a given id, the latitude and longitude are always the same. Let's check it.
@@ -69,10 +74,8 @@ print(len(unique_triples) == len(unique_ids) == 10)
 # So an `id` represents a unique camera in a unique location, therefore it has a unique pair (`latitude`, `longitude`).\
 # This means that the `latitude` and `longitude` columns are redundant, hence we can drop them.
 # %%
-drop_if_present("latitude")
-drop_if_present("longitude")
-
-# %%
+drop_if_exists("latitude")
+drop_if_exists("longitude")
 
 # %%
 NUM_COL = ["avg_vehicle_speed", "vehicle_flow_rate", "traffic_concentration"]
@@ -87,21 +90,35 @@ for i in range(len(NUM_COL)):
         px.scatter(df_num, col_x, col_y).show()
 
 
+# %% [markdown]
+# There doesn't appear to be (much) correlation between the numerical columns.
+# Interestingly enough however, we noticed that the `traffic_concentration` column seems to be, if not categorical, at least fairly discrete.
 # %%
-NUM_COL = ["avg_vehicle_speed", "vehicle_flow_rate", "traffic_concentration"]
-df_corr = df.select(NUM_COL)
-df_corr.show(2)
-for col in NUM_COL:
-    df_corr = df_corr.withColumn(col, df_corr[col].cast("double"))
-print(df_corr.dtypes)
-num_vector_col = "corr_features"
-corr_assembler = VectorAssembler(
-    inputCols=df_corr.columns, outputCol=num_vector_col)
-df_vect = corr_assembler.transform(df_corr).select(num_vector_col)
-df_vect.toPandas()
+# NUM_COL = ["avg_vehicle_speed", "vehicle_flow_rate", "traffic_concentration"]
+# df_corr = df.select(NUM_COL)
+# df_corr.show(2)
+# for col in NUM_COL:
+#     df_corr = df_corr.withColumn(col, df_corr[col].cast("double"))
+# print(df_corr.dtypes)
+# num_vector_col = "corr_features"
+# corr_assembler = VectorAssembler(
+#     inputCols=df_corr.columns, outputCol=num_vector_col)
+# df_vect = corr_assembler.transform(df_corr).select(num_vector_col)
 # Correlation.corr(df_vect, num_vector_col)
 
 
+# %% [markdown]
+# Now that we studied the original data set sufficiently (performing only some redundancy removal), we can transform it.\
+# We will start by dealing with missing values in the `traffic_status` (counted as "unknown"), as mentioned previously. Let's see how many observations are concerned by this issue.
+# %%
+df.groupby("traffic_status").count().show()
+print(f"Total number of rows in the data: {df.count()}")
+# %% [markdown]
+# We see that there are 10309 "unkown" rows for the column `traffic_status`. This represents $\approx 5.8\%$ of the total number of rows. \
+# It is probably safe to drop these rows since the rest of the data is fairly clean, therefore we shouldn't have to drop more rows.
+# %%
+df = df.filter(df["traffic_status"] != "unknown")
+df.groupby("traffic_status").count().show()
 # %%
 CAT_COLS = ["direction", "traffic_status"]
 CAT_COLS_INDEXER = [f"{cat_col}_indexer" for cat_col in CAT_COLS]
@@ -119,6 +136,6 @@ onehot_pipe = Pipeline(stages=[
     VectorAssembler(inputCols=CAT_COLS_ONEHOT, outputCol="cat_features"),
 ])
 
-onehot_pipe.fit(df).transform(df).show(5)
+onehot_pipe.fit(df).transform(df).show(2)
 df.select("traffic_status").distinct().collect()
 df.select("direction").distinct().collect()
