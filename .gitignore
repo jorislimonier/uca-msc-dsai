@@ -3,7 +3,7 @@
 **/311_small.csv
 **/5_intro_AI.pptx
 *.joblib
-# intro-ML/final-project/limonier.joblib
+**/last-year/
 .vscode
 
 # ------------ PYTHON ------------
