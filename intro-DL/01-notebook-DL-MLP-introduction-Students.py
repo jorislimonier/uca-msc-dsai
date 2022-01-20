@@ -231,9 +231,9 @@ plt.show()
 
 # %%
 # Evaluate the model
-score = model.evaluate(X_test, y_test_enc)
-print('Test loss:', score[0])
-print('Test accuracy', score[1])
+# score = model.evaluate(X_test, y_test_enc)
+# print('Test loss:', score[0])
+# print('Test accuracy', score[1])
 
 # %%
 # Modify the network in order to obtain better accuracy (better than 0.96)
