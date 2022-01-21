@@ -28,29 +28,109 @@
 \subsection{Exercise 1}
 Show that
 \begin{equation}
-    \E \left[ \hat{\mathcal{R}}_S (h) \right] = \mathcal{R}_{D, f} (h)
+  \E \left[ \hat{\mathcal{R}}_S (h) \right] = \mathcal{R}_{D, f} (h)
 \end{equation}
 \begin{align*}
-    \E \left[ \hat{\mathcal{R}}_S (h) \right]
-     & = \E \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
-     & = \frac{1}{n} \sum_{i=1}^n \E \left[ \mathbf{1}_{h(x_i) \neq y_i} \right] \\
-     & = \frac{1}{n} \sum_{i=1}^n \P \left(h(x_i) \neq y_i \right)               \\
-     & = \frac{1}{n} n  \P \left(h(x_i) \neq y_i \right)                         \\
-     & = \P \left(h(x_i) \neq y_i \right)                                        \\
-     & = \P \left(h(x_i) \neq f(x) \right)                                       \\
-     & = \mathcal{R}_{D, f} (h)
+  \E \left[ \hat{\mathcal{R}}_S (h) \right]
+   & = \E \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+   & = \frac{1}{n} \sum_{i=1}^n \E \left[ \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+   & = \frac{1}{n} \sum_{i=1}^n \P \left(h(x_i) \neq y_i \right)               \\
+   & = \frac{1}{n} n  \P \left(h(x_i) \neq y_i \right)                         \\
+   & = \P \left(h(x_i) \neq y_i \right)                                        \\
+   & = \P \left(h(x_i) \neq f(x) \right)                                       \\
+   & = \mathcal{R}_{D, f} (h)
 \end{align*}
 
 \subsection{Exercise 2}
 We must prove that the variance of \(\hat{\mathcal{R}}_S (h) \to 0\)
 \begin{align*}
-    Var \left[ \hat{\mathcal{R}}_S (h) \right]
-     & = Var \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right]   \\
-     & = Var \frac{1}{n^2} \left[ \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
+  Var \left[ \hat{\mathcal{R}}_S (h) \right]
+   & = Var \left[ \frac{1}{n} \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right]   \\
+   & = Var \frac{1}{n^2} \left[ \sum_{i=1}^n \mathbf{1}_{h(x_i) \neq y_i} \right] \\
 \end{align*}
 
 Let the \(Z_i\) be defined as follows:
 \[\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{h(x_i) \neq f(x_i)} =: \frac{1}{n} \sum_{i=1}^{n} Z_i\]
 (not finished, see lecture 1 slides)
+
+\section{Inclass exercise January 21, 2022}
+\subsection{Exercise 1}
+Set \(g(x) = \P(Y=1 \mid X=x)\). We define the Bayes optimal predictor as:
+\begin{equation*}
+  f_\mathcal{D}(x) =
+  \begin{cases}
+    1 & g(x) \geq 1/2    \\
+    0 & \text{otherwise}
+  \end{cases}
+\end{equation*}
+
+\paragraph{Question 1.}
+Let \(h: \mathcal{X} \to \{0,1\}\) be a classifier. Show that
+\begin{align*}
+   & \P(h(X) \neq Y \mid X = x )                                                      \\
+   & = g(x) \cdot \P(h(X) = 0 \mid X = x)) + (1 - g(x)) \cdot \P(h(X) = 1 \mid X = x)
+\end{align*}
+\begin{align*}
+   & g(x) \cdot \P(h(X) = 0 \mid X = x)) + (1 - g(x)) \cdot \P(h(X) = 1 \mid X = x) \\
+   & = \P(Y=1 \mid X = x) \cdot \P(h(X) = 0 \mid X = x))                            \\
+   & + (1 - \P(Y=1 \mid X = x)) \cdot \P(h(X) = 1 \mid X = x)                       \\
+   & = \P(Y=1 \cap h(X) = 0 \mid X = x))                                            \\
+   & + \P(h(X) = 1 \mid X = x) - \P(Y=1 \cap h(X) = 1 \mid X = x)                   \\
+   & = \P(Y=1 \cap h(X) = 0 \mid X = x)) + \P(Y=0 \cap h(X) = 1 \mid X = x)         \\
+   & =\P(h(X) \neq Y \mid X = x)
+\end{align*}
+
+\paragraph{Question 2.}
+Deduce that
+\[
+  \P(f_D (X) \neq Y \mid X = x) = \min (g(x), 1 - g(x))
+\]
+
+\begin{align*}
+   & \P(f_D (X) \neq Y \mid X = x) \\
+   & =
+  \begin{cases}
+    \P(1 \neq Y \mid X = x), & g(x) \geq 1/2 \\
+    \P(0 \neq Y \mid X = x), & g(x) < 1/2    \\
+  \end{cases}        \\
+   & =
+  \begin{cases}
+    1 - g(x), & g(x) \geq 1-g(x) \\
+    g(x),     & g(x) < 1 - g(x)  \\
+  \end{cases}        \\
+   & = \min (g(x), 1-g(x))
+\end{align*}
+
+\paragraph{Question 3.}
+Show that
+\begin{equation*}
+  \P(h(X) \neq Y \mid X=x) \geq \P (f_D(x) \neq Y \mid X=x)
+\end{equation*}
+
+\begin{align*}
+  \P (f_D(x) \neq Y \mid X=x)
+   & = \min (g(x), 1-g(x))                             \\
+   & = \min (g(x), 1-g(x))                             \\
+   & \cdot (\P(h(X)=0 \mid X=x) + \P(h(X)=1 \mid X=x)) \\
+   & \leq g(x) \cdot (\P(h(X)=0 \mid X=x)              \\
+   & + (1-g(x)) \cdot \P(h(X)=1 \mid X=x))             \\
+   & = \P(h(X) \neq Y \mid X=x)
+\end{align*}
+
+\paragraph{Question 4.}
+Prove that
+\begin{equation*}
+  \mathcal{R}_\mathcal{D} (f_\mathcal{D}) \leq \mathcal{R}_\mathcal{D} (h)
+\end{equation*}
+
+\begin{align*}
+           &
+  \P (f_D(x) \neq Y \mid X=x) \leq \P(h(X) \neq Y \mid X=x)                               \\
+  \implies &
+  \E\left[\P (f_D(x) \neq Y \mid X=x)\right] \leq \E\left[\P(h(X) \neq Y \mid X=x)\right] \\
+  \implies &
+  \mathcal{R}_\mathcal{D} (f_\mathcal{D}) \leq \mathcal{R}_\mathcal{D} (h)
+\end{align*}
+
 
 \end{document}
