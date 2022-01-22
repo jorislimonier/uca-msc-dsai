@@ -259,7 +259,7 @@ else:
 CAT_COLS_INDEXER = [f"{cat_col}_indexer" for cat_col in CAT_COLS_PRED]
 CAT_COLS_ONEHOT = [f"{cat_col}_vec" for cat_col in CAT_COLS_PRED]
 
-stages_cat = [
+cat_stages = [
     StringIndexer(
         inputCols=CAT_COLS_PRED,
         outputCols=CAT_COLS_INDEXER,
@@ -270,19 +270,15 @@ stages_cat = [
         dropLast=True,
     ),
 ]
-# VectorAssembler(
-#     inputCols=CAT_COLS_ONEHOT,
-#     outputCol="cat_features",
-# ),
 
-
-Pipeline(stages=stages_cat).fit(train).transform(train).show(2)
+# Show the effect of the categorical stages
+Pipeline(stages=cat_stages).fit(train).transform(train).show(2)
 
 # %% [markdown]
 # ### Preprocess numerical columns
 # We scale the numerical columns
 # %%
-stages_num = [
+num_stages = [
     VectorAssembler(
         inputCols=NUM_COLS_PRED,
         outputCol="assembled_num",
@@ -292,8 +288,46 @@ stages_num = [
         outputCol="scaled_num",
     ),
 ]
-train.show(20, truncate=False)
-Pipeline(stages=stages_num).fit(train).transform(train).show(20, truncate=False)
+
+# Show the effect of the categorical stages
+Pipeline(stages=num_stages).fit(train).transform(train).show(20, truncate=False)
 # %%
+feature_assembler = [
+    VectorAssembler(
+        inputCols=CAT_COLS_ONEHOT + ["scaled_num"],
+        outputCol="features",
+    )
+]
+# %%
+target_stages = [StringIndexer(inputCol=TARGET_COL, outputCol="label"),]
+
+# Show the effect of the target_stages
+Pipeline(stages=target_stages).fit(train).transform(train).show(2)
+# %%
+pipe = Pipeline(stages=cat_stages + num_stages + feature_assembler + target_stages)
+preproc_model = pipe.fit(train)
 
 # %%
+preproc_train = preproc_model.transform(train).select("features", "label")
+preproc_train.show(2, truncate=False)
+
+# %%
+from pyspark.ml.classification import LogisticRegression
+clf = LogisticRegression().fit(preproc_train)
+
+# %%
+clf.summary.accuracy
+# %%
+preproc_test = preproc_model.transform(test).select("features", "label")
+preproc_test.show(2)
+# %%
+transf_test = clf.transform(preproc_test)
+
+# %%
+from pyspark.mllib.evaluation import BinaryClassificationMetrics
+results = transf_test.select(["prediction", "label"])
+results.show(2)
+
+
+# %%
+type(results.rdd)
