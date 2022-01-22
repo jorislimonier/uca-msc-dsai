@@ -2,7 +2,12 @@
 import pandas as pd
 import plotly.express as px
 from pyspark.ml import Pipeline
-from pyspark.ml.feature import OneHotEncoder, StringIndexer, VectorAssembler
+from pyspark.ml.feature import (
+    OneHotEncoder,
+    StandardScaler,
+    StringIndexer,
+    VectorAssembler,
+)
 from pyspark.ml.stat import Correlation
 from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
 from pyspark.sql import SparkSession
@@ -38,7 +43,7 @@ NUM_COL = [
     "vehicle_flow_rate",
     "traffic_concentration",
 ]
-CAT_COLS = ["direction", "traffic_status"]
+CAT_COLS_PRED = ["direction", "traffic_status"]
 
 # %% [markdown]
 # ## Exploratory Data Analysis (EDA)
@@ -165,8 +170,10 @@ Correlation.corr(df_vect, num_vector_col).show(truncate=False)
 # Now we deal with the `time` column.
 
 # %%
-time = df.select("time")
-time.show(2, truncate=False)
+df.select("time").show(2, truncate=False)
+# %% [markdown]
+# We convert the time column (currently `str`) to a datetime object
+# %%
 df = df.withColumn(
     colName="datetime",
     col=to_timestamp(df.time),
@@ -174,48 +181,119 @@ df = df.withColumn(
 
 df.show(2)
 
-# %%
-from pyspark.sql.functions import dayofweek, dayofyear, month, weekofyear, year
-
-for time_prop in [dayofweek, dayofyear, month, weekofyear, year]:
-    df = df.withColumn(colName=time_prop.__name__, col=year(col("datetime")))
-# %%
 # %% [markdown]
-# ## Perform train-test split
+# Now we split the datetime object into several of its compenents.
+# %%
+from pyspark.sql.functions import (
+    dayofmonth,
+    dayofweek,
+    dayofyear,
+    hour,
+    minute,
+    month,
+    weekofyear,
+    year,
+)
+
+time_props = [
+    dayofweek,
+    dayofyear,
+    dayofmonth,
+    hour,
+    minute,
+    month,
+    weekofyear,
+    year,
+]
+
+if "datetime" in df.columns:  # prevent errors on cell re-run
+    for time_prop in time_props:
+        df = df.withColumn(
+            colName=time_prop.__name__,
+            col=time_prop(col("datetime")),
+        )
+        df.groupby(time_prop.__name__).count().show()
+
+# %% [markdown]
+# We see that the `year` column has only one value (2019). It doesn't bring any extra information so we drop it.\
+# We also drop the `time` and `datetime` columns.
+# %%
+time_props = [time_prop for time_prop in time_props if time_prop != year]
+TIME_COLS = [time_prop.__name__ for time_prop in time_props]
+
+df.show(2)
+drop_if_exists("year")
+drop_if_exists("time")
+drop_if_exists("datetime")
+df.show(2)
+# %% [markdown]
+# We drop the `avg_vehicle_speed` as mentioned before
+# %%
+drop_if_exists("avg_vehicle_speed")
+# %% [markdown]
+# ## Classification
+# ### Perform train-test split
 # %%
 train, test = df.randomSplit(weights=[0.8, 0.2], seed=42)
 print(f"Number of observations in the train set: {train.count()}")
 print(f"Number of observations in the test set: {test.count()}")
 
 # %%
-CAT_COLS = ["direction", "traffic_status"]
-CAT_COLS_INDEXER = [f"{cat_col}_indexer" for cat_col in CAT_COLS]
-CAT_COLS_ONEHOT = [f"{cat_col}_vec" for cat_col in CAT_COLS]
+CAT_COLS_PRED = TIME_COLS + ["direction", "id"]
+NUM_COLS_PRED = ["vehicle_flow_rate", "traffic_concentration"]
+TARGET_COL = "traffic_status"
 
-onehot_pipe = Pipeline(
-    stages=[
-        StringIndexer(
-            inputCols=CAT_COLS,
-            outputCols=CAT_COLS_INDEXER,
-        ),
-        OneHotEncoder(
-            inputCols=CAT_COLS_INDEXER,
-            outputCols=CAT_COLS_ONEHOT,
-            dropLast=True,
-        ),
-        VectorAssembler(
-            inputCols=CAT_COLS_ONEHOT,
-            outputCol="cat_features",
-        ),
-    ]
-)
+missing_cols = [
+    missing_col
+    for missing_col in df.columns
+    if missing_col not in CAT_COLS_PRED + NUM_COLS_PRED + [TARGET_COL]
+]
+if missing_cols == []:
+    print("All columns are planned for classification")
+else:
+    print(f"{missing_cols} are not yet planned")
+# %% [markdown]
+# ### Preprocess categorical columns
+# We OneHotEncode the categorical columns
+# %%
+CAT_COLS_INDEXER = [f"{cat_col}_indexer" for cat_col in CAT_COLS_PRED]
+CAT_COLS_ONEHOT = [f"{cat_col}_vec" for cat_col in CAT_COLS_PRED]
 
-onehot_pipe.fit(train).transform(train).show(2)
+stages_cat = [
+    StringIndexer(
+        inputCols=CAT_COLS_PRED,
+        outputCols=CAT_COLS_INDEXER,
+    ),
+    OneHotEncoder(
+        inputCols=CAT_COLS_INDEXER,
+        outputCols=CAT_COLS_ONEHOT,
+        dropLast=True,
+    ),
+]
+# VectorAssembler(
+#     inputCols=CAT_COLS_ONEHOT,
+#     outputCol="cat_features",
+# ),
+
+
+Pipeline(stages=stages_cat).fit(train).transform(train).show(2)
 
 # %% [markdown]
-# Select numerical columns (disregarding `avg_vehicle_speed` as mentioned previously)
+# ### Preprocess numerical columns
+# We scale the numerical columns
 # %%
-NUM_COL_PRED = ["vehicle_flow_rate", "traffic_concentration"]
+stages_num = [
+    VectorAssembler(
+        inputCols=NUM_COLS_PRED,
+        outputCol="assembled_num",
+    ),
+    StandardScaler(
+        inputCol="assembled_num",
+        outputCol="scaled_num",
+    ),
+]
+train.show(20, truncate=False)
+Pipeline(stages=stages_num).fit(train).transform(train).show(20, truncate=False)
 # %%
 
 # %%
