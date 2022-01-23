@@ -1,5 +1,7 @@
 # %% [markdown]
 # # Distributed Big Data Systems - Final Project
+# <div style="text-align: right"> <h3>by Joris LIMONIER</h3> </div>
+#
 # This notebook uses PySpark to predict how important the traffic is on the B40 road in Luxembourg. The data set is available [here](https://www.kaggle.com/fabmob/motorway-traffic-in-luxembourg?select=datexDataB40.csv) and should be in the same directory as this script, named as "datexDataB40.csv".
 # %%
 import numpy as np
@@ -323,7 +325,7 @@ preproc_test.show(2, truncate=False)
 # %%
 from pyspark.ml.classification import LogisticRegression, RandomForestClassifier
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
-from pyspark.ml.tuning import CrossValidator, ParamGridBuilder, CrossValidatorModel
+from pyspark.ml.tuning import CrossValidator, CrossValidatorModel, ParamGridBuilder
 
 # %%
 lr = LogisticRegression()
@@ -376,5 +378,13 @@ print(
 print(
     f"Result of random forest on the test set: {evaluator.evaluate(cvModel.transform(preproc_test))}"
 )
-# %%
-# %%
+# %% [markdown]
+# ### Conclusion
+# We get fairly similar results using both Linear Regression or Random Forest. We could try other classifiers and perform GridSearch on more parameters, but this project intends to demonstrate the ability to use (Py)Spark, the data set itself is merely a pretext to justify its use.\
+# We believe that we demonstrated this ability since we performed the most important Machine Learning Classification tasks using PySpark:
+# - Exploratory Data Anlalysis
+# - Data Cleaning
+# - Data Preprocessing
+# - Classification
+# - Hyperparameter tuning
+# - Model Evaluation
