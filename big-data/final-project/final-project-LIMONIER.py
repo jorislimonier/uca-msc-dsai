@@ -1,3 +1,6 @@
+# %% [markdown]
+# # Distributed Big Data Systems - Final Project
+# This notebook uses PySpark to predict how important the traffic is on the B40 road in Luxembourg. The data set is available [here](https://www.kaggle.com/fabmob/motorway-traffic-in-luxembourg?select=datexDataB40.csv) and should be in the same directory as this script, named as "datexDataB40.csv".
 # %%
 import pandas as pd
 import plotly.express as px
@@ -299,7 +302,7 @@ feature_assembler = [
     )
 ]
 # %%
-target_stages = [StringIndexer(inputCol=TARGET_COL, outputCol="label"),]
+target_stages = [StringIndexer(inputCol=TARGET_COL, outputCol="label")]
 
 # Show the effect of the target_stages
 Pipeline(stages=target_stages).fit(train).transform(train).show(2)
@@ -310,24 +313,35 @@ preproc_model = pipe.fit(train)
 # %%
 preproc_train = preproc_model.transform(train).select("features", "label")
 preproc_train.show(2, truncate=False)
+# %%
+preproc_test = preproc_model.transform(test).select("features", "label")
+preproc_test.show(2, truncate=False)
 
 # %%
 from pyspark.ml.classification import LogisticRegression
-clf = LogisticRegression().fit(preproc_train)
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+from pyspark.ml.tuning import CrossValidator, ParamGridBuilder, CrossValidatorModel
 
+lr = LogisticRegression()
+grid = (
+    ParamGridBuilder()
+    .addGrid(lr.maxIter, [80, 100])
+    .addGrid(lr.regParam, [0.0, 1.0])
+    .addGrid(lr.elasticNetParam, [0.0, 1.0])
+    .build()
+)
+print(grid)
+evaluator = BinaryClassificationEvaluator()
+cv = CrossValidator(
+    estimator=lr,
+    estimatorParamMaps=grid,
+    evaluator=evaluator,
+    parallelism=8,
+    numFolds=5,
+)
+cvModel = cv.fit(preproc_train)
 # %%
-clf.summary.accuracy
+evaluator.evaluate(cvModel.transform(preproc_test))
 # %%
-preproc_test = preproc_model.transform(test).select("features", "label")
-preproc_test.show(2)
+cvModel.avgMetrics
 # %%
-transf_test = clf.transform(preproc_test)
-
-# %%
-from pyspark.mllib.evaluation import BinaryClassificationMetrics
-results = transf_test.select(["prediction", "label"])
-results.show(2)
-
-
-# %%
-type(results.rdd)
