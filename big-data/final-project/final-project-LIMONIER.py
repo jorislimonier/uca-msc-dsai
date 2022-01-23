@@ -2,6 +2,7 @@
 # # Distributed Big Data Systems - Final Project
 # This notebook uses PySpark to predict how important the traffic is on the B40 road in Luxembourg. The data set is available [here](https://www.kaggle.com/fabmob/motorway-traffic-in-luxembourg?select=datexDataB40.csv) and should be in the same directory as this script, named as "datexDataB40.csv".
 # %%
+import numpy as np
 import pandas as pd
 import plotly.express as px
 from pyspark.ml import Pipeline
@@ -97,6 +98,8 @@ print(f"Total number of rows in the data set: {df.count()}")
 # %% [markdown]
 # We see that there are 10309 "unkown" rows for the column `traffic_status`. This represents $\approx 5.8\%$ of the total number of rows. \
 # It is probably safe to drop these rows since the rest of the data is fairly clean. We also remove the 4 "impossible" values, since they are not numerous enough to make a good classifier.
+#
+# *Note: We could have set the `nullValue` parameter appropriately when reading the csv file initially, but we kept this somewhat less elegant technique to reflect that we initially didn't know the data set and that it is the EDA that allowed us to notice this kind of unexpected issues.*
 # %%
 df = df.filter(df["traffic_status"] != "unknown")
 df = df.filter(df["traffic_status"] != "impossible")
@@ -318,10 +321,11 @@ preproc_test = preproc_model.transform(test).select("features", "label")
 preproc_test.show(2, truncate=False)
 
 # %%
-from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.classification import LogisticRegression, RandomForestClassifier
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder, CrossValidatorModel
 
+# %%
 lr = LogisticRegression()
 grid = (
     ParamGridBuilder()
@@ -340,8 +344,37 @@ cv = CrossValidator(
     numFolds=5,
 )
 cvModel = cv.fit(preproc_train)
+print(
+    cvModel.avgMetrics
+)  # result of cross validation for each combination of parameters
+print(
+    f"Result of linear regression on the test set: \
+        {evaluator.evaluate(cvModel.transform(preproc_test))}"
+)
 # %%
-evaluator.evaluate(cvModel.transform(preproc_test))
+rf = RandomForestClassifier()
+grid = (
+    ParamGridBuilder()
+    .addGrid(rf.maxDepth, [5, 7, 10])
+    .addGrid(rf.maxBins, [8, 16, 32])
+    .addGrid(rf.numTrees, [10, 20, 30])
+    .build()
+)
+print(grid)
+evaluator = BinaryClassificationEvaluator()
+cv = CrossValidator(
+    estimator=rf,
+    estimatorParamMaps=grid,
+    evaluator=evaluator,
+    parallelism=8,
+    numFolds=5,
+)
+cvModel = cv.fit(preproc_train)
+print(
+    cvModel.avgMetrics
+)  # result of cross validation for each combination of parameters
+print(
+    f"Result of random forest on the test set: {evaluator.evaluate(cvModel.transform(preproc_test))}"
+)
 # %%
-cvModel.avgMetrics
 # %%
