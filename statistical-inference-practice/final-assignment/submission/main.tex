@@ -1,0 +1,135 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+\newacronym{pdf}{PDF}{Probability Density Function}
+\newacronym{iid}{i.i.d.}{Independent and Identically Distributed}
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=10mm,
+    bottom=25mm}
+\import{./}{title}
+
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
+\restoregeometry
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+\clearpage
+\pagenumbering{arabic}
+
+\section{Exercise 1}
+\subsection{Question (a)}
+We compute \(\E[y_i]\):
+\begin{align*}
+    \E \left[ y_i \right]
+     & = \E \left[ a + bx_i + \epsilon_i \right]                                      & \textit{(definition)}                                                  \\
+     & = \E \left[ a \right] + \E \left[ b x_i \right] + \E \left[ \epsilon_i \right] & \textit{(linearity of expectation)}                                    \\
+     & = a + b x_i                                                                    & \textit{(\(a, b, x_i\) deterministic, \(\epsilon_i\) centered normal)} \\
+\end{align*}
+We compute \(\var(y_i)\):
+\begin{align*}
+    \var \left[ y_i \right]
+     & = \E \left[ y_i^2 \right] - \E \left[ y_i \right]^2                                                                              \\
+     & = \E \left[ \left(a + bx_i + \epsilon_i \right)^2 \right] - \left(a + b x_i\right)^2                                             \\
+     & = a^2 + b^2x_i^2 + \E\left[\epsilon_i^2\right]                                       & \textit{(linearity of expectation}        \\
+     & + 2abx_i + 2a \E \left[\epsilon_i\right] + 2bx_i \E\left[\epsilon_i \right]          & \textit{and only \(\epsilon_i\) random)}  \\
+     & - \left(a^2 + b^2x_i^2 + 2abx_i\right)                                                                                           \\
+     & = \E\left[\epsilon_i^2\right]                                                        & \textit{(\(\epsilon_i\) centered normal)} \\
+     & = \E\left[\epsilon_i^2\right] - {\underbrace{\E\left[\epsilon_i\right]}_{=0}}^2                                                  \\
+     & = \var(\epsilon_i)                                                                                                               \\
+     & = \sigma^2                                                                                                                       \\
+\end{align*}
+
+
+\subsection{Question (b)}
+Our goal is to prove the following:
+\begin{equation}
+    \label{eqn: ex1b independence}
+    \P\left(\bigcap_{i=1}^N \left\{y_i = \nu_i\right\}\right) = \prod_{i=1}^N \P\left(\left\{y_i = \nu_i\right\}\right)
+\end{equation}
+and we have that for a given \(1 \leq i \leq N\):
+\begin{align*}
+    \P(\{y_i = \nu_i\})
+     & = \P \left(\left\{a + bx_i + \epsilon_i = \nu_i\right\}\right)              \\
+     & = \P (\{\epsilon_i = \nu_i - \underbrace{(a + bx_i)}_{\textrm{constant}}\}) \\
+\end{align*}
+We note that for a given \(1 \leq i \leq N\), \(a, b\) and \(x_i\) are constant, so we can rewrite \eqref{eqn: ex1b independence} as:
+\begin{align}
+    \nonumber
+    \P\left(\bigcap_{i=1}^N \left\{y_i = \nu_i\right\}\right)
+     & =\P\left(\bigcap_{i=1}^N \left\{\epsilon_i = \nu_i - (a + bx_i)\right\}\right) \\
+    \label{eqn: ex1b independence rewritten}
+     & = \prod_{i=1}^N \P\left(\left\{\epsilon_i = \nu_i - (a + bx_i)\right\}\right)
+\end{align}
+Now,  the \(\nu_i - (a + bx_i)\) in equation \eqref{eqn: ex1b independence rewritten} are just deterministic values. Hence, by the fact that the \(\epsilon_i\)'s, \(1 \leq i \leq N\) are \gls{iid}, we have that \eqref{eqn: ex1b independence rewritten} holds. \\
+Thus the \(y_i\)'s, \(1 \leq i \leq N\) are \gls{iid}.
+
+\subsection{Question (c)}
+Let \(g(y_i)\) denote the \gls{pdf} of \(y_i\). We define the likelihood function of \(y_i, \ 1 \leq i \leq N\) as:
+\begin{equation*}
+    \L(\theta) := \prod_{i=1}^N g(y_1, \ldots, y_N ; \theta)
+\end{equation*}
+We also define the log-likelihood as:
+\begin{equation*}
+    \ell(\theta) := \log \L(\theta)
+\end{equation*}
+and since the \(y_i\)'s are \gls{iid}:
+\begin{equation*}
+    \ell(\theta) = \log \prod_{i=1}^N g(y_i ; \theta) = \sum_{i=1}^N \log g(y_i ; \theta)
+\end{equation*}
+Moreover, we know that the \gls{pdf} of a random variable \(X \sim \mathcal{N}(\mu, \sigma^2)\) is given by:
+\begin{equation*}
+    f_{\mu, \sigma^2}(t)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left(-\frac{(t-\mu)^{2}}{2 \sigma^{2}}\right)
+\end{equation*}
+We also know that for a given \(i\), \(\epsilon_i  \sim \mathcal{N}(0, \sigma^2)\). Therefore its \gls{pdf} is given by:
+\begin{equation*}
+    f(t) := f_{0, \sigma^2}(t) = \frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left(-\frac{t^{2}}{2 \sigma^{2}}\right)
+\end{equation*}
+which we can rename to \(f(t; \theta)\), to stress the fact that we have an influence on our parameters \(\theta = (a, b) \in \R^2\), not over our observations.
+Thus by \eqref{eqn: ex1b independence rewritten}, we obtain that the log-likelihood becomes:
+\begin{align*}
+    \ell(\theta)
+     & = \sum_{i=1}^N \log f(\epsilon_i - (a + bx_i) ; \theta)                                                                                             \\
+     & = \sum_{i=1}^N \log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left(-\frac{\left(\epsilon_i - (a + bx_i)\right)^{2}}{2 \sigma^{2}}\right)\right] \\
+     & = -\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right] \sum_{i=1}^N \left(\epsilon_i - (a + bx_i)\right)^{2}                    \\
+\end{align*}
+and we want find \(\aml\) by maximising \(\ell\) with respect to \(a\). Therefore we get:
+\begin{align*}
+    \aml
+     & =\arg \max_a \ell(\theta)                                                                                                                    \\
+     & = \arg \max_a -\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right] \sum_{i=1}^N \left(\epsilon_i - (a + bx_i)\right)^{2} \\
+     & = \arg \min_a  \sum_{i=1}^N \left(\epsilon_i - (a + bx_i)\right)^{2}                                                                         \\
+     & = \arg \min_a  \sum_{i=1}^N \left(\epsilon_i - bx_i - a\right)^{2}                                                                           \\
+\end{align*}
+
+
+\subsection{Question (d)}
+\subsection{Question (e)}
+\section{Exercise 2}
+\subsection{Question (a)}
+\subsection{Question (b)}
+
+\clearpage
+
+% \printnoidxglossaries
+
+\end{document}
