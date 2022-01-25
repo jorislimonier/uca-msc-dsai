@@ -10,6 +10,7 @@
 % \makenoidxglossaries
 \newacronym{pdf}{PDF}{Probability Density Function}
 \newacronym{iid}{i.i.d.}{independent and identically distributed}
+\newacronym{ols}{OLS}{Ordinary Least Squares}
 
 % \pagenumbering{roman}
 \begin{document}
@@ -124,12 +125,15 @@ whic is equal to:
 \end{equation*}
 
 Thus by \eqref{eqn: ex1b independence rewritten}, we obtain that the log-likelihood becomes:
-\begin{align*}
+\begin{align}
+    \nonumber
     \ell(\theta)
      & = \sum_{i=1}^N \log f(y_i ; \theta)                                                                                                          \\
+    \nonumber
      & = \sum_{i=1}^N \log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left(-\frac{\left(y_i - (a + bx_i)\right)^{2}}{2 \sigma^{2}}\right)\right] \\
-     & = -\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right] \sum_{i=1}^N \left(y_i - bx_i - a)\right)^{2}                     \\
-\end{align*}
+    \label{eqn: ex1 log-likelihood}
+     & = -\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right] \sum_{i=1}^N \left(y_i - a - bx_i\right)^{2}
+\end{align}
 We want find \(\aml\) which maximises \(\ell\) with respect to \(a\). To do so, we take the partial derivative with respect to \(a\) and set it to 0. Therefore we get:
 \begin{align*}
              &
@@ -235,14 +239,86 @@ Then, we rewrite our previous system and inject \(\bml\) into the equation of \(
     \implies &
     \begin{cases}
         \aml = \bar{y} - \left[\bar{x} \langle x, y-\bar{y}\rangle / \left\langle x, x-\bar{x}\right\rangle\right] \\
-        \bml = \langle x, y-\bar{y}\rangle / \left\langle x, x-\bar{x}\right\rangle                   \\
+        \bml = \langle x, y-\bar{y}\rangle / \left\langle x, x-\bar{x}\right\rangle                                \\
     \end{cases} \\
 \end{align*}
 
 \subsection{Question (e)}
+We know that the \gls{ols} estimates are found by minimising the Residual Sum of Squares, which is given by:
+\begin{equation*}
+    R_{SS}(a,b) := \sum_{i=1}^N \left(y_i - a - bx_i\right)^2 = \sum_{i=1}^N \epsilon_i^2
+\end{equation*}
+In other words, the \gls{ols} estimates are given by:
+\begin{equation*}
+    (\aols, \bols) = \arg \min_{(a,b) \in \R^2} R_{SS}(a,b)
+\end{equation*}
+We have that the Maximum Likelihood estimators (\(\aml, \bml\)) maximise our log-likelihood function \(\ell\), which means:
+\begin{align*}
+             &
+    \left(\aml, \bml\right) = \arg \max_{(a,b) \in \R^2} \ell(\theta)                                                                                                                                                            \\
+    \implies &
+    \left(\aml, \bml\right) = \arg \max_{(a,b) \in \R^2} -\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right] \sum_{i=1}^N \left(y_i - a - bx_i\right)^{2}                                                   \\
+    \implies &
+    \left(\aml, \bml\right) = \arg \min_{(a,b) \in \R^2} \underbrace{\frac{N}{2 \sigma^2}\log \left[\frac{1}{\sqrt{2 \pi \sigma^{2}}}\right]}_{\text{doesn't depend on \((a, b)\)}} \sum_{i=1}^N \left(y_i - a - bx_i\right)^{2} \\
+    \implies &
+    \left(\aml, \bml\right) = \arg \min_{(a,b) \in \R^2} \sum_{i=1}^N \left(y_i - a - bx_i\right)^{2}                                                                                                                            \\
+    \implies &
+    \left(\aml, \bml\right) = \arg \min_{(a,b) \in \R^2} R_{SS}(a,b)                                                                                                                                                             \\
+    \implies &
+    \left(\aml, \bml\right) = \left(\aols, \bols\right)                                                                                                                                                                          \\
+\end{align*}
+We get that for \(1 \leq i \leq N, \ \epsilon_i \sim \mathcal{N}\left(0, \sigma^2\right)\), the maximum-likelihood estimates and the \gls{ols} are equal.
+
 \section{Exercise 2} % see lecture from 17/12
 \subsection{Question (a)}
+We compute \(\E\left[\betols\right]\)
+\begin{align*}
+    \E\left[\betols\right]
+     & = \E\left[ \left( X^T X \right)^{-1}X^T Y \right]                                                                                                                                 \\
+     & = \E\left[ \left( X^T X \right)^{-1}X^T \left(X\beta + \epsilon\right) \right]                                                                                                    \\
+     & = \E\left[ \left( X^T X \right)^{-1}X^T X \beta + \left( X^T X \right)^{-1}X^T \epsilon \right]                                                                                   \\
+     & = \E\left[ \beta \right] + \E\left[ \underbrace{\left( X^T X \right)^{-1}X^T}_{\text{deterministic}} \epsilon \right] & \textit{(linearity of expectation)}                       \\
+     & = \E\left[ \beta \right] + \left( X^T X \right)^{-1}X^T \underbrace{\E\left[  \epsilon \right]}_{=0}                                                                              \\
+     & = \E\left[ \beta \right]                                                                                              & \textit{(\(\epsilon \sim \mathcal{N}(0, \sigma^2 I_N)\))} \\
+     & = \beta                                                                                                               & \textit{(\(\beta\) deterministic)}                        \\
+\end{align*}
+We have \(\E\left[\betols\right] = \beta\), therefore \(\betols\) is an unbiased estimator.
+
 \subsection{Question (b)}
+We know that:
+\begin{align*}
+    \var\left[\betols\right]
+     & = \E\left[ \left(\betols - \beta\right) \left(\betols - \beta\right)^T \right] \\
+\end{align*}
+Let us first exaluate \(\betols - \beta\):
+\begin{align*}
+    \betols - \beta
+     & = \left( X^T X \right)^{-1}X^T Y - \beta                              \\
+     & = \left( X^T X \right)^{-1}X^T \left(X\beta + \epsilon\right) - \beta \\
+     & = \beta + \left( X^T X \right)^{-1}X^T \epsilon - \beta               \\
+     & = \left( X^T X \right)^{-1}X^T \epsilon                               \\
+\end{align*}
+We now compute \(\var\left[\betols\right]\):
+\begin{align*}
+    \var\left[\betols\right]
+     & = \E\left[ \left(\betols - \beta\right) \left(\betols - \beta\right)^T \right]                                                                                                                     \\
+     & = \E\left[ \left(\left( X^T X \right)^{-1}X^T \epsilon\right) \left(\left( X^T X \right)^{-1}X^T \epsilon\right)^T \right]                                                                         \\
+     & = \E\left[ \left( X^T X \right)^{-1}X^T \epsilon \epsilon^T X \left(\left( X^T X \right)^{-1}\right)^{T} \right]                                                                                   \\
+     & = \E\left[ \left( X^T X \right)^{-1}X^T \epsilon \epsilon^T X \left(\left( X^T X \right)^{T}\right)^{-1} \right]                                                                                   \\
+     & = \E\left[ \left( X^T X \right)^{-1}X^T \epsilon \epsilon^T X \left(X^T X \right)^{-1} \right]                                                                                                     \\
+     & = \left( X^T X \right)^{-1}X^T \E\left[\epsilon \epsilon^T \right] X \left(X^T X \right)^{-1}                                                                                                      \\
+     & = \left( X^T X \right)^{-1}X^T \sigma^2 I_N X \left(X^T X \right)^{-1}                                                     & \textit{( \(\E[\epsilon\epsilon^T] = \sigma^2 I_N\), since}            \\
+     &                                                                                                                            & \textit{\(\epsilon_i \sim \mathcal{N}(0, \sigma^2)\) \acrshort{iid})} \\
+     & = \sigma^2 \left( X^T X \right)^{-1}X^T X \left(X^T X \right)^{-1}                                                         & \textit{(\(\sigma^2 \in \R\),}                                        \\
+     &                                                                                                                            & \textit{therefore commutes)}                                          \\
+     & = \sigma^2 \left( X^T X \right)^{-1}                                                                                                                                                               \\
+\end{align*}
+where we used that:
+\begin{itemize}
+    \item The transpose of a product is the product of the transposed factors in reverse order
+    \item The transpose of the inverse is the inverse of the transpose.
+\end{itemize}
+
 
 \clearpage
 
