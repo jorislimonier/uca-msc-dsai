@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\1}{\mathbf{1}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\ie}{\textit{i.e. }}
+\newcommand{\eg}{\textit{e.g. }}
+
+\title{Optimization - Exercises}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+% \tableofcontents
+
+\begin{equation*}
+  w_{k+1} = w_k - \alpha_k g_k(w_k, \xi_k)
+\end{equation*}
+\(F\) is \(L\)-smooth.
+\begin{align*}
+           &
+  F(w_{k+1}) \leq F(w_k) + \nabla F(w_k)^T (w_{k+1} - w_k) + \frac{1}{2} L \alpha_k^2 \|g_k(w_k, \xi_k)\|^2          \\
+  \implies &
+  F(w_{k+1}) \leq F(w_k) - \alpha_k \nabla F(w_k)^T g_k (w_k, \xi_k) + \frac{1}{2} L \alpha_k^2 \|g_k(w_k, \xi_k)\|^2 \\
+\end{align*}
+
+\end{document}

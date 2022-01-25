@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\1}{\mathbf{1}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\ie}{\textit{i.e. }}
+\newcommand{\eg}{\textit{e.g. }}
+
+\title{Optimization - Minitest 2}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+% \tableofcontents
+      
+\section{Question 1}
+\paragraph{What is a surrogate loss?}
+\begin{itemize}
+  \item A loss that we use instead of the natural loss.
+  \item It is greater than the surrogate loss.
+  \item It is convex in the number of parameters.
+\end{itemize}
+
+\section{Question 2}
+\paragraph{Why do we use it in Machine Learning?}
+Because convex optimization problems are easier to solve.
+
+
+\end{document}
