@@ -179,8 +179,6 @@ Now we want to find \(\bml\). We proceed similarily, that is we differentiate \(
     \sum_{i=1}^N x_i \left(y_i - a \right) = \bml \sum_{i=1}^N x_i^2                                                                                                         \\
     \implies &
     \bml = \frac{\sum_{i=1}^N x_i \left(y_i - a \right)}{\sum_{j=1}^N x_j^2}                                                                                                 \\
-    \implies &
-    \bml = \frac{\sum_{i=1}^N x_i \left(y_i - a \right)}{\sum_{j=1}^N x_j^2}                                                                                                 \\
 \end{align*}
 where we used the linearity of differentiation. \\
 We now plug in the value of \(\aml\) found in \eqref{eqn: preliminary aml}, which gives us the following system:
@@ -198,7 +196,46 @@ We now plug in the value of \(\aml\) found in \eqref{eqn: preliminary aml}, whic
     \implies &
     \begin{cases}
         \aml = \bar{y} - \bml \bar{x} \\
-        \bml = \frac{1}{\sum_{j=1}^N x_j^2} \sum_{i=1}^N x_i y_i - x_i\bar{y} + \bml \bar{x}x_i
+        \bml \sum_{i=1}^N x_i^2 = \sum_{i=1}^N x_i y_i - x_i\bar{y} + \sum_{i=1}^N\bml \bar{x}x_i
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \aml = \bar{y} - \bml \bar{x} \\
+        \bml \left[\sum_{i=1}^N x_i^2 - \bar{x}x_i\right] = \sum_{i=1}^N x_i y_i - x_i\bar{y}
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \aml = \bar{y} - \bml \bar{x} \\
+        \bml = \left[\sum_{i=1}^N x_i (y_i-\bar{y})\right] / \left[\sum_{i=1}^N x_i(x_i-\bar{x})\right]
+    \end{cases} \\
+\end{align*}
+Now, let \(x\) and \(y\) be as follows:
+\begin{align*}
+    x :=
+    \begin{bmatrix}
+        x_1    \\
+        \vdots \\
+        x_N
+    \end{bmatrix} \in \R^n \\
+    y :=
+    \begin{bmatrix}
+        y_1    \\
+        \vdots \\
+        y_N
+    \end{bmatrix} \in \R^n \\
+\end{align*}
+and let \(\langle \cdot, \cdot \rangle\) denote the classical dot product. \\
+Then, we rewrite our previous system and inject \(\bml\) into the equation of \(\aml\) to solve it.
+\begin{align*}
+             &
+    \begin{cases}
+        \aml = \bar{y} - \bml \bar{x}                                                 \\
+        \bml = \langle x, y-\bar{y}\rangle / {\left\langle x, x-\bar{x}\right\rangle} \\
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        \aml = \bar{y} - \left[\bar{x} \langle x, y-\bar{y}\rangle / \left\langle x, x-\bar{x}\right\rangle\right] \\
+        \bml = \langle x, y-\bar{y}\rangle / \left\langle x, x-\bar{x}\right\rangle                   \\
     \end{cases} \\
 \end{align*}
 
