@@ -5,6 +5,7 @@
 *.joblib
 **/last-year/
 .vscode
+**/glove.6B/
 
 # ------------ PYTHON ------------
 
