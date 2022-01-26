@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\cov}{\operatorname{Cov}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\gauss}{\mathcal{N}}
+\newcommand{\ie}{\textit{i.e. }}
+\newcommand{\eg}{\textit{e.g. }}
+
+\title{Model Selection and Resampling - Exercises}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+% \tableofcontents
+
+\section{In-class exercises January 26, 2022}
+\(x \sim \gauss(0, I_n)\)
+  \begin{align*}
+  y = Lx + a \implies y = Lx + a \sim \gauss(a, L^T L)
+\end{align*}
+
+\begin{align*}
+  \E \left[ y \right]
+  &=
+  \E \left[ Lx + a \right] \\
+  &=
+  L \underbrace{\E \left[ x \right]}_{=0} + a \\
+  &=
+  a \\
+\end{align*}
+
+\begin{align*}
+  \cov \left[ y \right]
+  &=
+  \cov \left[ Lx + a \right] \\
+  &=
+  L^T \underbrace{\cov \left[ x \right]}_{=I_n} L \\
+  &=
+  L^T L \\
+\end{align*}
+
+\end{document}
