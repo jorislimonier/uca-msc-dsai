@@ -16,6 +16,8 @@
 \renewcommand{\L}{\mathcal{L}}
 \newcommand{\thetahat}{\hat\theta}
 \newcommand{\ie}{\textit{i.e. }}
+\newcommand{\var}{\operatorname{Var}}
+
 
 \title{Statistical inference practice}
 \author{Joris LIMONIER}
@@ -131,6 +133,98 @@ Prove that
   \implies &
   \mathcal{R}_\mathcal{D} (f_\mathcal{D}) \leq \mathcal{R}_\mathcal{D} (h)
 \end{align*}
+
+\section{Inclass exercise January 28, 2022}
+\subsection{Exercise 1}
+Let \(Z\) be a random variable with a second moment such that \(\E[Z] = \mu\) and \(\var(Z) = \sigma^2\).
+\subsubsection{Question 1}
+Let \(g : t \mapsto \E[(Z-t)^2]\). Show that \(g\) is minimum at \(t = \mu\).
+\begin{align*}
+  g(t)
+   & =
+  \E\left[ (Z-t)^2 \right]                                       \\
+   & =
+  \E\left[ Z^2 + t^2 - 2tZ \right]                               \\
+   & =
+  \E\left[ Z^2\right] + \E\left[t^2\right] - \E\left[2tZ \right] \\
+   & =
+  \E\left[ Z^2\right] + t^2 - 2t\E\left[Z \right]                \\
+   & =
+  \sigma^2 - \mu^2 + t^2 - 2t\mu                                 \\
+   & =
+  \sigma^2 - \mu^2 + t^2 - 2t\mu                                 \\
+\end{align*}
+We differentiate with respect to \(t\):
+\begin{align*}
+           & \frac{\partial}{\partial t} g(t) = 0                             \\
+  \implies &
+  \frac{\partial}{\partial t} \left[\sigma^2 - \mu^2 + t^2 - 2t\mu\right] = 0 \\
+  \implies &
+  2t - 2\mu  = 0                                                              \\
+  \implies &
+  t = \mu                                                                     \\
+\end{align*}
+
+
+\subsubsection{Question 2}
+Assume \(Z \in \left[a,b\right]\) almost surely. Use the previous question to show that
+\begin{equation*}
+  \var(Z) \leq \frac{(b-a)^2}{4}
+\end{equation*}
+\begin{align*}
+           &
+  g(\mu) \leq g(t)                                                          \\
+  \implies &
+  \var(Z) \leq \E\left[(Z-t)^2\right]                                       \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left(2Z - a - b \right)^2\right]        \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left((Z - a) + (Z - b) \right)^2\right] \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left((Z - a) - (b - Z) \right)^2\right] \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left(|Z - a| - |b - Z| \right)^2\right] \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left|(Z - a) - (Z - b)\right|^2\right]  \\
+  \implies &
+  \var(Z) \leq \frac{1}{4} \E\left[\left|b-a\right|^2\right]                \\
+  \implies &
+  \var(Z) \leq \frac{\left(b-a\right)^2}{4}                                 \\
+\end{align*}
+
+
+\subsubsection{Question 3}
+Let \(Z_1, \ldots, Z_n \sim Z\) be i.i.d. Use Chebyshev inequality to obtain a concentration inequality for
+\begin{equation*}
+  Z := \frac{1}{n} \sum_{i=1}^n Z_i
+\end{equation*}
+Chebyshev inequality:
+\begin{equation}
+  \label{eqn: chebyshev inequality}
+  \P\left( |Z - \E[Z]| \geq a\right) \leq \frac{\var Z}{a^2}
+\end{equation}
+\begin{align*}
+  \var\left(Z\right)
+                                                  & =
+  \var\left(\frac{1}{n^2}\sum_{i=1}^n Z_i\right)                                     \\
+                                                  & =
+  \frac{1}{n^2} \sum_{i=1}^n \var\left(Z_i\right) & \textit{(\(Z_i\)'s independent)} \\
+                                                  & \leq
+  \frac{1}{n^2} \sum_{i=1}^n \frac{\left(b-a\right)^2}{4}                            \\
+                                                  & \leq
+  \frac{\left(b-a\right)^2}{4n}                                                      \\
+\end{align*}
+Then we apply \eqref{eqn: chebyshev inequality}:
+\begin{align*}
+           &
+  \P\left( |Z - \E[Z]| \geq \varepsilon \right) \leq \frac{\var Z}{\varepsilon^2}                                                    \\
+  \implies &
+  \P\left( \left| \frac{1}{n} \sum_{i=1}^n Z_i - \mu\right| \geq \varepsilon \right) \leq \frac{\left(b-a\right)^2}{4n\varepsilon^2} \\
+\end{align*}
+
+\subsubsection{Question 4}
+
+
 
 
 \end{document}
