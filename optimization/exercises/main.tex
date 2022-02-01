@@ -18,22 +18,22 @@
 \newcommand{\ie}{\textit{i.e. }}
 \newcommand{\eg}{\textit{e.g. }}
 
-\title{Optimization - Exercises}
+\title{Optimization - Minitest 3}
 \author{Joris LIMONIER}
+\date{February 1, 2022}
 \begin{document}
 \maketitle
-\tableofcontents
 
-\section{In-class proof January 25, 2021}
-\begin{equation*}
-  w_{k+1} = w_k - \alpha_k g_k(w_k, \xi_k)
-\end{equation*}
-\(F\) is \(L\)-smooth.
-\begin{align*}
-           &
-  F(w_{k+1}) \leq F(w_k) + \nabla F(w_k)^T (w_{k+1} - w_k) + \frac{1}{2} L \alpha_k^2 \|g_k(w_k, \xi_k)\|^2          \\
-  \implies &
-  F(w_{k+1}) \leq F(w_k) - \alpha_k \nabla F(w_k)^T g_k (w_k, \xi_k) + \frac{1}{2} L \alpha_k^2 \|g_k(w_k, \xi_k)\|^2 \\
-\end{align*}
+\section*{Question 1}
+\begin{equation}
+  \label{lemma}
+  \E_{\xi_k}\left[F(w_{k+1})\right] - F(w_k) \leq \alpha_k \left(\mu - \frac{1}{2} \alpha_k L M_G\right) \left\| \nabla F(w_k)\right\|^2 + \frac{1}{2} \alpha_k^2 LM
+\end{equation}
+\paragraph{What does equation \eqref{lemma} imply ?}
+If \(\alpha_k\) is small enough, \(\E\left[F(w_{k+1})\right] \leq F(w_k)\), so we can hope that the gradient method leads to the minimum of \(F\).
+
+\section*{Question 2}
+\paragraph{What is the role of each of the components (\(\alpha_k, L, M, \ldots\))?}
+
 
 \end{document}
