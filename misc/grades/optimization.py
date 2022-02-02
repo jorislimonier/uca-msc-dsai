@@ -63,6 +63,15 @@ opt = Optimization()
 opt.data
 
 # %%
+px.bar(
+    data_frame=opt.data.T.loc[
+        opt.data.mean().sort_values(ascending=False).index
+    ],
+    barmode="group",
+)
+# %%
+opt.data_no_worst_grade
+# %%
 df_remove_worst_grade = opt.data_no_worst_grade
 px.bar(
     data_frame=df_remove_worst_grade.T.loc[
