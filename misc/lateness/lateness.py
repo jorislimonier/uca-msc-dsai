@@ -4,8 +4,8 @@ import plotly.express as px
 
 
 # %%
-lateness_path = "~/Documents/uca-msc-dsai/misc/lateness/"
-data = pd.read_excel(lateness_path + "lateness.ods")
+LATENESS_PATH = "~/Documents/uca-msc-dsai/misc/lateness/"
+data = pd.read_excel(LATENESS_PATH + "lateness.ods")
 data.tail()
 
 
