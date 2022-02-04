@@ -10,6 +10,7 @@
   linkcolor=blue, 
 }
 
+\newcommand{\1}{\mathbf{1}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\R}{\mathbb{R}}
 \renewcommand{\P}{\mathbb{P}}
@@ -222,8 +223,43 @@ Then we apply \eqref{eqn: chebyshev inequality}:
   \P\left( \left| \frac{1}{n} \sum_{i=1}^n Z_i - \mu\right| \geq \varepsilon \right) \leq \frac{\left(b-a\right)^2}{4n\varepsilon^2} \\
 \end{align*}
 
-\subsubsection{Question 4}
+\section{In-class exercise February 4, 2022}
+\subsection{Question 1}
+We define our loss as:
+\begin{equation*}
+  \ell(y, y') = |y - y'|
+\end{equation*}
+Show:
+\begin{equation*}
+  \forall\ c \in \R,\ \begin{cases}
+    |c| = \min_{a \geq 0} a \\
+    s.t. \quad a \geq c     \\
+    \qquad a \geq -c
+  \end{cases}
+\end{equation*}
+A function study of \(x \mapsto |x|\) gives the result.
 
+\subsection{Question 2}
+ERM consists in finding the following quantity:
+\begin{align*}
+  \min_{w \in \R} \mathcal{R}_S (w)
+   & = \min_{w \in \R} \frac{1}{n} \sum_{i=1}^n |\langle w_i x_i \rangle - y_i|  \\
+\end{align*}
+% \begin{align*}
+%   \ell(y, y')
+%    & = |y - y'|                                       \\
+%    & \forall\ w \in \R^n,\ \begin{cases}
+%     |c| = \min_{a \geq 0} a \\
+%     s.t. \quad a \geq c     \\
+%     \qquad a \geq -c
+%   \end{cases}
+% \end{align*}
+
+
+
+
+
+\subsection{Question 3}
 
 
 
