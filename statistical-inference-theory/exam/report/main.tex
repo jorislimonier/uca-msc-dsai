@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+
+% \newacronym{bof}{BOF}{Bag Of Features}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
+\pagenumbering{arabic}
+
+
+% \clearpage
+% \printnoidxglossaries
+
+\end{document}
