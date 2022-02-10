@@ -8,8 +8,9 @@
 \usepackage{multirow}
 \usepackage{glossaries}
 % \makenoidxglossaries
+% \newcommand{\thetahat}{\hat{\theta}}
 
-% \newacronym{bof}{BOF}{Bag Of Features}
+\newacronym{iid}{iid}{Independent and Identically Distributed}
 
 
 % \pagenumbering{roman}
@@ -31,9 +32,20 @@
 \pagenumbering{arabic}
 
 \section{Exercise}
+Let \(X_1, \ldots, X_n\) be \gls{iid} random variables with density:
 \begin{equation}
+    \label{eqn: ex1 pdf}
     f_{\theta}(x) = (k+1) \theta^{-k-1} x^k \1_{[0, theta]} (x)
 \end{equation}
+where \(k \in \N_{\geq 0}\) and \(\theta > 0\) is unknown. \\
+Let \(m := n(k+1)\).
+
+\subsection{Question 1}
+We want to find 
+\subsection{Question 2}
+\subsection{Question 3}
+
+
 
 % \clearpage
 % \printnoidxglossaries
