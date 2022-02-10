@@ -5,19 +5,19 @@ import plotly.express as px
 
 # %%
 RAW_DATA = """
-		Minitest 1	Minitest 2	Minitest 3
-BERAS CARABALLO	Julio Enrique	19	18	14
-BIRBIRI	Ufuk Cem	16	12	7
-DE VILLIERS	Marlize			
-KACHMAR	Hadi	16		
-LIMONIER	Joris Shan André	20	6	15
-NAHED	Melissa			
-NJOMGUE FOTSO	Evariste	9	18	17.5
-RAI	Sourav	16	19	13
-SAOUD	Hamidou	10	12	5
-SARTAJ	Hajam	14	4	7
-YEGHIAZARYAN	Martinos	19	13	2
-YOUSSOUFI	Ayoub	15	18	13
+		Minitest 1	Minitest 2	Minitest 3	Minitest 4
+BERAS CARABALLO	Julio Enrique	19	18	14	16
+BIRBIRI	Ufuk Cem	16	12	7	11
+DE VILLIERS	Marlize				
+KACHMAR	Hadi	16			
+LIMONIER	Joris Shan André	20	6	15	18
+NAHED	Melissa				
+NJOMGUE FOTSO	Evariste	9	18	17.5	14
+RAI	Sourav	16	19	13	4
+SAOUD	Hamidou	10	12	5	7
+SARTAJ	Hajam	14	4	7	2
+YEGHIAZARYAN	Martinos	19	13	2	18
+YOUSSOUFI	Ayoub	15	18	13	11
 """
 
 
@@ -30,16 +30,18 @@ class Optimization:
         raw_data = self.RAW_DATA
         raw_data = raw_data.split("\n")
         raw_data = [row.split("\t") for row in raw_data]
-        raw_data = raw_data[2:-1]
-        df = pd.DataFrame(
-            data=raw_data,
-            columns=["last_name", "first_name", "test1", "test2", "test3"],
+        raw_data = raw_data[2:-1]  # remove header and empty row
+        columns = (
+            ["last_name", "first_name"]
+            # adapt for future new columns
+            + [f"test{i}" for i in range(1, len(raw_data[0]) - 1)],
         )
+        df = pd.DataFrame(data=raw_data, columns=columns)
         df["name"] = df["last_name"] + " " + df["first_name"]
         df = df.set_index("name")
         df = df.drop(
             columns=["last_name", "first_name"],
-            index=["DE VILLIERS Marlize", "NAHED Melissa"],
+            index=["DE VILLIERS Marlize", "NAHED Melissa", "KACHMAR Hadi"],
             errors="ignore",
         )
 
@@ -50,6 +52,9 @@ class Optimization:
 
     @property
     def data_no_worst_grade(self):
+        """
+        remove minimum grade per student
+        """
         df = self.data.copy()
         for col_index in range(len(df.columns)):
             if df.iloc[:, col_index].isna().sum() == 0:
@@ -59,14 +64,13 @@ class Optimization:
                 pass
         return df
 
+
 opt = Optimization()
 opt.data
 
 # %%
 px.bar(
-    data_frame=opt.data.T.loc[
-        opt.data.mean().sort_values(ascending=False).index
-    ],
+    data_frame=opt.data.T.loc[opt.data.mean().sort_values(ascending=False).index],
     barmode="group",
 )
 # %%
@@ -81,6 +85,9 @@ px.bar(
 )
 
 # %%
-px.bar(opt.data.mean().sort_values(ascending=False))
+px.bar(data_frame=opt.data.mean().sort_values(ascending=False), title="Simple average")
 # %%
-px.bar(df_remove_worst_grade.mean().sort_values(ascending=False))
+px.bar(
+    data_frame=df_remove_worst_grade.mean().sort_values(ascending=False),
+    title="Average without worst grade per student",
+)
