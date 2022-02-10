@@ -1,0 +1,34 @@
+@prefix ns: <http://namespace.com/> .
+@prefix ns2: <http://web-of-data.com/> .
+
+ns2:margot
+    a teacher ;
+    ns:yearsOld 32 ;
+    ns:shoeSize 38 ;
+    ns:pantsSize 40 ;
+    ns:husband ns2:arthur;
+    ns:children ns2:simon, ns2:marie ;
+    ns:colleague ns2:alice, ns2:pierre .
+
+ns2:arthur
+    ns:name "arthur" ;
+    ns:wife ns2:margot ;
+    ns:children ns2:simon, ns2:marie .
+
+ns2:simon
+    ns:name "simon" ;
+    ns:mother ns2:margot ;
+    ns:father ns2:arthur .
+
+ns2:marie
+    ns:name "marie" ;
+    ns:mother ns2:margot ;
+    ns:father ns2:arthur .
+
+ns2:alice
+    ns:name "alice" ;
+    ns:colleague ns2:margot, ns2:pierre .
+
+ns2:pierre
+    ns:name "pierre" ;
+    ns:colleague ns2:alice, ns2:margot .
