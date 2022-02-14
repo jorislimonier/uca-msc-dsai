@@ -1,0 +1,9 @@
+- Understand the paper
+- Explain to others
+- Which problem does it solve?
+- What solution is proposed?
+- Results?
+- Opinion on the quality of the papers (_e.g._ small dataset, compared to poor-performing algorithms)
+- Opinion on the paper (why it's clever, why it's a good idea)
+- Ask questions during other people's presentation.
+- If adding resources from the paper, mention the source
