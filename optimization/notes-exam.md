@@ -1,0 +1,9 @@
+- Look at minitests
+- Look at previous exams
+- May have definitions:
+    - Convex
+    - Strong-convex
+    - L-smooth
+    - Not assumptions of theorem
+    - Quadratic convergence
+- No proof
