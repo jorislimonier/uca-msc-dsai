@@ -1,8 +1,11 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 @prefix ns: <http://namespace.com/> .
 @prefix ns2: <http://web-of-data.com/> .
 
 ns2:margot
-    a teacher ;
+    a ns:Teacher ;
+    a ns:Woman ;
+    ns:name "margot" ;
     ns:yearsOld 32 ;
     ns:shoeSize 38 ;
     ns:pantsSize 40 ;
@@ -11,24 +14,31 @@ ns2:margot
     ns:colleague ns2:alice, ns2:pierre .
 
 ns2:arthur
+    a ns:Man ;
     ns:name "arthur" ;
     ns:wife ns2:margot ;
     ns:children ns2:simon, ns2:marie .
 
 ns2:simon
+    a ns:Man ;
     ns:name "simon" ;
     ns:mother ns2:margot ;
-    ns:father ns2:arthur .
+    ns:f    ather ns2:arthur .
 
 ns2:marie
+    a ns:Woman ;
     ns:name "marie" ;
     ns:mother ns2:margot ;
-    ns:father ns2:arthur .
+    ns:f    ather ns2:arthur .
 
 ns2:alice
+    a ns:Woman ;
+    a ns:Teacher ;
     ns:name "alice" ;
     ns:colleague ns2:margot, ns2:pierre .
 
 ns2:pierre
+    a ns:Man ;
+    a ns:Teacher ;
     ns:name "pierre" ;
     ns:colleague ns2:alice, ns2:margot .

@@ -1,0 +1,34 @@
+@base <http://namespace.com/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ns: <http://namespace.com/> .
+@prefix ns2: <http://web-of-data.com/> .
+
+# --- CLASSES ---
+<Woman> a rdfs:Class ;
+    rdfs:subClassOf <Person> ;
+    rdfs:label "woman"@en ;
+    rdfs:comment "an adult female person"@en .
+
+<Man> a rdfs:Class ;
+    rdfs:subClassOf <Person> ;
+    rdfs:label "man"@en ;
+    rdfs:comment "an adult male person"@en .
+
+<Teacher> a rdfs:Class ;
+    rdfs:subClassOf <Person> ;
+    rdfs:label "teacher"@en ;
+    rdfs:comment "a knwoledge-spreader"@en .
+
+# --- PROPERTIES ---
+<name> a rdf:Property ;
+    rdfs:label "name"@en ;
+    rdfs:comment "how to call someone"@en .
+
+<mother> a rdf:Property ;
+    rdfs:label "has for mother"@en ;
+    rdfs:comment "to have a woman parent"@en .
+
+<father> a rdf:Property ;
+    rdfs:label "has for father"@en ;
+    rdfs:comment "to have a man parent"@en .
