@@ -5,19 +5,19 @@ import plotly.express as px
 
 # %%
 RAW_DATA = """
-		Minitest 1	Minitest 2	Minitest 3	Minitest 4
-BERAS CARABALLO	Julio Enrique	19	18	14	16
-BIRBIRI	Ufuk Cem	16	12	7	11
-DE VILLIERS	Marlize				
-KACHMAR	Hadi	16			
-LIMONIER	Joris Shan André	20	6	15	18
-NAHED	Melissa				
-NJOMGUE FOTSO	Evariste	9	18	17.5	14
-RAI	Sourav	16	19	13	4
-SAOUD	Hamidou	10	12	5	7
-SARTAJ	Hajam	14	4	7	2
-YEGHIAZARYAN	Martinos	19	13	2	18
-YOUSSOUFI	Ayoub	15	18	13	11
+		Minitest 1	Minitest 2	Minitest 3	Minitest 4	Minitest 5
+BERAS CARABALLO	Julio Enrique					
+BIRBIRI	Ufuk Cem	16	12	7	11	5
+DE VILLIERS	Marlize					
+KACHMAR	Hadi					
+LIMONIER	Joris Shan André	20	6	15	18	14
+NAHED	Melissa					
+NJOMGUE FOTSO	Evariste	9	18	17.5	14	13
+RAI	Sourav	16	19	13	4	13
+SAOUD	Hamidou	10	12	5	7	17
+SARTAJ	Hajam	14	4	7	2	12
+YEGHIAZARYAN	Martinos	19	13	2	18	13
+YOUSSOUFI	Ayoub					
 """
 
 
@@ -34,18 +34,19 @@ class Optimization:
         columns = (
             ["last_name", "first_name"]
             # adapt for future new columns
-            + [f"test{i}" for i in range(1, len(raw_data[0]) - 1)],
+            + [f"test{i}" for i in range(1, len(raw_data[0]) - 1)]
         )
         df = pd.DataFrame(data=raw_data, columns=columns)
         df["name"] = df["last_name"] + " " + df["first_name"]
         df = df.set_index("name")
         df = df.drop(
             columns=["last_name", "first_name"],
-            index=["DE VILLIERS Marlize", "NAHED Melissa", "KACHMAR Hadi"],
-            errors="ignore",
         )
 
-        df = df.replace("", np.nan)
+        # drop empty cells
+        df = df.replace({"": np.nan})
+        df = df.dropna(axis=0)
+
         df = df.astype(float)
         df = df.T
         return df
@@ -85,9 +86,14 @@ px.bar(
 )
 
 # %%
-px.bar(data_frame=opt.data.mean().sort_values(ascending=False), title="Simple average")
+px.bar(
+    data_frame=opt.data.mean().sort_values(ascending=False),
+    title="Simple average",
+    text_auto=True,
+)
 # %%
 px.bar(
     data_frame=df_remove_worst_grade.mean().sort_values(ascending=False),
     title="Average without worst grade per student",
+    text_auto=True,
 )
