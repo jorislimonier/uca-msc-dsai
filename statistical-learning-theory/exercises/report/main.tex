@@ -13,6 +13,7 @@
 \newcommand{\1}{\mathbf{1}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\Rcal}{\mathcal{R}}
 \renewcommand{\P}{\mathbb{P}}
 \renewcommand{\L}{\mathcal{L}}
 \newcommand{\thetahat}{\hat\theta}
@@ -243,7 +244,7 @@ A function study of \(x \mapsto |x|\) gives the result.
 ERM consists in finding the following quantity:
 \begin{align*}
   \min_{w \in \R} \mathcal{R}_S (w)
-   & = \min_{w \in \R} \frac{1}{n} \sum_{i=1}^n |\langle w_i x_i \rangle - y_i|  \\
+   & = \min_{w \in \R} \frac{1}{n} \sum_{i=1}^n |\langle w_i x_i \rangle - y_i| \\
 \end{align*}
 % \begin{align*}
 %   \ell(y, y')
@@ -258,6 +259,90 @@ ERM consists in finding the following quantity:
 
 
 
+
+\section{In-class exercise February 22, 2022}
+\subsection{Question 1}
+Show that ERM with the logistic loss is equivalent to minimizing
+\begin{equation*}
+  F(w) = \sum_{i=1}^{n} \log \left( 1 + \exp \left( - \tilde{y}_{i}\left\langle w, x_{i}\right\rangle\right)\right)
+\end{equation*}
+with \(\tilde{y}_i = \operatorname{sign}(y_i - 0.5)\). Deduce that \(\hat{\Rcal}\) is a convex function of \(w\). \\
+We have:
+\begin{align*}
+  \ell \left(y, y_i\right)
+   & =
+  \begin{cases}
+    - \log (1 - \hat y) & y = 0 \\
+    - \log (\hat y)     & y = 1
+  \end{cases}                      \\
+   & =
+  \begin{cases}
+    - \log \left(1 - \frac{1}{1 + e^{-w^T x_i}}\right) & y = 0 \\
+    - \log \left(\frac{1}{1 + e^{-w^T x_i}}\right)     & y = 1
+  \end{cases}                      \\
+   & =
+  \begin{cases}
+    - \log \left(\frac{e^{-w^T x_i}}{1 + e^{-w^T x_i}}\right) & y = 0 \\
+    - \log \left(\frac{1}{1 + e^{-w^T x_i}}\right)            & y = 1
+  \end{cases}                      \\
+   & =
+  \begin{cases}
+    \log \left(\frac{1 + e^{-w^T x_i}}{e^{-w^T x_i}}\right) & y = 0 \\
+    \log \left( 1 + e^{-w^T x_i} \right)                    & y = 1
+  \end{cases}                      \\
+   & =
+  \begin{cases}
+    \log \left( 1 + \frac{1}{e^{-w^T x_i}}\right) & y = 0 \\
+    \log \left( 1 + e^{-w^T x_i} \right)          & y = 1
+  \end{cases}                      \\
+   & =
+  \begin{cases}
+    \log \left(1 + e^{w^T x_i} \right)   & y = 0 \\
+    \log \left( 1 + e^{-w^T x_i} \right) & y = 1
+  \end{cases}                      \\
+   & =
+  \log \left(1 + e^{-\tilde{y_i} w^T x_i} \right) \\
+   & =
+  \log \left(1 + e^{(-1)^{y_i} w^T x_i} \right)   \\
+\end{align*}
+% Convex: \(t f(w_1) + (1-t) f(w_2) \geq f(tw_1 + (1-t)w_2)\)
+\begin{align*}
+   & \frac{\partial^2}{\partial w^2} \log \left(1 + e^{(-1)^{y_i} w^T x_i} \right)                                                                          \\
+   & = \frac{\partial}{\partial w} \frac{-y_i x_i e^{-\tilde{y_i} w^T x_i}}{1 + e^{-\tilde{y_i} w^T x_i}}                                                   \\
+   & = \frac{(y_i x_i)^2 e^{-\tilde{y_i} w^T x_i} (1 + e^{-\tilde{y_i} w^T x_i}) - (-y_i x_i e^{-\tilde{y_i} w^T x_i})^2}{(1 + e^{-\tilde{y_i} w^T x_i})^2} \\
+   & = \frac{x_i^2 e^{-\tilde{y_i} w^T x_i} (1 + e^{-\tilde{y_i} w^T x_i}) - x_i^2 e^{-2\tilde{y_i} w^T x_i}}{(1 + e^{-\tilde{y_i} w^T x_i})^2}             \\
+   & = \frac{x_i^2 e^{-\tilde{y_i} w^T x_i}}{(1 + e^{-\tilde{y_i} w^T x_i})^2}                                                                              \\
+   & \geq 0
+\end{align*}
+
+\subsection{Question 2}
+Compute the gradient of \(\hat\Rcal\) with respect to \(w\). \\
+Hint: show that \(\phi'(z) = \phi(z)(1 - \phi(z))\)
+\begin{align*}
+  \frac{d}{dz} \phi(z)
+   & = \frac{d}{dz} \frac{1}{1 + e^{-z}}                      \\
+   & = -\frac{-e^{-z}}{\left(1 + e^{-z}\right)^2}             \\
+   & = \frac{1 - 1 + e^{-z}}{\left(1 + e^{-z}\right)^2}       \\
+   & = \frac{1}{1 + e^{-z}} \frac{- 1 + e^{-z}}{1 + e^{-z}}   \\
+   & = \frac{1}{1 + e^{-z}} \frac{e^{-z}}{1 + e^{-z}}         \\
+   & = \frac{1}{1 + e^{-z}} \frac{1 + e^{-z} - 1}{1 + e^{-z}} \\
+   & = \phi(z)(1 - \phi(z))                                   \\
+\end{align*}
+\begin{align*}
+  \hat\Rcal (w)
+   & = \sum_{i=1}^n \ell(y_i, \hat y_i)                                       \\
+   & = \sum_{i=1}^n -(1-y) \log \left(1 - \hat{y_i}\right) - y_i \log \hat{y_i} \\
+   & = \sum_{i=1}^n -(1-y) \log \left(1 - \phi(w^T x_i)\right) - y_i \log \phi(w^T x_i) \\
+  \end{align*}
+  For some \(1 \leq j \leq n\):
+  \begin{align*}
+    \frac{\partial}{\partial w_j} \ell\left(y, \hat{y}\right)
+    & = \frac{\partial}{\partial w_j} -(1-y) \log \left(1 - \phi(w^T x_i)\right) - y_i \log \phi(w^T x_i) \\
+\end{align*}
+Final result:
+\begin{equation*}
+  \hat\Rcal = \sum_{i=1}^n \left(\phi(w^T x_i) - y_i\right)x_{ij}
+\end{equation*}
 
 \subsection{Question 3}
 
