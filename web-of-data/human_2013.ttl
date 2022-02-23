@@ -1,0 +1,112 @@
+@prefix ns0: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Harry>
+  a <http://www.inria.fr/2007/09/11/humans.rdfs#Man> ;
+  ns0:name "Harry" ;
+  ns0:hasChild <http://www.inria.fr/2007/09/11/humans.rdfs-instances#John> ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Sophie> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#John>
+  a ns0:Person ;
+  ns0:name "John" ;
+  ns0:shoesize 14 ;
+  ns0:age 37 ;
+  ns0:shirtsize 12 ;
+  ns0:trouserssize 44 ;
+  ns0:hasParent <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Sophie> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Mark>
+  a ns0:Person ;
+  ns0:name "Mark" ;
+  ns0:shoesize 8 ;
+  ns0:age 14 ;
+  ns0:shirtsize 9 ;
+  ns0:trouserssize 36 ;
+  ns0:hasFather <http://www.inria.fr/2007/09/11/humans.rdfs-instances#John> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Eve>
+  a ns0:Person, ns0:Lecturer ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#David> ;
+  ns0:name "Eve" ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Alice> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#David>
+  a ns0:Person, ns0:Researcher ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Gaston> ;
+  ns0:name "David" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Alice>
+  a ns0:Woman ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#John> ;
+  ns0:name "Alice" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Jack>
+  a ns0:Man ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Alice> ;
+  ns0:hasChild <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Harry> ;
+  ns0:name "Jack" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Flora>
+  a ns0:Woman ;
+  ns0:age 95 ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Gaston> ;
+  ns0:hasChild <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Pierre> ;
+  ns0:name "Flora" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Laura>
+  a ns0:Person, ns0:Lecturer, ns0:Researcher ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Alice> ;
+  ns0:name "Laura" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Jennifer>
+  a ns0:Woman ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#John> ;
+  ns0:name "Jennifer" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Lucas>
+  a ns0:Man ;
+  ns0:shoesize 7 ;
+  ns0:trouserssize 28 ;
+  ns0:age 12 ;
+  ns0:shirtsize 8 ;
+  ns0:name "Lucas" ;
+  ns0:hasMother <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Catherine> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Gaston>
+  a ns0:Man, ns0:Researcher ;
+  ns0:shoesize 11 ;
+  ns0:trouserssize 38 ;
+  ns0:age 102 ;
+  ns0:shirtsize 12 ;
+  ns0:name "Gaston" ;
+  ns0:hasChild <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Pierre>, <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Jack> .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#William>
+  a ns0:Person ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Laura> ;
+  ns0:shoesize 10 ;
+  ns0:age 42 ;
+  ns0:trouserssize 46 ;
+  ns0:shirtsize 13 ;
+  ns0:name "William" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Pierre>
+  a ns0:Man ;
+  ns0:shoesize 8 ;
+  ns0:age 71 ;
+  ns0:trouserssize 30 ;
+  ns0:shirtsize 9 ;
+  ns0:name "Pierre" .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Karl>
+  a ns0:Person ;
+  ns0:hasSpouse <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Catherine> ;
+  ns0:hasFriend <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Sophie> ;
+  ns0:shoesize 7 ;
+  ns0:age 36 ;
+  ns0:shirtsize 9 ;
+  ns0:trouserssize 40 .
+
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Catherine>
+  a ns0:Woman ;
+  ns0:hasMother <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Laura> .

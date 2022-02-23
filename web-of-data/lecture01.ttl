@@ -1,3 +1,4 @@
+@base <http://namespace.com/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 @prefix ns: <http://namespace.com/> .
 @prefix ns2: <http://web-of-data.com/> .
@@ -23,13 +24,13 @@ ns2:simon
     a ns:Man ;
     ns:name "simon" ;
     ns:mother ns2:margot ;
-    ns:f    ather ns2:arthur .
+    ns:father ns2:arthur .
 
 ns2:marie
     a ns:Woman ;
     ns:name "marie" ;
     ns:mother ns2:margot ;
-    ns:f    ather ns2:arthur .
+    ns:father ns2:arthur .
 
 ns2:alice
     a ns:Woman ;
