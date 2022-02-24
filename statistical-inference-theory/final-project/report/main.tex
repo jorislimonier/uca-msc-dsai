@@ -35,15 +35,212 @@
 Let \(X_1, \ldots, X_n\) be \gls{iid} random variables with density:
 \begin{equation}
     \label{eqn: ex1 pdf}
-    f_{\theta}(x) = (k+1) \theta^{-k-1} x^k \1_{[0, theta]} (x)
+    f_{\theta}(x) = (k+1) \theta^{-k-1} x^k \1_{[0, \theta]} (x)
 \end{equation}
 where \(k \in \N_{\geq 0}\) and \(\theta > 0\) is unknown. \\
 Let \(m := n(k+1)\).
 
 \subsection{Question 1}
-We want to find 
+Let \(\L\) be the likelihood function. Let \(x_1, \ldots, x_n\) be a sample drawn from \(X_1, \ldots, X_n\). \\
+We want to find \(\thetahat\) maximizing \(\L\), that is:
+\begin{equation}
+    \thetahat = \arg \max_{\theta \in \R_{>0}} \L(\theta)                                                          \\
+\end{equation}
+and we have:
+\begin{align*}
+    \L(\theta)
+     & = \prod_{i=1}^n f_\theta (x_i)                                        \\
+     & = \prod_{i=1}^n (k+1) \theta^{-k-1} x_i^k \1_{[0, \theta]} (x_i)      \\
+     & = (k+1)^n \theta^{-n(k+1)} \prod_{i=1}^n x_i^k \1_{[0, \theta]} (x_i) \\
+\end{align*}
+Since we have that:
+\begin{equation*}
+    \exists\ 1 \leq i \leq n,\ \theta < x_i \implies \L(\theta) = 0
+\end{equation*}
+We can enforce:
+\begin{equation}
+    \label{eqn: ex1 theta lower bound}
+    \theta \geq x_{\max} := \max \{x_1, \ldots, x_n\}
+\end{equation}
+which yields:
+\begin{equation*}
+    \thetahat = \arg \max_{\theta \in \R_{\geq x_{\max}}} (k+1)^n \theta^{-n(k+1)} \prod_{i=1}^n x_i^k
+\end{equation*}
+Now, since \(\L\) is decreasing (with respect to \(\theta\)), maximizing it implies choosing \(\theta\) as small as possible. By \eqref{eqn: ex1 theta lower bound} however, we have a lower bound on \(\theta\). This results in:
+\begin{equation*}
+    \thetahat = x_{\max}
+\end{equation*}
+
+
 \subsection{Question 2}
+The bias of \(\thetahat\) is defined as:
+\begin{equation*}
+    \bias(\thetahat) := \E[\thetahat] - \theta
+\end{equation*}
+Let \(X_{\max} := \max\left\{X_1, \ldots, X_n\right\}\). We start by computing \(\P(\thetahat \leq t)\):
+\begin{align*}
+    \P(\thetahat \leq t)
+     & = \P(X_{\max} \leq t)                                                                \\
+     & = \P\left(X_{1} \leq t, \ldots X_n \leq t\right)                                     \\
+     & = \prod_{i=1}^n \P\left(X_{i} \leq t\right)      & \textit{(independence)}           \\
+     & = \P\left(X_{1} \leq t\right)^n                  & \textit{(identical distribution)} \\
+\end{align*}
+We compute the CDF of \(X_1\):
+\begin{align*}
+    \P\left(X_{1} \leq t\right)
+     & = \int_{-\infty}^t f_{   \theta}(s) ds                             \\
+     & = \int_{-\infty}^t (k+1) \theta^{-k-1} s^k \1_{[0, \theta]} (s) ds \\
+\end{align*}
+The indicator function tells us that:
+\begin{equation*}
+    \P\left(X_{1} \leq t\right) =
+    \begin{cases}
+        0 & t < 0      \\
+        1 & t > \theta
+    \end{cases}
+\end{equation*}
+So we can now focus on the case \(t \in [0, \theta]\):
+\begin{align*}
+    \P\left(X_{1} \leq t\right)
+     & = (k+1) \theta^{-k-1} \int_{0}^t s^k ds                      \\
+     & = (k+1) \theta^{-k-1} \left[\frac{s^{k+1}}{k+1}\right]_{0}^t \\
+     & = \theta^{-k-1} \left[s^{k+1}\right]_{0}^t                   \\
+     & = \left[\frac{t}{\theta}\right]^{k+1}                        \\
+\end{align*}
+So to recap, the CDF of \(X_1\) is:
+\begin{equation*}
+    \P\left(X_{1} \leq t\right) =
+    \begin{cases}
+        0                                   & t < 0             \\
+        \left[\frac{t}{\theta}\right]^{k+1} & t \in [0, \theta] \\
+        1                                   & t > \theta
+    \end{cases}
+\end{equation*}
+and therefore, the CDF of \(\thetahat = X_{\max}\) is given by:
+\begin{align*}
+    \P(\thetahat \leq t)
+     & = \P\left(X_{1} \leq t\right)^n \\
+     & =
+    \begin{cases}
+        0                                      & t < 0             \\
+        \left[\frac{t}{\theta}\right]^{n(k+1)} & t \in [0, \theta] \\
+        1                                      & t > \theta
+    \end{cases}         \\
+     & =
+    \begin{cases}
+        0                                 & t < 0             \\
+        \left[\frac{t}{\theta}\right]^{m} & t \in [0, \theta] \\
+        1                                 & t > \theta
+    \end{cases}         \\
+\end{align*}
+By differentiating the CDF of \(\thetahat = X_{\max}\), we can obtain its PDF:
+\begin{align*}
+    \P(\thetahat = t)
+     & =
+    \frac{d}{dt} \P(\thetahat \leq t)              \\
+     & =
+    \begin{cases}
+        \frac{d}{dt} 0                                 & t < 0             \\
+        \frac{d}{dt} \left[\frac{t}{\theta}\right]^{m} & t \in [0, \theta] \\
+        \frac{d}{dt} 1                                 & t > \theta
+    \end{cases}                     \\
+     & =
+    \begin{cases}
+        0                          & t < 0             \\
+        m \frac{t^{m-1}}{\theta^m} & t \in [0, \theta] \\
+        0                          & t > \theta
+    \end{cases}                     \\
+     & =
+    m \frac{t^{m-1}}{\theta^m} \1_{[0, \theta]}(t) \\
+\end{align*}
+
+\begin{align*}
+    \E[\thetahat]
+     & = \E[X_{\max}]                                                                \\
+     & = \int_{-\infty}^{\infty} t \P(X_{\max} = t) dt                               \\
+     & = \int_{-\infty}^{\infty} t m \frac{t^{m-1}}{\theta^m} \1_{[0, \theta]}(t) dt \\
+     & = \int_{0}^{\theta} t m \frac{t^{m-1}}{\theta^m} dt                           \\
+     & = \frac{m}{\theta^m} \int_{0}^{\theta} t^m dt                                 \\
+     & = \frac{m}{\theta^m} \left[\frac{t^{m+1}}{m+1} \right]_{0}^{\theta}           \\
+     & = \frac{m}{\theta^m} \frac{\theta^{m+1}}{m+1}                                 \\
+     & = \frac{m}{m+1} \theta                                                        \\
+\end{align*}
+Now, from the definition of the bias:
+\begin{align*}
+    \bias(\thetahat)
+     & = \E[\thetahat] - \theta        \\
+     & = \frac{m}{m+1} \theta - \theta \\
+     & = \frac{-1}{m+1} \theta         \\
+\end{align*}
+
+
 \subsection{Question 3}
+We want to find \(\lambda_1\) and \(\lambda_2\) such that \(\lambda_1 \thetahat\) is unbiased and \(\lambda_2 \thetahat\) has the smallest quadratic error.
+\subsubsection{Unbiased}
+\begin{align*}
+             &
+    \bias(\lambda_1 \thetahat) = 0              \\
+    \implies &
+    \E[\lambda_1 \thetahat] - \theta = 0        \\
+    \implies &
+    \lambda_1 \E[\thetahat] - \theta = 0        \\
+    \implies &
+    \lambda_1 \frac{m}{m+1} \theta - \theta = 0 \\
+    \implies &
+    \lambda_1 = \theta \frac{m+1}{m \theta}     \\
+    \implies &
+    \lambda_1 = \frac{m+1}{m}                   \\
+\end{align*}
+
+\subsubsection{Smallest quadratic error}
+We define the quadratic error (mean squared error) is defined as follows:
+\begin{align*}
+    MSE(\lambda_2 \thetahat) := \E \left[\left(\lambda_2 \thetahat - \theta\right)^2 \right]
+\end{align*}
+we want to minimize it:
+\begin{align*}
+    MSE(\lambda_2 \thetahat)
+     & := \E \left[\left(\lambda_2 \thetahat - \theta\right)^2 \right]                                     \\
+     & = \E \left[\thetahat^2\right] \lambda_2^2 - 2 \theta \E \left[\thetahat\right] \lambda_2 + \theta^2 \\
+     & = \E \left[\thetahat^2\right] \lambda_2^2 - \frac{2m \theta^2}{m+1} \lambda_2 + \theta^2            \\
+\end{align*}
+We compute \(\E \left[\thetahat^2\right]\):
+\begin{align*}
+    \E \left[\thetahat^2\right]
+     & = \int_{-\infty}^{\infty} t^2 \P(\underbrace{\thetahat}_{=X_{\max}} = t) dt     \\
+     & = \int_{-\infty}^{\infty} t^2 m \frac{t^{m-1}}{\theta^m} \1_{[0, \theta]}(t) dt \\
+     & = \int_{0}^{\theta} t^2 m \frac{t^{m-1}}{\theta^m} dt                           \\
+     & = \frac{m}{\theta^m} \int_{0}^{\theta} t^{m+1} dt                               \\
+     & = \frac{m}{\theta^m (m+2)} \left[t^{m+2} \right]_{0}^{\theta}                   \\
+     & = \frac{m \theta^{2}}{m+2}                                                      \\
+\end{align*}
+Therefore, the quadratic error becomes:
+\begin{align*}
+    MSE(\lambda_2 \thetahat)
+     & = \E \left[\thetahat^2\right] \lambda_2^2 - \frac{2m \theta^2}{m+1} \lambda_2 + \theta^2 \\
+     & = \frac{m \theta^{2}}{m+2} \lambda_2^2 - \frac{2m \theta^2}{m+1} \lambda_2 + \theta^2    \\
+\end{align*}
+We have a parabola, with the coefficient of the term of degree 2 that is positive, so we know that the minimum will occur when the derivative becomes 0. We differentiate and equate to 0:
+\begin{align*}
+             &
+    \frac{\partial}{\partial \lambda_2} MSE(\lambda_2 \thetahat) = 0                                                                           \\
+    \implies &
+    \frac{\partial}{\partial \lambda_2} \left[ \frac{m \theta^{2}}{m+2} \lambda_2^2 - \frac{2m \theta^2}{m+1} \lambda_2 + \theta^2 \right] = 0 \\
+    \implies &
+    \frac{2m \theta^{2}}{m+2} \lambda_2 - \frac{2m \theta^2}{m+1} = 0                                                                          \\
+    \implies &
+    \frac{1}{m+2} \lambda_2 = \frac{1}{m+1}                                                                                                    \\
+    \implies &
+    \lambda_2 = \frac{m+2}{m+1}                                                                                                                \\
+\end{align*}
+We can evaluate the MSE at the minimum:
+\begin{align*}
+    MSE(\lambda_2 \thetahat)
+     & = \frac{m \theta^{2}}{m+2} \left(\frac{m+2}{m+1}\right)^2 - \frac{2m \theta^2}{m+1} \left(\frac{m+2}{m+1}\right) + \theta^2 \\
+     & = \frac{m \theta^{2} (m+2)}{(m+1)^2} - \frac{2m \theta^2 (m+2)}{(m+1)^2} + \theta^2                                         \\
+     & = \theta^2 - \frac{m \theta^2 (m+2)}{(m+1)^2}                                                                               \\
+     & = \theta^2 \left[ 1 - \frac{m (m+2)}{(m+1)^2} \right]                                                                               \\
+\end{align*}
 
 
 
