@@ -1,47 +1,109 @@
-# Question 1
+# ------ Question 1 ------
 # Create a graph with all the data
 CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }
 
-# Question 2
+# ------ Question 2 ------
 prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
 select * where { ?x a ?t . filter(strstarts(?t, h:)) }
 # select all entries if predicate starts with the URI h.
 # 21 answers
 # John: <http://www.inria.fr/2007/09/11/humans.rdfs#Person>
 
-# Question 3
+# ------ Question 3 ------
+# Part 1
 select * where { ?x a ?t . filter(strends(?x, "John")) }
-select * where { ?x ?y ?t . filter(strends(?x, "John")) }
 
-# Question 4
+# Part 2
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+describe p:John where { ?x ?y ?t . }
+
+
+# ------ Question 4 ------
 prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
 select * where { ?x h:hasSpouse ?y }
 # find all entries with the hasSpouse property
 # 6 entries
 
-# Question 5
+# ------ Question 5 ------
 # Part 1
 prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
 select * where { ?x h:shoesize ?y } 
 
 # Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select * where { 
+?x a h:Person
+optional { ?x h:shoesize ?z } .
+} 
+
 # Part 3
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select * where { 
+{?x h:shoesize ?shoe . filter(?shoe > 8)}
+union
+{?x h:shirtsize ?shirt . filter(?shirt > 12)}
+} 
 
 
-# Question 6
+# ------ Question 6 ------
+# hasChild
+
 # Part 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select * where {
+?x h:hasChild ?child 
+} 
+# 5 answers
+# 1 person has 2 children
+
 # Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select distinct ?x where {
+?x h:hasChild ?child
+}
+
 # Part 3
-# Question 7
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select * where {
+?x a h:Person .
+Minus {?x h:hasChild ?child}
+} 
+
+
+
+# ------ Question 7 ------
+# age
 # Part 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select * where {
+?x h:age ?age . filter( ?age <= 18)
+}
+# 2 answers
+
 # Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+ask {p:Mark h:age ?age . filter(xsd:integer(?age) >= 18)}
+
 # Part 3
-# Question 8
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+select *
+where{
+?pers h:age ?age
+bind (xsd:integer(?age/2) = xsd:integer(?age)/2 as ?ageEven)
+}
+
+
+# ------ Question 8 ------
 # Part 1
 # Part 2
-# Question 9
-# Question 10
-# Question 11
+
+# ------ Question 9 ------
+
+# ------ Question 10 ------
+
+# ------ Question 11 ------
 # Part 1
 # Part 2
 # Part 3
@@ -50,8 +112,13 @@ select * where { ?x h:shoesize ?y }
 # Part 6
 # Part 7
 # Part 8
-# Question 12
-# Question 13
-# Question 14
-# Question 15
-# Question 16
+
+# ------ Question 12 ------
+
+# ------ Question 13 ------
+
+# ------ Question 14 ------
+
+# ------ Question 15 ------
+
+# ------ Question 16 ------
