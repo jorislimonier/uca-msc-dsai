@@ -21,7 +21,7 @@
 \newcommand{\var}{\operatorname{Var}}
 
 
-\title{Statistical inference practice}
+\title{Statistical learning theory}
 \author{Joris LIMONIER}
 \begin{document}
 \maketitle
@@ -330,22 +330,101 @@ Hint: show that \(\phi'(z) = \phi(z)(1 - \phi(z))\)
 \end{align*}
 \begin{align*}
   \hat\Rcal (w)
-   & = \sum_{i=1}^n \ell(y_i, \hat y_i)                                       \\
-   & = \sum_{i=1}^n -(1-y) \log \left(1 - \hat{y_i}\right) - y_i \log \hat{y_i} \\
+   & = \sum_{i=1}^n \ell(y_i, \hat y_i)                                                 \\
+   & = \sum_{i=1}^n -(1-y) \log \left(1 - \hat{y_i}\right) - y_i \log \hat{y_i}         \\
    & = \sum_{i=1}^n -(1-y) \log \left(1 - \phi(w^T x_i)\right) - y_i \log \phi(w^T x_i) \\
-  \end{align*}
-  For some \(1 \leq j \leq n\):
-  \begin{align*}
-    \frac{\partial}{\partial w_j} \ell\left(y, \hat{y}\right)
-    & = \frac{\partial}{\partial w_j} -(1-y) \log \left(1 - \phi(w^T x_i)\right) - y_i \log \phi(w^T x_i) \\
+\end{align*}
+For some \(1 \leq j \leq n\):
+\begin{align*}
+  \frac{\partial}{\partial w_j} \ell\left(y, \hat{y}\right)
+   & = \frac{\partial}{\partial w_j} -(1-y) \log \left(1 - \phi(w^T x_i)\right) - y_i \log \phi(w^T x_i) \\
 \end{align*}
 Final result:
 \begin{equation*}
   \hat\Rcal = \sum_{i=1}^n \left(\phi(w^T x_i) - y_i\right)x_{ij}
 \end{equation*}
 
+\section{In class exercises February 25, 2022}
+\subsection{Question 1}
+Prove that the following function is a kernel:
+\begin{equation*}
+  k(x,y) = 2^{x+y}
+\end{equation*}
+\paragraph{Symmetry} Trivial
+\paragraph{Positive definiteness}
+\begin{align*}
+  \sum_{i=1}^n \sum_{j=1}^n c_i c_j k(x_i, x_j)
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j 2^{x_i + x_j}   \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j 2^{x_i} 2^{x_j} \\
+   & = \sum_{i=1}^n c_i 2^{x_i} \sum_{j=1}^n c_j 2^{x_j} \\
+   & = \left[\sum_{i=1}^n c_i 2^{x_i}\right]^2           \\
+  \geq 0
+\end{align*}
+
+\subsection{Question 2}
+Prove that the following function is a kernel:
+\begin{equation*}
+  k(x,y) = (x^T y)^2
+\end{equation*}
+\paragraph{Symmetry} Trivial
+
+\paragraph{Positive definiteness}
+\begin{align*}
+  \sum_{i=1}^n \sum_{j=1}^n c_i c_j k(x_i, x_j)
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j (x_i^T x_j)^2                           \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j (x_i^T x_j) (x_i^T x_j)                 \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j (x_j^T x_i) (x_i^T x_j)                 \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \operatorname{tr} (x_j^T x_i x_i^T x_j) \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \operatorname{tr} (x_i x_i^T x_j x_j^T) \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \langle x_i x_i^T, x_j x_j^T \rangle    \\
+   & = \sum_{i=1}^n c_i x_i x_i^T \sum_{j=1}^n c_j x_j x_j^T                     \\
+   & = \left[\sum_{i=1}^n c_i x_i x_i^T\right]^2                                 \\
+   & \geq 0
+\end{align*}
+
+
 \subsection{Question 3}
+Prove that the following function is a kernel:
+\begin{equation*}
+  k(x,y) = \cos(x-y)
+\end{equation*}
+\paragraph{Symmetry} Trivial
 
+\paragraph{Positive definiteness}
 
+\begin{align*}
+   & \sum_{i=1}^n \sum_{j=1}^n c_i c_j k(x_i, x_j)                                                                   \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \cos(x_i - x_j)                                                             \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \left[\cos(x_i) \cos(x_j) + \sin(x_i) \sin(x_j)\right]                      \\
+   & = \sum_{i=1}^n \sum_{j=1}^n c_i c_j \cos(x_i) \cos(x_j) + \sum_{i=1}^n \sum_{j=1}^n c_i c_j \sin(x_i) \sin(x_j) \\
+   & = \left[\sum_{i=1}^n c_i \cos(x_i)\right]^2 + \left[\sum_{i=1}^n c_i \sin(x_i)\right]^2                         \\
+   & \geq 0
+\end{align*}
 
+\subsection{Exercise}
+Show that the Gaussian kernel, which is given by:
+\begin{equation*}
+  k(x,y) := \exp \left(- \frac{\|x-y\|^2}{2\nu^2}\right)
+\end{equation*}
+is actually a kernel. \\
+We have that:
+\begin{equation*}
+  \exp \left(- \frac{\|x-y\|^2}{2\nu^2}\right) = \lim_{n \to \infty} \sum_{p=1}^n \frac{1}{p!} \left(\frac{-\|x-y\|^2}{2\nu^2}\right)^p
+\end{equation*}
+\begin{align*}
+           & \|x-y\|^2 = (x-y)^T (x-y)      \\
+  \implies &
+  \|x-y\|^2 = x^T x - x^T y - y^T x + y^T y \\
+  \implies &
+  \|x-y\|^2 = \|x\|^2 - 2x^T y + \|y\|^2    \\
+  \implies &
+  - \|x-y\|^2 = \underbrace{2x^T y}_{\text{kernel}} - \|x\|^2 - \|y\|^2    \\
+\end{align*}
+
+Let us show that \(\exp\left(- \|x\|^2 - \|y\|^2\right)\) is a kernel:
+\begin{align*}
+  \exp\left(- \|x\|^2 - \|y\|^2\right)
+  &= \exp\left(- \|x\|^2 \right) \exp \left(- \|y\|^2\right) \\
+  &= \langle \exp\left(- \|x\|^2 \right), \exp \left(- \|y\|^2\right) \rangle \\
+\end{align*}
 \end{document}
