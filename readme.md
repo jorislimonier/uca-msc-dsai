@@ -47,7 +47,7 @@ Classes:
   </details>
   
   <details>
-    <summary> Internship </summary>
+    <summary> Internship at Mane </summary>
   </details>
   </ul>
 </details>
