@@ -412,19 +412,45 @@ We have that:
   \exp \left(- \frac{\|x-y\|^2}{2\nu^2}\right) = \lim_{n \to \infty} \sum_{p=1}^n \frac{1}{p!} \left(\frac{-\|x-y\|^2}{2\nu^2}\right)^p
 \end{equation*}
 \begin{align*}
-           & \|x-y\|^2 = (x-y)^T (x-y)      \\
+           & \|x-y\|^2 = (x-y)^T (x-y)                                  \\
   \implies &
-  \|x-y\|^2 = x^T x - x^T y - y^T x + y^T y \\
+  \|x-y\|^2 = x^T x - x^T y - y^T x + y^T y                             \\
   \implies &
-  \|x-y\|^2 = \|x\|^2 - 2x^T y + \|y\|^2    \\
+  \|x-y\|^2 = \|x\|^2 - 2x^T y + \|y\|^2                                \\
   \implies &
-  - \|x-y\|^2 = \underbrace{2x^T y}_{\text{kernel}} - \|x\|^2 - \|y\|^2    \\
+  - \|x-y\|^2 = \underbrace{2x^T y}_{\text{kernel}} - \|x\|^2 - \|y\|^2 \\
 \end{align*}
 
 Let us show that \(\exp\left(- \|x\|^2 - \|y\|^2\right)\) is a kernel:
 \begin{align*}
   \exp\left(- \|x\|^2 - \|y\|^2\right)
-  &= \exp\left(- \|x\|^2 \right) \exp \left(- \|y\|^2\right) \\
-  &= \langle \exp\left(- \|x\|^2 \right), \exp \left(- \|y\|^2\right) \rangle \\
+   & = \exp\left(- \|x\|^2 \right) \exp \left(- \|y\|^2\right)                  \\
+   & = \langle \exp\left(- \|x\|^2 \right), \exp \left(- \|y\|^2\right) \rangle \\
 \end{align*}
+
+\section{In-class exercises March 9, 2022}
+\subsection{Exercise}
+Let \(S = \{ x_1, \ldots, x_n\}\) be a finite set of points in \(\mathcal{X}\). Compute the distance to the barycenter of \(S\) in the RKHS. \\
+The distance to the barycenter is given by:
+\begin{align*}
+  d^2
+   & := \left\| \Phi(x_{i_0}) - \frac{1}{n} \sum_{i=1}^n \Phi(x_i) \right\|^2                                                                                                                                                                       \\
+   & = \left\langle \Phi(x_{i_0}) - \frac{1}{n} \sum_{i=1}^n \Phi(x_i), \Phi(x_{i_0}) - \frac{1}{n} \sum_{i=1}^n \Phi(x_i) \right\rangle                                                                                                            \\
+   & = \left\langle \Phi(x_{i_0}), \Phi(x_{i_0}) \right\rangle + \left\langle \frac{1}{n} \sum_{i=1}^n \Phi(x_i), \frac{1}{n} \sum_{i=1}^n \Phi(x_i) \right\rangle - 2 \left\langle \Phi(x_{i_0}), \frac{1}{n} \sum_{i=1}^n \Phi(x_i) \right\rangle \\
+   & = \left\langle k(x_{i_0}), k(x_{i_0}) \right\rangle + \frac{1}{n^2} \left\langle \sum_{i=1}^n \Phi(x_i), \sum_{i=1}^n \Phi(x_i) \right\rangle - 2 \left\langle \Phi(x_{i_0}), \frac{1}{n} \sum_{i=1}^n \Phi(x_i) \right\rangle                 \\
+\end{align*}
+
+\subsection{Exercise}
+Show that for any matrices \(A, B\), \(A\left(BA + \gamma I\right)^{-1} = \left(AB + \gamma I\right)^{-1} A\).
+\begin{align*}
+  &
+  A\left(BA + \gamma I\right)^{-1} = \left(AB + \gamma I\right)^{-1} A \\
+  \implies &
+  \left(AB + \gamma I\right) A = A \left(BA + \gamma I\right) \\
+  \implies &
+  ABA + \gamma A = ABA + \gamma A \\
+\end{align*}
+The linear kernel is given by \(k(x, y) = x^T y\), so \(K\)
+
+
 \end{document}
