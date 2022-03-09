@@ -97,28 +97,285 @@ bind (xsd:integer(?age/2) = xsd:integer(?age)/2 as ?ageEven)
 
 # ------ Question 8 ------
 # Part 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct { ?y h:isFriend ?x }
+where { ?x h:hasFriend ?y }
+
 # Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert { ?y h:hasFriend ?x }
+where { ?x h:hasFriend ?y }
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x h:hasFriend ?y
+}
+
+
 
 # ------ Question 9 ------
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct { ?y h:isFriend ?x }
+where { ?x h:hasFriend ?y }
 
 # ------ Question 10 ------
+# Don't want to modify the human_2013 file.
 
 # ------ Question 11 ------
 # Part 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select ?person1 ?person2
+where { 
+?person1 h:shirtsize ?ss 
+?person2 h:shirtsize ?ss 
+filter (?person1 != ?person2)
+}
+
+
 # Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct {?person1 h:sameShirtSize ?person2}
+where { 
+?person1 h:shirtsize ?ss 
+?person2 h:shirtsize ?ss 
+filter (?person1 != ?person2)
+}
+
 # Part 3
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?person1 h:sameShirtSize ?person2}
+where { 
+?person1 h:shirtsize ?ss 
+?person2 h:shirtsize ?ss 
+filter (?person1 != ?person2)
+}
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select *
+where {
+?p1 h:sameShirtSize ?p2}
+
 # Part 4
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct {?person1 h:sameShirtSize ?person2}
+where { 
+{?person1 h:sameShirtSize ?person2}
+filter (?person1 != ?person2)
+}
+
+
 # Part 5
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct {?person1 h:sameShirtSize ?person2}
+where { 
+?person1 h:shoesize ?ss 
+?person2 h:shoesize ?ss 
+filter (?person1 != ?person2)
+}
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?person1 h:sameShoeSize ?person2}
+where { 
+?person1 h:shoesize ?ss 
+?person2 h:shoesize ?ss 
+filter (?person1 != ?person2)
+}
+
 # Part 6
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select *
+where {
+?p1 h:sameShoeSize ?p2}
+
 # Part 7
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct {?person1 h:hasSame ?person2}
+where { 
+{ ?person1 h:sameShirtSize ?person2 }
+union
+{ ?person1 h:sameShoeSize ?person2 }
+}
+
 # Part 8
+# All relations are gone because we inserted them in the file. Reloading results in loosing them.
+
+
 
 # ------ Question 12 ------
+# Part 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select *
+where { 
+?person1 h:shoesize ?ss 
+}
+ORDER BY DESC(?ss) LIMIT 1
+
+# Part 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select (max(?ss) as ?maxShoeSize)
+where { 
+?person1 h:shoesize ?ss 
+}
+
+# Part 3
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select (avg(?ss) as ?avgShoeSize)
+where { 
+?person1 h:shoesize ?ss 
+}
+
+# Part 4
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select (?sumShoeSize / ?countShoeSize as ?avgShoeSize)
+where{
+select 
+(sum(?ss) as ?sumShoeSize)
+(count(?ss) as ?countShoeSize)
+where { 
+?person1 h:shoesize ?ss 
+}
+}
 
 # ------ Question 13 ------
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select *
+where{
+?parent1 h:hasSpouse ?parent2 .
+filter not exists {?parent1 h:hasChild ?child}
+}
 
 # ------ Question 14 ------
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert data {
+<http://www.inria.fr/2007/09/11/humans.rdfs-instances#Joris>
+  a h:Person ;
+  h:name "Joris" ;
+  h:shoesize 43 ;
+  h:age 24 ;
+}
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+select * where {
+  <http://www.inria.fr/2007/09/11/humans.rdfs-instances#Joris> ?prop ?value
+}
 
 # ------ Question 15 ------
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?p1 h:isRelative ?p2}
+where { 
+?p1 h:hasSpouse ?p2
+}
+
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?p1 h:isRelative ?p2}
+where { 
+?p1 h:hasMother ?p2
+}
+
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?p1 h:isRelative ?p2}
+where { 
+?p1 h:hasFather ?p2
+}
+
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?p1 h:isRelative ?p2}
+where { 
+?p1 h:hasParent ?p2
+}
+
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+insert {?p1 h:isRelative ?p2}
+where { 
+?p1 h:hasChild ?p2
+}
+
+
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+prefix p: <http://www.inria.fr/2007/09/11/humans.rdfs-instances#>
+
+construct {
+  ?x h:isRelative ?y
+}
+ where {
+  ?x h:isRelative ?y
+}
+
+
 
 # ------ Question 16 ------
+prefix db: <http://dbpedia.org/ontology/> 
+prefix foaf: <http://xmlns.com/foaf/0.1/> 
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> 
+
+construct  { ?x h:name ?nx . ?y h:name ?ny . ?x h:hasSpouse ?y }  
+where {
+   service <http://fr.dbpedia.org/sparql/> {
+      select * where {        ?x db:spouse ?y .?x foaf:name ?nx .?y foaf:name ?ny .}
+  limit 20} } 
+# it gets a bunch of characters from dbpedia and constructs a graph with their spouse
+
+# then (it is correct, but doesn't work for some reason)
+prefix db: <http://dbpedia.org/ontology/> 
+prefix foaf: <http://xmlns.com/foaf/0.1/> 
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> 
+
+insert  { ?x h:name ?nx . ?y h:name ?ny . ?x h:hasSpouse ?y }  
+where {
+   service <http://fr.dbpedia.org/sparql/> {
+      select * where {        ?x db:spouse ?y .?x foaf:name ?nx .?y foaf:name ?ny .}
+  limit 20} } 
