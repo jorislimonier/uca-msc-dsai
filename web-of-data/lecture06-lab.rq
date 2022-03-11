@@ -1,0 +1,177 @@
+# Query the schema itself
+
+# Sub-question 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x a rdfs:Class
+}
+
+# Sub-question 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x rdfs:subClassOf ?y
+}
+
+# Sub-question 3
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  h:shoesize ?p ?y
+}
+
+# Sub-question 4
+select ?u
+where{
+?x ?p "personne"@fr .
+?x ?t ?u
+}
+
+# Sub-question 5
+select * where {
+  ?x ?p "size"@en
+}
+
+# Sub-question 6
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+{h:Person ?p ?y}
+union
+{?s h:Person ?o}
+}
+
+# Sub-question 7
+CONSTRUCT { ?s rdfs:subClassOf ?o } 
+WHERE { ?s rdfs:subClassOf  ?o }
+
+# Sub-question 8
+construct {
+?s rdfs:subClassOf ?u .
+?m rdfs:domain ?n .
+?o rdfs:range ?p .
+}
+WHERE {
+{?s rdfs:subClassOf ?u }
+union
+{?m rdfs:domain ?n}
+union
+{?o rdfs:range ?p}
+}
+
+# Query RDF data augmented by an RDFS schema
+# Question 1
+
+# Sub-question 1
+# Done
+
+# Sub-question 2
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x ?p h:Person
+}
+
+# Sub-question 3
+# Done
+
+# Sub-question 4
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x ?p h:Person
+}
+
+# Sub-question 5
+# There are extra persons because the rdfs file makes explicit that some relationships are have a Person as domain and range (e.g. hasFriend)
+# Moreover, a hierarchy is implemented, which makes Corese understand that (say) a Man is a subclass of Person, therefore it is also a Person.
+
+# Question 2
+# Sub-question 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+?x rdf:type h:Male .
+optional {?x h:hasSpouse ?y}
+}
+
+# Sub-question 2
+# Karl was added to the Males because he is the father of someone, therefore Corese infers that he is a man
+
+
+# Question 3
+# Sub-question 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+select * where {
+  ?x a h:Lecturer . ?x a ?y
+}
+# There are several answers because of multiple inheritance. (a Lecturer is also a Person and also a Man/Woman).
+
+# Sub-question 2
+@prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+select * where {
+?x a h:Person .
+?x a h:Male .
+}
+# Jack is a Male, therefore a subclass of Person
+
+# Question 4
+@prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+select * where {
+?x h:hasAncestor ?y
+}
+# (hasFather, hasMother) < hasParent < hasAncestor
+
+# Question 5
+# Sub-question 1
+@prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+select * where {
+?x h:hasSpouse ?y .
+{?child h:hasParent ?x }
+union
+{?child h:hasParent ?y}
+}
+
+# Sub-question 2
+@prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+construct {
+?x h:hasSpouse ?y .
+?child h:hasParent ?x .
+?child h:hasParent ?y .
+} 
+where {
+?x h:hasSpouse ?y .
+{?child h:hasParent ?x }
+union
+{?child h:hasParent ?y}
+}
+
+# Question 6
+# Sub-question 1
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+insert {?p1 h:olderThan ?p2} where {
+?p1 h:age ?age1 .
+?p2 h:age ?age2
+
+filter (?age1 > ?age2)
+}
+# then
+prefix h: <http://www.inria.fr/2007/09/11/humans.rdfs#> .
+
+select * where {
+  ?x h:olderThan ?y
+}
+
+
+# Sub-question 2
+
+# Question 7
+
+# Question 8
