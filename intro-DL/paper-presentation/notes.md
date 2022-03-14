@@ -3,7 +3,7 @@
 - Which problem does it solve?
 - What solution is proposed?
 - Results?
-- Opinion on the quality of the papers (_e.g._ small dataset, compared to poor-performing algorithms)
+- Opinion on the quality of the papers (*e.g.* small dataset, compared to poor-performing algorithms)
 - Opinion on the paper (why it's clever, why it's a good idea)
-- Ask questions during other people's presentation.
+- Ask questions during other people's presentation (min 2 questions)
 - If adding resources from the paper, mention the source
