@@ -443,14 +443,41 @@ The distance to the barycenter is given by:
 \subsection{Exercise}
 Show that for any matrices \(A, B\), \(A\left(BA + \gamma I\right)^{-1} = \left(AB + \gamma I\right)^{-1} A\).
 \begin{align*}
-  &
+           &
   A\left(BA + \gamma I\right)^{-1} = \left(AB + \gamma I\right)^{-1} A \\
   \implies &
-  \left(AB + \gamma I\right) A = A \left(BA + \gamma I\right) \\
+  \left(AB + \gamma I\right) A = A \left(BA + \gamma I\right)          \\
   \implies &
-  ABA + \gamma A = ABA + \gamma A \\
+  ABA + \gamma A = ABA + \gamma A                                      \\
 \end{align*}
 The linear kernel is given by \(k(x, y) = x^T y\), so \(K\)
+
+\section{In-class exercises March 18, 2022}
+\subsection{Exercise}
+\begin{align*}
+  \alpha_t    & = \frac{1}{2} \log\frac{1 - \varepsilon_t}{\varepsilon_t} \\
+  D_{t+1} (i) & =
+  \frac{D_t (i)}{Z_t}
+  \begin{cases}
+    e^{-\alpha t}, & h_t (x_i) = y_i    \\
+    e^{\alpha t},  & h_t (x_i) \neq y_i
+  \end{cases}
+\end{align*}
+\subsubsection{Part 1}
+Show that
+\[
+  \P_{i \sim D_{t+1}} \left(h_t (x_i) \neq y_i\right) = \frac{\sqrt{\varepsilon_t (1 - \varepsilon_t)}}{Z_t}
+\]
+\begin{align*}
+  \P_{i \sim D_{t+1}} \left(h_t (x_i) \neq y_i\right)
+   & = \sum_{i=1}^n D_{t+1} (i) \1_{y_i \neq h_{t} (x_i)}                                                                           \\
+   & = \sum_{i=1}^n \frac{D_t (i)}{Z_t} e^{\alpha_t} \1_{y_i \neq h_{t} (x_i)}                                                  \\
+   & = \sum_{i=1}^n \frac{D_t (i)}{Z_t} e^{\frac{1}{2} \log\frac{1 - \varepsilon_t}{\varepsilon_t}} \1_{y_i \neq h_{t} (x_i)} \\
+   & = \sum_{i=1}^n \frac{D_t (i)}{Z_t} \sqrt{\frac{1 - \varepsilon_t}{\varepsilon_t}} \1_{y_i \neq h_{t} (x_i)} \\
+   & = \frac{1}{Z_t} \sqrt{\frac{1 - \varepsilon_t}{\varepsilon_t}} \sum_{i=1}^n D_t (i) \1_{y_i \neq h_{t} (x_i)} \\
+   & = \frac{1}{Z_t} \sqrt{\frac{1 - \varepsilon_t}{\varepsilon_t}} \ \varepsilon_t \\
+   & = \frac{\sqrt{\varepsilon_t (1 - \varepsilon_t)}}{Z_t}
+\end{align*}
 
 
 \end{document}
