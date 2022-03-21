@@ -38,7 +38,7 @@ Classes:
     <ul>
       <li> Case Study </li>
       <li> Introduction to Deep Learning </li>
-      <li> Machine Learning Algorithms </li>
+      <li> Machine Learning Algorithms :heavy_check_mark: </li>
       <li> Model Selection and Resampling </li>
       <li> Optimization for Data Science </li>
       <li> Statistical Learning Theory </li>
