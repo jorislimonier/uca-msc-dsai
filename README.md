@@ -40,7 +40,7 @@ Classes:
       <li> Introduction to Deep Learning </li>
       <li> Machine Learning Algorithms :heavy_check_mark: </li>
       <li> Model Selection and Resampling </li>
-      <li> Optimization for Data Science </li>
+      <li> Optimization for Data Science :heavy_check_mark: </li>
       <li> Statistical Learning Theory </li>
       <li> Web of Data </li>
     </ul>
