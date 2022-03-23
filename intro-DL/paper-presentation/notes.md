@@ -1,13 +1,13 @@
 # Notes on visualizing and Understanding Convolutional Networks
 ## Notes on paper
-### Introduction
+### 1. Introduction
 - CNN's are great, but we don't really know why
 - Visualization on Deconvnet (2011)
 - Work is on supervised learning
 - Goal: show which patterns from the training set activate the feature map
 - Previous work had shown regions of the image that are important. This paper shows "top-down projections that reveal structures within each patch that stimulate a particular feature map"
 
-### Approach
+### 2. Approach
 - Models: standard fully supervised convnet models
 - 
 ### ...
@@ -20,8 +20,17 @@
     - Filter
         - Apply transposed filters to the rectified maps (flip each filter vertically and horizontally)
 
+### 3. Training details
+Nothing primordial, only details on parameter values.
 
-
+### 4. Convnet visualization
+- Fixing some issues about Krizhevsky et al.'s paper.
+    - Problem 1: First layer contain high and low frequency information, but nothing in-between
+    - Problem 2: Second layer contains aliasing artifacts caused by large stride (stride of 4)
+    - Solution 1: Reduce filter of layer 1 from $11 \times 11$ to $7 \times 7$
+    - Solution 2: Make slide 2 rather than 4
+    - Fig 6 shows improvements
+<!-- Next is 4.2 -->
 
 ## Remarks
 - Easy to read, beginner friendly -> recall of some very basic concepts to talk to a large audience (explanation of $N$ samples, what $\{x, y\}$ are...etc)
