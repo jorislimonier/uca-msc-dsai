@@ -1,0 +1,193 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> 
+# @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix jlns: <http://jlns.rdfs#> .
+
+
+jlns:LimonierCo a foaf:Organization ;
+    
+
+
+
+
+# below for reference only
+
+ns:Animal a owl:Class ;
+    rdfs:label "animal"@en,
+        "animal"@fr ;
+    rdfs:comment "a living organism characterized by voluntary movement."@en,
+        "être vivant doué de sensibilite de mobilité."@fr .
+
+ns:Female a owl:Class ;
+    owl:disjointWith ns:Male ;
+    rdfs:label "female"@en,
+        "femelle"@fr ;
+    rdfs:comment " an animal that produces gametes (ova) that can be fertilized by male gametes (spermatozoa)."@en,
+        "animal appartenant au sexe apte à produire des ovules."@fr ;
+    rdfs:subClassOf ns:Animal .
+
+ns:Lecturer a owl:Class ;
+    rdfs:label "lecturer"@en,
+        "professeur"@fr ;
+    rdfs:comment "someone who lectures professionally"@en,
+        "personne qui enseigne une discipline, une technique, un art."@fr ;
+    rdfs:subClassOf ns:Person .
+
+ns:Male a owl:Class ;
+    rdfs:label "male"@en,
+        "mâle"@fr ;
+    rdfs:comment "an animal that produces gametes (spermatozoa) that can fertilize female gametes (ova)."@en,
+        "individu appartenant au sexe qui possède le pouvoir de fécondation."@fr ;
+    rdfs:subClassOf ns:Animal .
+
+ns:Man a owl:Class ;
+    owl:disjointWith ns:Woman;
+    rdfs:label "man"@en,
+        "homme"@fr ;
+    rdfs:comment "an adult male person"@en,
+        "mâle adulte de l'espèce humaine."@fr ;
+    rdfs:subClassOf ns:Male,
+        ns:Person .
+
+ns:Person a owl:Class ;
+    rdfs:label "human"@en,
+        "human being"@en,
+        "person"@en,
+        "homme"@fr,
+        "humain"@fr,
+        "personne"@fr,
+        "être humain"@fr ;
+    rdfs:comment "a member of the human species"@en,
+        "un membre de l'espèce humaine."@fr ;
+    rdfs:subClassOf ns:Animal .
+
+ns:Researcher a owl:Class ;
+    rdfs:label "researcher"@en,
+        "scientist"@en,
+        "chercheur"@fr,
+        "scientifique"@fr ;
+    rdfs:comment "a person who devotes himself to doing research"@en,
+        "personne adonnée à des recherches spécialisées."@fr ;
+    rdfs:subClassOf ns:Person .
+
+ns:Woman a owl:Class ;
+    rdfs:label "woman"@en,
+        "femme"@fr ;
+    rdfs:comment "an adult female person"@en,
+        "femelle adulte de l'espèce humaine."@fr ;
+    rdfs:subClassOf ns:Female,
+        ns:Person .
+
+ns:age a owl:DatatypeProperty ;
+    rdfs:label "age"@en,
+        "âge"@fr ;
+    rdfs:comment "complete existence duration."@en,
+        "durée complète d'existence."@fr .
+
+ns:hasBrother a owl:ObjectProperty ;
+    rdfs:label "has for brother"@en,
+        "a pour frère"@fr ;
+    rdfs:comment "relation with a male who has the same parents."@en,
+        "relation avec un mâle ayant les mêmes parents."@fr ;
+    rdfs:domain ns:Animal ;
+    rdfs:range ns:Male .
+
+ns:hasChild a owl:IrreflexiveProperty ;
+    rdfs:label "has for child"@en,
+        "a pour enfant"@fr ;
+    rdfs:comment "relation between an animal and another animal to which it gave birth."@en,
+        "relation entre un animal et un autre animal auquel il a donné naissance."@fr .
+
+ns:hasFather a owl:IrreflexiveProperty ;
+    rdfs:label "has for father"@en,
+        "a pour père"@fr ;
+    rdfs:comment "to have for parent a male."@en,
+        "avoir pour parent un mâle."@fr ;
+    rdfs:range ns:Male ;
+    rdfs:subPropertyOf ns:hasParent .
+
+ns:hasFriend a owl:ObjectProperty ;
+    rdfs:label "has for friend"@en,
+        "a pour ami"@fr ;
+    rdfs:comment "relation between a person and another person he or she knows well and regards with affection and trust."@en,
+        "relation entre une personne et une autre personne qui est l'objet d'un attachement privilégié."@fr ;
+    rdfs:domain ns:Person ;
+    rdfs:range ns:Person .
+
+ns:hasMother a owl:IrreflexiveProperty ;
+    rdfs:label "has for mother"@en,
+        "a pour mère"@fr ;
+    rdfs:comment "to have for parent a female."@en,
+        "avoir pour parent un femmelle."@fr ;
+    rdfs:range ns:Female ;
+    rdfs:subPropertyOf ns:hasParent .
+
+ns:hasSister a owl:ObjectProperty ;
+    rdfs:label "has for sister"@en,
+        "a pour soeur"@fr ;
+    rdfs:comment "relation with a female who has the same parents."@en,
+        "relation avec une femelle ayant les mêmes parents."@fr ;
+    rdfs:domain ns:Animal ;
+    rdfs:range ns:Female .
+
+ns:hasSpouse a owl:ReflexiveProperty ;
+    rdfs:label "has for spouse"@en,
+        "est en ménage avec"@fr ;
+    rdfs:comment "a person's partner in marriage."@en,
+        "le partenaire d'une personne dans un mariage."@fr ;
+    rdfs:domain ns:Person ;
+    rdfs:range ns:Person .
+
+ns:name a owl:DatatypeProperty ;
+    rdfs:label "name"@en,
+        "nom"@fr ;
+    rdfs:comment "designation of something."@en,
+        "désignation de quelque chose."@fr .
+
+ns:shirtsize a owl:FunctionalProperty, owl:DatatypeProperty ;
+    rdfs:label "shirt size"@en,
+        "size"@en,
+        "taille"@fr,
+        "taille de chemise"@fr ;
+    rdfs:comment "express in some way the approximate dimensions of the shirts of a person."@en,
+        "dimensions approximatives des chemises portées par une personne."@fr ;
+    rdfs:domain ns:Person .
+
+ns:shoesize a owl:DatatypeProperty ;
+    rdfs:label "shoe size"@en,
+        "size"@en,
+        "pointure"@fr ;
+    rdfs:comment "express in some way the approximate length of the shoes for a person."@en,
+        "taille, exprimée en points, des chaussures d'une personne."@fr ;
+    rdfs:domain ns:Person .
+
+ns:trouserssize a owl:DatatypeProperty ;
+    rdfs:label "size"@en,
+        "trousers size"@en,
+        "taille"@fr,
+        "taille de pantalon"@fr ;
+    rdfs:comment "express in some way the approximate dimensions of the trousers of a person."@en,
+        "dimensions approximatives des pantalons portés par une personne."@fr ;
+    rdfs:domain ns:Person .
+
+ns:hasAncestor a owl:TransitiveProperty ;
+    rdfs:label "has for ancestor"@en,
+        "a pour ancêtre"@fr ;
+    rdfs:comment "relation between an animal and another animal from which it is descended."@en,
+        "relation entre un animal et un autre animal duquel il descend."@fr ;
+    rdfs:domain ns:Animal ;
+    rdfs:range ns:Animal .
+
+ns:hasParent a owl:IrreflexiveProperty ;
+    rdfs:label "has for parent"@en,
+        "a pour parent"@fr ;
+    rdfs:comment "relation between an animal and another animal which gave birth to it."@en,
+        "relation entre un animal et un autre animal qui lui a donné naissance."@fr ;
+    rdfs:subPropertyOf ns:hasAncestor .
+
+ns:olderThan a owl:AsymmetricProperty ;
+    rdfs:label "is older than"@en,
+        "est plus vieux que"@fr ;
+    rdfs:comment "to have lived more years than someone else"@en,
+        "avoir vécu plus d'années que quelqu'un d'autre"@fr .
