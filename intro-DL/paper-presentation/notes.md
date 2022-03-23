@@ -30,7 +30,7 @@ Nothing primordial, only details on parameter values.
     - Solution 1: Reduce filter of layer 1 from $11 \times 11$ to $7 \times 7$
     - Solution 2: Make slide 2 rather than 4
     - Fig 6 shows improvements
-<!-- Next is 4.2 -->
+- Occlusion sensitivity
 
 ## Remarks
 - Easy to read, beginner friendly -> recall of some very basic concepts to talk to a large audience (explanation of $N$ samples, what $\{x, y\}$ are...etc)
