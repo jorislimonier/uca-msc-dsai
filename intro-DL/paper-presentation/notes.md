@@ -26,7 +26,7 @@ Nothing primordial, only details on parameter values.
     - Problem 1: First layer contain high and low frequency information, but nothing in-between
     - Problem 2: Second layer contains aliasing artifacts caused by large stride (stride of 4)
     - Solution 1: Reduce filter of layer 1 from $11 \times 11$ to $7 \times 7$
-    - Solution 2: Make slide 2 rather than 4
+    - Solution 2: Make stride 2 rather than 4
     - Fig 6 shows improvements
 - Occlusion sensitivity:
     - Change probability prediction depending on which region of the image is occluded.
@@ -36,6 +36,7 @@ Nothing primordial, only details on parameter values.
 
 ### 5. Experiments
 - > both our feature representation and the hand-crafted features are designed using images beyond the Caltech and PASCAL training sets.
+
 #### Varying ImageNet Model Sizes
 - Removing fully connected layers (6, 7) $\implies$ little increase in error
 - Removing two of the middle convolutional layers $\implies$ little increase in error
