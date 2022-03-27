@@ -41,7 +41,7 @@ Classes:
       <li> Machine Learning Algorithms :heavy_check_mark: </li>
       <li> Model Selection and Resampling </li>
       <li> Optimization for Data Science :heavy_check_mark: </li>
-      <li> Statistical Learning Theory </li>
+      <li> Statistical Learning Theory :heavy_check_mark: </li>
       <li> Web of Data </li>
     </ul>
   </details>
