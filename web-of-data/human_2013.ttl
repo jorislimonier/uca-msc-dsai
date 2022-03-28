@@ -7,8 +7,7 @@ ns1:Harry
   ns0:hasChild ns1:John ;
   ns0:hasSpouse ns1:Sophie .
 
-ns1:John
-  a ns0:Person ;
+ns1:John a ns0:Person ;
   ns0:name "John" ;
   ns0:shoesize 14 ;
   ns0:age 37 ;
@@ -16,8 +15,7 @@ ns1:John
   ns0:trouserssize 44 ;
   ns0:hasParent ns1:Sophie .
 
-ns1:Mark
-  a ns0:Person ;
+ns1:Mark a ns0:Person ;
   ns0:name "Mark" ;
   ns0:shoesize 8 ;
   ns0:age 14 ;
@@ -25,47 +23,39 @@ ns1:Mark
   ns0:trouserssize 36 ;
   ns0:hasFather ns1:John .
 
-ns1:Eve
-  a ns0:Person, ns0:Lecturer ;
+ns1:Eve a ns0:Person, ns0:Lecturer ;
   ns0:hasSpouse ns1:David ;
   ns0:name "Eve" ;
   ns0:hasFriend ns1:Alice .
 
-ns1:David
-  a ns0:Person, ns0:Researcher ;
+ns1:David a ns0:Person, ns0:Researcher ;
   ns0:hasFriend ns1:Gaston ;
   ns0:name "David" .
 
-ns1:Alice
-  a ns0:Woman ;
+ns1:Alice a ns0:Woman ;
   ns0:hasFriend ns1:John ;
   ns0:name "Alice" .
 
-ns1:Jack
-  a ns0:Man ;
+ns1:Jack a ns0:Man ;
   ns0:hasFriend ns1:Alice ;
   ns0:hasChild ns1:Harry ;
   ns0:name "Jack" .
 
-ns1:Flora
-  a ns0:Woman ;
+ns1:Flora a ns0:Woman ;
   ns0:age 95 ;
   ns0:hasSpouse ns1:Gaston ;
   ns0:hasChild ns1:Pierre ;
   ns0:name "Flora" .
 
-ns1:Laura
-  a ns0:Person, ns0:Lecturer, ns0:Researcher ;
+ns1:Laura a ns0:Person, ns0:Lecturer, ns0:Researcher ;
   ns0:hasFriend ns1:Alice ;
   ns0:name "Laura" .
 
-ns1:Jennifer
-  a ns0:Woman ;
+ns1:Jennifer a ns0:Woman ;
   ns0:hasSpouse ns1:John ;
   ns0:name "Jennifer" .
 
-ns1:Lucas
-  a ns0:Man ;
+ns1:Lucas a ns0:Man ;
   ns0:shoesize 7 ;
   ns0:trouserssize 28 ;
   ns0:age 12 ;
@@ -74,8 +64,7 @@ ns1:Lucas
   ns0:hasFather ns1:Karl ; # added by myself
   ns0:hasMother ns1:Catherine .
 
-ns1:Gaston
-  a ns0:Man, ns0:Researcher ;
+ns1:Gaston a ns0:Man, ns0:Researcher ;
   ns0:shoesize 11 ;
   ns0:trouserssize 38 ;
   ns0:age 102 ;
@@ -83,8 +72,7 @@ ns1:Gaston
   ns0:name "Gaston" ;
   ns0:hasChild ns1:Pierre, ns1:Jack .
 
-ns1:William
-  a ns0:Person ;
+ns1:William a ns0:Person ;
   ns0:hasSpouse ns1:Laura ;
   ns0:shoesize 10 ;
   ns0:age 42 ;
@@ -92,16 +80,14 @@ ns1:William
   ns0:shirtsize 13 ;
   ns0:name "William" .
 
-ns1:Pierre
-  a ns0:Man ;
+ns1:Pierre a ns0:Man ;
   ns0:shoesize 8 ;
   ns0:age 71 ;
   ns0:trouserssize 30 ;
   ns0:shirtsize 9 ;
   ns0:name "Pierre" .
 
-ns1:Karl
-  a ns0:Person ;
+ns1:Karl a ns0:Person ;
   ns0:hasSpouse ns1:Catherine ;
   ns0:hasFriend ns1:Sophie ;
   ns0:shoesize 7 ;
@@ -109,6 +95,5 @@ ns1:Karl
   ns0:shirtsize 9 ;
   ns0:trouserssize 40 .
 
-ns1:Catherine
-  a ns0:Woman ;
+ns1:Catherine a ns0:Woman ;
   ns0:hasMother ns1:Laura .
