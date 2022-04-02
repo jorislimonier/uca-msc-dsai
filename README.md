@@ -36,10 +36,10 @@ Classes:
   <details open>
     <summary> Semester 2 :construction: </summary>
     <ul>
-      <li> Case Study </li>
+      <li> Case Study :heavy_check_mark: </li>
       <li> Introduction to Deep Learning :heavy_check_mark: </li>
       <li> Machine Learning Algorithms :heavy_check_mark: </li>
-      <li> Model Selection and Resampling </li>
+      <li> Model Selection and Resampling :heavy_check_mark: </li>
       <li> Optimization for Data Science :heavy_check_mark: </li>
       <li> Statistical Learning Theory :heavy_check_mark: </li>
       <li> Web of Data </li>
