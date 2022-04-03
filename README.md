@@ -42,12 +42,9 @@ Classes:
       <li> Model Selection and Resampling :heavy_check_mark: </li>
       <li> Optimization for Data Science :heavy_check_mark: </li>
       <li> Statistical Learning Theory :heavy_check_mark: </li>
-      <li> Web of Data </li>
+      <li> Web of Data :heavy_check_mark: </li>
+      <li> Internship at Mane :construction: </li>
     </ul>
-  </details>
-  
-  <details>
-    <summary> Internship at Mane </summary>
   </details>
   </ul>
 </details>
