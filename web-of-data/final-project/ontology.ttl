@@ -1,0 +1,166 @@
+# Existing
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Custom
+@prefix ns: <http://www.erm.fr/2022/01/01/ns.rdfs#> .
+
+
+# define all elements from ns
+    # define domain, range, label, comment
+# don't define stuff from already implemented namespaces (e.g. foaf...etc)
+# 10-ish queries with multiple keywords and triples in at least some queries
+
+# ============  OBJECTS  ============
+ns:EMR a owl:Class ;
+    rdfs:label "Electronic Medical Record"@en ,
+        "Dossier Numérique de Santé"@fr ;
+    rdfs:comment "All medical information relative to a person"@en ,
+        "L'ensemble des informations médicales sur une personne"@fr .
+
+
+ns:Physician a owl:Class ;
+    rdfs:label "Physician"@en ,
+        "Médecin"@fr ;
+    rdfs:comment "Person who heals their patients"@en ,
+        "Personne qui soigne ses patients"@fr ;
+    rdfs:subClassOf foaf:Person .
+
+ns:Infectiologist a owl:Class ;
+    rdfs:label "Infectiologist"@en ,
+        "Infectiologue"@fr ;
+    rdfs:comment "Physician specialized in infectious diseases"@en ,
+        "Médecin spécialisé en maladies infectieuses"@fr ;
+    rdfs:subClassOf ns:Physician .
+
+# ====== Consultations ======
+ns:Consultation a owl:Class ;
+    rdfs:label "consultation"@en ,
+        "consultation"@fr ;
+    rdfs:comment "a medical appointment"@en ,
+        "un rendez-vous médical"@fr .
+
+# ====== Prescriptions ======
+ns:Prescription a owl:Class ;
+    rdfs:label "prescription"@en ,
+        "ordonnance"@fr ;
+    rdfs:comment "a medical note"@en ,
+        "une feuille d'instructions médicales"@fr .
+
+# ====== Surgeries ======
+ns:Surgery a owl:Class ;
+    rdfs:label "surgery"@en ,
+        "chirurgie"@fr ;
+    rdfs:comment "a medical act"@en ,
+        "un acte médical"@fr .
+    
+ns:HeartSurgery a owl:Class ;
+    rdfs:label "heart surgery"@en ,
+        "chirurgie cardiaque"@fr ;
+    rdfs:subClassOf ns:Surgery .
+
+# ====== Hospital ======
+ns:Hospital a owl:Class ;
+    rdfs:label "hospital"@en ,
+        "hôpital"@fr ;
+    rdfs:comment "place where people are healed"@en ,
+        "lieux où les malades sont soignés"@fr .
+
+# ====== Medication ======
+ns:Medication a owl:Class ;
+    rdfs:label "medication"@en ,
+        "médicament" ;
+    rdfs:comment "an active substance to heal people"@en ,
+        "un principe actif qui soigne les personnes"@fr .
+
+# ====== Diseases ======
+ns:Disease a owl:Class ;
+    rdfs:label "disease"@en ,
+        "maladie"@fr ;
+    rdfs:comment "the reason why someone is sick"@en ,
+        "la raison pour laquelle quelqu'un est malade"@fr .
+
+# ns:Covid a owl:Class ;
+#     rdfs:label "COVID-19"@en ,
+#         "COVID-19"@fr ;
+#     rdfs:comment "the disease associated to Sars-Cov2"@en ,
+#         "la maladie associée au Sars-Cov2"@fr ;
+#     owl:subClassOf ns:Disease .
+
+# ns:Flu a owl:Class ;
+#     rdfs:label "seasonal flu"@en ,
+#         "la grippe saisonnière"@fr ;
+#     rdfs:comment "a disease that comes and goes seasonally"@en ,
+#         "une maladie qui va et vient de manière saisonière"@fr ;
+#     owl:subClassOf ns:Disease .
+
+# ============ PROPERTIES ============
+ns:hasPhysician a owl:IrreflexiveProperty ;
+    rdfs:label "has for physician"@en ,
+        "a pour médecin"@fr ;
+    rdfs:comment "a person who heals the subject"@en ,
+        "une personne qui soigne le sujet"@fr ;
+    rdfs:domain foaf:Person ;
+    rdfs:range ns:Physician .
+
+ns:hasPatient a owl:IrreflexiveProperty ;
+    owl:inverseOf ns:hasPhysician ;
+    rdfs:label "has for patient"@en ,
+        "a pour patient"@fr ;
+    rdfs:comment "a person who is healed by the subject"@en ,
+        "une personne qui est soignée par le sujet"@fr .
+
+ns:hasAllergy a owl:DatatypeProperty ;
+    rdfs:label "is allergic to"@en ;
+    rdfs:comment "substance that produces an allergic reaction"@en ;
+    rdfs:domain ns:EMR ;
+    rdfs:range ns:Allergy .
+
+ns:immuneTo a owl:DatatypeProperty ;
+    rdfs:label "is immune to"@en ,
+        "est immunisé contre"@fr ;
+    rdfs:comment "disease(s) which causes no reaction to the patient"@en ,
+    rdfs:comment "maladies ne causant pas de réaction au patient"@fr ;
+    rdfs:domain ns:EMR ;
+    rdfs:range ns:Disease .
+
+ns:reimbursement a owl:FunctionalProperty ;
+    rdfs:label "proportion reimbursed"@en ,
+        "proportion remboursée"@fr ;
+    rdfs:comment "the proportion of medical expenses that is reimbursed"@en ,
+        "la proportion des dépenses medicales qui est remboursée"@fr ;
+    rdfs:domain ns:EMR ;
+    rdfs:range xsd:decimal .
+
+ns:belongsTo a owl:IrreflexiveProperty ;
+    rdfs:label "belongs to"@en ,
+        "appartient à"@fr ;
+    rdfs:comment "the person who owns this EMR"@en ,
+        "la personne qui détient cet EMR"@fr ;
+    rdfs:domain ns:EMR ;
+    rdfs:range foaf:Person .
+
+ns:hasEMR a owl:IrreflexiveProperty ;
+    owl:inverseOf ns:belongsTo ;
+    rdfs:label "has EMR"@en ,
+        "a pour EMR"@fr ;
+    rdfs:comment "the EMR that belongs to this person"@en ,
+        "l'EMR qui appartient à la personne"@fr .
+
+
+# ns:name a owl:DatatypeProperty ;
+#     rdfs:label "name"@en ,
+#         "nom"@fr ;
+#     rdfs:comment "designation of something."@en ,
+#         "désignation de quelque chose."@fr .
+
+# ns:age a owl:DatatypeProperty ;
+#     rdfs:label "age"@en ,
+#         "âge"@fr ;
+#     rdfs:comment "complete existence duration."@en ,
+#         "durée complète d'existence."@fr .
+
+
+

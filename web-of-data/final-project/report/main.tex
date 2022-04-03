@@ -1,0 +1,190 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+% \newcommand{\thetahat}{\hat{\theta}}
+
+\newacronym{emr}{EMR}{Electronic Medical Record}
+\newacronym{bmi}{BMI}{Body Mass Index}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
+\pagenumbering{arabic}
+
+\section{Model presentation}
+The goal of this project is to model an \glspl{emr} using the XML syntax. We use a mix of foaf, schema and custom namespaces. The structure revolves around an \(EMR\) object, which contains informations including:
+\begin{itemize}
+    \item \(ns:belongsTo\)
+    \item \(foaf:name\)
+    \item \(foaf:age\)
+    \item \(schema:weight\)
+    \item \(schema:height\)
+    \item \(ns:hasAllergy\)
+    \item \(ns:reimbursement\)
+    \item \(ns:surgery\)
+    \item \(ns:consultation\)
+\end{itemize}
+where the \(ns:belongsTo\) predicate indicates the owner of the \gls{emr}. The other predicates give medical or personal information and should be self-explanatory. \\
+The \(ns:consultation\) predicate has range \(ns:Consultation\), which is the generic class for consultation instances. Consultations then hold pieces of information about a consultation. That includes:
+\begin{itemize}
+    \item \(ns:prescription\)
+    \item \(ns:hasPhysician\)
+    \item \(ns:diagnosis\)
+    \item \(ns:price\)
+    \item \(ns:date\)
+\end{itemize}
+
+
+\section{Queries}
+In this section, we present a number of queries to study our RDF and its schema
+All queries in this section should be performed with the following prefices defined:
+\begin{verbatim}
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix schema: <https://schema.org/>
+prefix ns: <http://www.erm.fr/2022/01/01/ns.rdfs#>
+prefix inst: <http://www.erm.fr/2022/01/01/inst.rdfs#>
+\end{verbatim}
+
+\subsection{Show all triples in the namespace \textit{ns}}
+We know that a triple is composed of Subject, Predicate and Object. This query allows to see all defined triples, which have an object in the \(ns\) namespace.
+\begin{verbatim}
+select * where { ?subject a ?object . filter(strstarts(?object, ns:)) }
+\end{verbatim}
+
+\subsection{Find people whose age is even}
+Let \(\lfloor x \rceil\) be defined as the rounding of \(x\) to the nearest integer. If \(x\) is even, then we get:
+\begin{equation}
+    \label{eqn: isEven}
+    \frac{\lfloor x \rceil}{2} = \left \lfloor \frac{x}{2} \right \rceil
+\end{equation}
+we check equation \eqref{eqn: isEven} with the following SPARQL query:
+\begin{verbatim}
+select ?person ?ageEven
+    where{
+    ?emr ns:belongsTo ?person
+    ?emr foaf:age ?age .
+    bind (xsd:integer(?age/2) = xsd:integer(?age)/2 as ?ageEven)
+}
+\end{verbatim}
+
+\subsection{Find people with age bigger than 24 or age less than 15}
+\begin{verbatim}
+select * where {
+    ?emr a ns:EMR
+{ ?emr foaf:age ?age .
+filter (?age > 24) }
+union
+{ ?emr foaf:age ?age .
+filter (?age < 15) }
+}
+\end{verbatim}
+
+
+\subsection{Construct graph with youngerThan relationship}
+Construct a graph of People, with relationships \(youngerThan\) if their age is less than the person they are being compared to.
+\begin{verbatim}
+construct {?person1 h:youngerThan ?person2}
+where {
+    ?emr1 ns:belongsTo ?person1 .
+    ?emr2 ns:belongsTo ?person2 .
+    ?emr1 foaf:age ?age1 
+    ?emr2 foaf:age ?age2 
+    filter (?age1 < ?age2)
+}
+\end{verbatim}
+
+\subsection{Use OWL to infer \textit{Person}'s}
+Get all people in the data. Let ``\(\subseteq\)'' denotes ``is a subclass of''. The OWL syntax allows us to deduce the following:
+\begin{equation}
+    ns:Infectiologist \subseteq ns:Physician \subseteq foaf:Person
+\end{equation}
+Thus the following query also returns \(ns:Raoult\), which is a \(ns:Infectiologist\).
+\begin{verbatim}
+select * where {
+    ?person a foaf:Person
+}
+\end{verbatim}
+
+\subsection{Link people to their physicians}
+Get a list of pairs with people and physicians they had at least one consultation with.
+\begin{verbatim}
+select ?person ?physician where {
+    ?emr ns:belongsTo ?person .
+    ?emr a ns:EMR .
+    ?emr ns:consultation ?consultation .
+    ?consultation ns:hasPhysician ?physician
+}
+\end{verbatim}
+
+\subsection{Find minors who took aspirin}
+Let's say some medication (\textit{e.g.} aspirin) is found to be dangerous for minors (people under the age of 18). In this case, we would be interested in getting a list of people who took aspirin, then filter only those who are less than 18 years old.
+\begin{verbatim}
+select * where {
+    ?emr foaf:age ?age
+    ?emr ns:consultation ?consultation .
+    ?consultation ns:prescription ?prescription .
+    ?prescription ns:medication inst:Aspirin .
+    filter(?age <= 18)
+}
+\end{verbatim}
+  
+\subsection{Compute BMI}
+The \gls{bmi} is given by:
+\begin{equation}
+    \label{eqn: bmi m2}
+    BMI = \frac{weight\ (kg^2)}{height^2\ (m^2)}
+\end{equation}
+but since our height is given in centimeters, equation \eqref{eqn: bmi m2} becomes:
+\begin{equation}
+    \label{eqn: bmi cm2}
+    BMI = 10^4 \times \frac{weight\ (kg^2)}{height^2\ (cm^2)}
+\end{equation}
+which we compute using the following SPARQL query:
+\begin{verbatim}
+select ?person ?bmi where {
+    ?emr ns:belongsTo ?person
+    ?emr schema:height ?height
+    ?emr schema:weight ?weight
+    bind (10000*?weight/(?height*?height) as ?bmi)
+}
+\end{verbatim}
+        
+\subsection{Compute \textit{isObese}}
+Starting from the previous example (\gls{bmi}), determine whether someone is obese. Note that we computed the condition for obesity based on the \(bmi > 22\), but this is only for demonstration purposes, since the actual criterion for obesity is \(bmi > 25\).
+\begin{verbatim}   
+insert { ?person ns:isObese ?obese } where {
+    ?emr ns:belongsTo ?person
+    ?emr schema:height ?height
+    ?emr schema:weight ?weight
+    bind (10000*?weight/(?height*?height) as ?bmi)
+    bind (?bmi > 22 as ?obese)
+}
+\end{verbatim}
+  
+% \clearpage
+% \printnoidxglossaries
+
+\end{document}

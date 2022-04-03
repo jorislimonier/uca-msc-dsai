@@ -1,0 +1,142 @@
+# Existing
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+
+# Custom
+@prefix ns: <http://www.erm.fr/2022/01/01/ns.rdfs#> .
+@prefix inst: <http://www.erm.fr/2022/01/01/inst.rdfs#> .
+
+# =========  Physicians  =========
+inst:Knock a ns:Physician ;
+    foaf:name "Dr. Knock" .
+
+inst:Raoult a ns:Infectiologist ;
+    foaf:name "Prof. Raoult" .
+
+# =========  Patients  =========
+
+# Alice
+inst:Alice a foaf:Woman .
+
+inst:EMR_Alice a ns:EMR ;
+    ns:belongsTo inst:Alice ;
+    foaf:name "Alice" ;
+    foaf:age 12 ;
+    schema:weight 52 ;
+    schema:height 170 ;
+    ns:hasAllergy inst:PollenAllergy ;
+    ns:immuneTo inst:Covid ;
+    ns:reimbursement 0.5 ;
+    ns:surgery inst:Surgery01 ;
+    ns:consultation inst:Consultation01 .
+
+# Bernard
+inst:Bernard a foaf:Man .
+
+inst:EMR_Bernard a ns:EMR ;
+    ns:belongsTo inst:Bernard ;
+    foaf:name "Bernard" ;
+    foaf:age 25 ;
+    schema:weight 70 ;
+    schema:height 178 ;
+    ns:hasAllergy inst:PollenAllergy, inst:MilkAllergy ;
+    ns:reimbursement 0.4 ;
+    ns:surgery inst:Surgery02 ;
+    ns:consultation inst:Consultation02 .
+
+# Denise
+inst:Denise a foaf:Woman .
+
+inst:EMR_Denise a ns:EMR ;
+    ns:belongsTo inst:Denise ;
+    foaf:name "Denise" ;
+    foaf:age 23 ;
+    schema:height 152 ;
+    schema:weight 51 ;
+    ns:hasAllergy inst:MilkAllergy ;
+    ns:reimbursement 0.3 ;
+    ns:consultation inst:Consultation03 .
+
+# inst:Eric a foaf:Man ;
+#     foaf:name "Eric" ;
+#     foaf:age 22 ;
+#     schema:height 175 ;
+#     schema:weight 70 .
+
+# inst:Fred a foaf:Man ;
+#     foaf:name "Fred" ;
+#     foaf:age 37 ;
+#     schema:height 199 ;
+#     schema:weight 77 .
+
+
+# =========  Hospitals  =========
+inst:Tzanck a ns:Hospital .
+inst:Pasteur a ns:Hospital .
+
+# =========  Surgeries  =========
+inst:Surgery01 a ns:HeartSurgery ;
+    ns:hospital inst:Tzanck ;
+    ns:price 1000 ;
+    ns:date "2021-09-24"^^xsd:date ;
+    ns:physician inst:Knock .
+
+inst:Surgery02 a ns:HeartSurgery ;
+    ns:hospital inst:Pasteur ;
+    ns:price 2000 ;
+    ns:date "2021-01-24"^^xsd:date ;
+    ns:physician inst:Raoult .
+
+# =========  Consultations  =========
+inst:Consultation01 a ns:Consultation ;
+    ns:prescription inst:Prescription01 ;
+    ns:hasPhysician inst:Raoult ;
+    ns:diagnosis inst:Covid ;
+    ns:price 50 ;
+    ns:date "2016-03-23"^^xsd:date .
+
+inst:Consultation02 a ns:Consultation ;
+    ns:prescription inst:Prescription02 ;
+    ns:hasPhysician inst:Knock ;
+    ns:diagnosis inst:Flu ;
+    ns:price 40 ;
+    ns:date "2019-11-17"^^xsd:date .
+
+inst:Consultation03 a ns:Consultation ;
+    ns:prescription inst:Prescription03 ;
+    ns:hasPhysician inst:Knock ;
+    ns:diagnosis inst:Cancer ;
+    ns:price 55 ;
+    ns:date "2019-11-15"^^xsd:date .
+
+# =========  Prescription  =========
+inst:Prescription01 a ns:Prescription ;
+    ns:medication inst:Aspirin, inst:Hydroxychloroquine .
+
+inst:Prescription02 a ns:Prescription ;
+    ns:medication inst:Dafalgan .
+
+inst:Prescription03 a ns:Prescription ;
+    ns:medication inst:Chemotherapy, inst:Aspirin .
+
+# =========  Medications  =========
+inst:Aspirin a ns:Medication .
+inst:Dafalgan a ns:Medication .
+inst:Hydroxychloroquine a ns:Medication .
+inst:Chemotherapy a ns:Medication .
+
+# =========  Allergies  =========
+inst:PollenAllergy a ns:Allergy .
+inst:MilkAllergy a ns:Allergy .
+
+# =========  Diseases  =========
+inst:Covid a ns:Disease .
+inst:Flu a ns:Disease .
+inst:Cancer a ns:Disease .
+
+
+
+
+
+

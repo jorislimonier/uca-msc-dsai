@@ -1,0 +1,75 @@
+prefix ns: <http://www.erm.fr/2022/01/01/ns.rdfs#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix inst: <http://www.erm.fr/2022/01/01/inst.rdfs#>
+prefix schema: <https://schema.org/>
+
+
+# Show all triples in the namespace `ns`
+select * where { ?subject a ?object . filter(strstarts(?object, ns:)) }
+
+# Find people whose age is even
+select ?person ?ageEven
+where{
+?emr ns:belongsTo ?person
+?emr foaf:age ?age .
+bind (xsd:integer(?age/2) = xsd:integer(?age)/2 as ?ageEven)
+}
+
+# Find people with age bigger than 24 or age less than 15
+select * where {
+?emr a ns:EMR
+{ ?emr foaf:age ?age .
+filter (?age > 24) }
+union
+{ ?emr foaf:age ?age .
+filter (?age < 15) }
+}
+
+# Construct graph with youngerThan relationship
+construct {?person1 h:youngerThan ?person2}
+where {
+?emr1 ns:belongsTo ?person1 .
+?emr2 ns:belongsTo ?person2 .
+?emr1 foaf:age ?age1 
+?emr2 foaf:age ?age2 
+filter (?age1 < ?age2)
+}
+
+# Get all people in class Person
+select * where {
+?person a foaf:Person
+}
+
+# Link people to their physicians
+select ?person ?physician where {
+  ?emr ns:belongsTo ?person .
+  ?emr a ns:EMR .
+  ?emr ns:consultation ?consultation .
+  ?consultation ns:hasPhysician ?physician
+}
+
+# Find minors who took aspirin
+select * where {
+  ?emr foaf:age ?age
+  ?emr ns:consultation ?consultation .
+  ?consultation ns:prescription ?prescription .
+  ?prescription ns:medication inst:Aspirin .
+  filter(?age <= 18)
+}
+
+# Compute BMI
+select ?person ?bmi where {
+	?emr ns:belongsTo ?person
+	?emr schema:height ?height
+	?emr schema:weight ?weight
+	bind (10000*?weight/(?height*?height) as ?bmi)
+}
+
+# Note people's obesity
+insert { ?person ns:isObese ?obese } where {
+?emr ns:belongsTo ?person
+?emr schema:height ?height
+?emr schema:weight ?weight
+bind (10000*?weight/(?height*?height) as ?bmi)
+bind (?bmi > 22 as ?obese)
+}
