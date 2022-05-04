@@ -1,0 +1,52 @@
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+% \newcommand{\thetahat}{\hat{\theta}}
+
+\newacronym{emr}{EMR}{Electronic Medical Record}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+
+
+\appendix
+\chapter{Weekly task record}
+\begin{itemize}
+    \item [\textbf{Week 1}] Laptop set up \& installation.
+    \item [\textbf{Week 2}] Get familiar with MacData and SmartData projects and their managers. First contact with production lines data.
+    \item [\textbf{Week 3}]                                                  
+    \item [\textbf{Week 4}]                                                  
+    \item [\textbf{Week 5}]                                                  
+    \item [\textbf{Week 6}]                                                  
+\end{itemize}
+
+
+% \clearpage
+% \printnoidxglossaries
+
+\end{document}
