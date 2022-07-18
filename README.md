@@ -76,6 +76,9 @@ Classes:
     <th>Year</th>
     <th>Module</th>
     <th>Course</th>
+    <th>Course grade</th>
+    <th>Module grade</th>
+    <th>Year grade</th>
   </thead>
   <tbody>
     <tr>
@@ -83,7 +86,9 @@ Classes:
       <td rowspan=4>Refresher</td>
       <td>Basic Probability :heavy_check_mark:</td>
     </tr>
-    <td>Basic Algebra for Data Analysis :heavy_check_mark:</td>
+    <tr>
+      <td>Basic Algebra for Data Analysis :heavy_check_mark:</td>
+    </tr>
     <tr>
       <td>Basic Algorithmics :heavy_check_mark:</td>
     </tr>
@@ -151,31 +156,31 @@ Classes:
     <tr>
       <td rowspan=9>Year 2</td>
       <td rowspan=4>Base</td>
-      <td>Bayesian Learning :construction:</td>
+      <td>Bayesian Learning :soon:</td>
     </tr>
-    <td>Advanced Deep Learning :construction:</td>
+    <td>Advanced Deep Learning :soon:</td>
     <tr>
-      <td>Introduction to Information Theory :construction:</td>
+      <td>Introduction to Information Theory :soon:</td>
     </tr>
     <tr>
-      <td>Model-Based statistical Learning :construction:</td>
+      <td>Model-Based statistical Learning :soon:</td>
     </tr>
     <tr>
       <td rowspan=2>Advanced methods in ML</td>
-      <td>Research Project :construction:</td>
+      <td>Research Project :soon:</td>
     </tr>
     <tr>
-      <td>Federated Learning - Data Privacy :construction:</td>
+      <td>Federated Learning - Data Privacy :soon:</td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>Statistical Analysis of Graph :construction:</td>
+      <td>Statistical Analysis of Graph :soon:</td>
     </tr>
     <tr>
-      <td>Deep Learning for computer vision :construction:</td>
+      <td>Deep Learning for computer vision :soon:</td>
     </tr>
     <tr>
-      <td>Inverse Problems in image processing :construction:</td>
+      <td>Inverse Problems in image processing :soon:</td>
     </tr>
   </tbody>
 </table>
