@@ -63,7 +63,7 @@ Grades obtained:
       <td>20</td>
     </tr>
     <tr>
-      <td>:heavy_check_mark: Technologies for Big Data with Python</td>
+      <td>:heavy_check_mark: Technologies for Big Data with Python (3 ECTS)</td>
       <td>20</td>
     </tr>
     <tr>
