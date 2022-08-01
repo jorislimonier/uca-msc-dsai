@@ -67,74 +67,74 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     <tr>
       <td rowspan=5>Refresher</td>
       <td>:heavy_check_mark: Basic Probability</td>
-      <td>19</td>
-      <td rowspan=5>18.6</td>
+      <td align="center">19</td>
+      <td rowspan=5 align="center">18.6</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algebra for Data Analysis</td>
-      <td>19</td>
+      <td align="center">19</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algorithmics</td>
-      <td>17</td>
+      <td align="center">17</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic tools for System Management </td>
-      <td>20</td>
+      <td align="center">20</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Methods and tools for technical and scienific writing </td>
-      <td>18</td>
+      <td align="center">18</td>
     </tr>
     <tr>
       <td rowspan=2>Statistics</td>
       <td>:heavy_check_mark: Statistical Inference Theory</td>
-      <td>15</td>
-      <td rowspan=2>15</td>
+      <td align="center">15</td>
+      <td rowspan=2 align="center">15</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Statistical Inference Practice</td>
-      <td>15</td>
+      <td align="center">15</td>
     </tr>
     <tr>
       <td rowspan=3>Data Mining</td>
       <td>:heavy_check_mark: A general introduction to Machine Learning</td>
-      <td>11</td>
-      <td rowspan=3>17</td>
+      <td align="center">11</td>
+      <td rowspan=3 align="center">17</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Processing large datasets with R</td>
-      <td>20</td>
+      <td align="center">20</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Technologies for Big Data with Python</td>
-      <td>20</td>
+      <td align="center">20</td>
     </tr>
     <tr>
       <td rowspan=3>Data Visualization and Management</td>
       <td>:heavy_check_mark: Ethical aspects of data</td>
-      <td>19.01</td>
-      <td rowspan=3>18.815</td>
+      <td align="center">19.01</td>
+      <td rowspan=3 align="center">18.815</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Distributed Big Data Systems</td>
-      <td>19</td>
+      <td align="center">19</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Data visualization</td>
-      <td>18.5</td>
+      <td align="center">18.5</td>
     </tr>
     <tr>
       <td rowspan=1>Workshop and Vulgarization</td>
       <td>:heavy_check_mark: Workshop and Vulgarization</td>
-      <td>19</td>
-      <td rowspan=1>19</td>
+      <td align="center">19</td>
+      <td rowspan=1 align="center">19</td>
     </tr>
     <tr>
       <td rowspan=3>Statistical Learning</td>
       <td>:heavy_check_mark: Statistical Learning Theory</td>
       <td> </td>
-      <td rowspan=3> </td>
+      <td rowspan=3 align="center"> </td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Model selection and resampling methods</td>
@@ -142,27 +142,27 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
     <tr>
       <td>:heavy_check_mark: Optimization for Data Science</td>
-      <td> 16.31 </td>
+      <td align="center"> 16.31 </td>
     </tr>
     <tr>
       <td rowspan=3>Machine Learning</td>
       <td>:heavy_check_mark: Machine learning algorithms</td>
-      <td>12.87</td>
-      <td rowspan=3>15.12</td>
+      <td align="center">12.87</td>
+      <td rowspan=3 align="center">15.12</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Introduction to deep learning</td>
-      <td>15.50</td>
+      <td align="center">15.50</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Web of Data</td>
-      <td>17</td>
+      <td align="center">17</td>
     </tr>
     <tr>
       <td rowspan=2>Machine Learning</td>
       <td>:heavy_check_mark: Case Studies</td>
       <td> </td>
-      <td rowspan=2> </td>
+      <td rowspan=2 align="center"> </td>
     </tr>
     <tr>
       <td>:construction: Internship</td>
@@ -185,7 +185,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td rowspan=4>Base</td>
       <td>:soon: Bayesian Learning</td>
       <td> </td>
-      <td rowspan=4> </td>
+      <td rowspan=4 align="center"> </td>
     </tr>
     <td>:soon: Advanced Deep Learning</td>
     <td> </td>
@@ -201,7 +201,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td rowspan=2>Advanced methods in ML</td>
       <td>:soon: Research Project</td>
       <td> </td>
-      <td rowspan=2> </td>
+      <td rowspan=2 align="center"> </td>
     </tr>
     <tr>
       <td>:soon: Federated Learning - Data Privacy</td>
@@ -211,7 +211,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td rowspan=3>Advanced methods in AI</td>
       <td>:soon: Statistical Analysis of Graph</td>
       <td> </td>
-      <td rowspan=3> </td>
+      <td rowspan=3 align="center"> </td>
     </tr>
     <tr>
       <td>:soon: Deep Learning for computer vision</td>
