@@ -2,25 +2,29 @@
 
 Resources for my Master's of Data Science and Artificial Intelligence at the University Côte d'Azur.
 
+## Year 1
 Grades obtained:
 
 <table>
   <thead>
-    <th>Year</th>
+    <!-- <th>Year</th> -->
     <th>Module</th>
     <th>Course</th>
     <th>Course grade</th>
     <th>Module grade</th>
-    <th>Year grade</th>
+    <!-- <th>Year grade</th> -->
   </thead>
   <tbody>
     <tr>
-      <td rowspan=22>Year 1</td>
+      <td colspan=4 style="text-align: center">Year 1</td>
+    </tr>
+    <tr>
+      <!-- <td rowspan=22>Year 1</td> -->
       <td rowspan=5>Refresher</td>
       <td>:heavy_check_mark: Basic Probability</td>
       <td>19</td>
       <td rowspan=5>18.6</td>
-      <td rowspan=22> </td>
+      <!-- <td rowspan=22> </td> -->
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algebra for Data Analysis</td>
@@ -121,12 +125,15 @@ Grades obtained:
       <td> </td>
     </tr>
     <tr>
-      <td rowspan=9>Year 2</td>
+      <td colspan=4 style="text-align: center">Year 2</td>
+    </tr>
+    <tr>
+      <!-- <td rowspan=9>Year 2</td> -->
       <td rowspan=4>Base</td>
       <td>:soon: Bayesian Learning</td>
       <td> </td>
       <td rowspan=4> </td>
-      <td rowspan=9> </td>
+      <!-- <td rowspan=9> </td> -->
     </tr>
     <td>:soon: Advanced Deep Learning</td>
     <td> </td>
