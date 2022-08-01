@@ -53,7 +53,9 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
   </tbody>
 </table>
+
 ### Year 1
+
 <table>
   <thead>
     <th>Module</th>
@@ -168,7 +170,6 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
   </tbody>
 </table>
-
 
 ### Year 2
 
