@@ -15,40 +15,44 @@ Grades obtained:
   </thead>
   <tbody>
     <tr>
-      <td rowspan=21>Year 1</td>
-      <td rowspan=4>Refresher</td>
+      <td rowspan=22>Year 1</td>
+      <td rowspan=5>Refresher</td>
       <td>:heavy_check_mark: Basic Probability</td>
-      <td> </td>
-      <td rowspan=4> </td>
-      <td rowspan=21> </td>
+      <td>19</td>
+      <td rowspan=5>18.6</td>
+      <td rowspan=22> </td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algebra for Data Analysis</td>
-      <td> </td>
+      <td>19</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algorithmics</td>
-      <td> </td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>:heavy_check_mark: Basic tools for System Management </td>
+      <td>20</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Methods and tools for technical and scienific writing </td>
-      <td> </td>
+      <td>18</td>
     </tr>
     <tr>
       <td rowspan=2>Statistics</td>
       <td>:heavy_check_mark: Statistical Inference Theory</td>
-      <td> </td>
-      <td rowspan=2> </td>
+      <td>15</td>
+      <td rowspan=2>15</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Statistical Inference Practice</td>
-      <td> </td>
+      <td>15</td>
     </tr>
     <tr>
       <td rowspan=3>Data Mining</td>
       <td>:heavy_check_mark: A general introduction to Machine Learning</td>
-      <td> </td>
-      <td rowspan=3> </td>
+      <td>11</td>
+      <td rowspan=3>17</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Processing large datasets with R</td>
@@ -61,22 +65,22 @@ Grades obtained:
     <tr>
       <td rowspan=3>Data Visualization and Management</td>
       <td>:heavy_check_mark: Ethical aspects of data</td>
-      <td> </td>
-      <td rowspan=3> </td>
+      <td>19.01</td>
+      <td rowspan=3>18.815</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Distributed Big Data Systems</td>
-      <td> </td>
+      <td>19</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Data visualization</td>
-      <td> </td>
+      <td>18.5</td>
     </tr>
     <tr>
       <td rowspan=1>Workshop and Vulgarization</td>
       <td>:heavy_check_mark: Workshop and Vulgarization</td>
-      <td> </td>
-      <td rowspan=1> </td>
+      <td>19</td>
+      <td rowspan=1>19</td>
     </tr>
     <tr>
       <td rowspan=3>Statistical Learning</td>
@@ -95,12 +99,12 @@ Grades obtained:
     <tr>
       <td rowspan=3>Machine Learning</td>
       <td>:heavy_check_mark: Machine learning algorithms</td>
-      <td> </td>
-      <td rowspan=3> </td>
+      <td>12.87</td>
+      <td rowspan=3>15.12</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Introduction to deep learning</td>
-      <td> </td>
+      <td>15.50</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Web of Data</td>
