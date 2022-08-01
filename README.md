@@ -2,29 +2,71 @@
 
 Resources for my Master's of Data Science and Artificial Intelligence at the University Côte d'Azur.
 
-## Year 1
-Grades obtained:
-
+## Grades
+### Recap
 <table>
   <thead>
-    <!-- <th>Year</th> -->
+    <th>Year</th>
+    <th>Semester</th>
+    <th>Semester Average</th>
+    <th>Year Average</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan=2>
+        Year 1
+      </td>
+      <td>
+        Semester 1
+      </td>
+      <td align="center">
+        17.484
+      </td>
+      <td rowspan=2>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Semester 2
+      </td>
+      <td align="center">
+      </td>
+    </tr>
+    <tr>
+      <td rowspan=2>
+        Year 2
+      </td>
+      <td>
+        Semester 3
+      </td>
+      <td align="center">
+      </td>
+      <td rowspan=2>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Semester 4
+      </td>
+      <td align="center">
+      </td>
+    </tr>
+  </tbody>
+</table>
+### Year 1
+<table>
+  <thead>
     <th>Module</th>
     <th>Course</th>
     <th>Course grade</th>
     <th>Module grade</th>
-    <!-- <th>Year grade</th> -->
   </thead>
   <tbody>
     <tr>
-      <td colspan=4 align=center><strong>Year 1</strong></td>
-    </tr>
-    <tr>
-      <!-- <td rowspan=22>Year 1</td> -->
       <td rowspan=5>Refresher</td>
       <td>:heavy_check_mark: Basic Probability</td>
       <td>19</td>
       <td rowspan=5>18.6</td>
-      <!-- <td rowspan=22> </td> -->
     </tr>
     <tr>
       <td>:heavy_check_mark: Basic Algebra for Data Analysis</td>
@@ -63,7 +105,7 @@ Grades obtained:
       <td>20</td>
     </tr>
     <tr>
-      <td>:heavy_check_mark: Technologies for Big Data with Python (3 ECTS)</td>
+      <td>:heavy_check_mark: Technologies for Big Data with Python</td>
       <td>20</td>
     </tr>
     <tr>
@@ -124,16 +166,25 @@ Grades obtained:
       <td>:construction: Internship</td>
       <td> </td>
     </tr>
+  </tbody>
+</table>
+
+
+### Year 2
+
+<table>
+  <thead>
+    <th>Module</th>
+    <th>Course</th>
+    <th>Course grade</th>
+    <th>Module grade</th>
+  </thead>
+  <tbody>
     <tr>
-      <td colspan=4 align=center><strong>Year 2</strong></td>
-    </tr>
-    <tr>
-      <!-- <td rowspan=9>Year 2</td> -->
       <td rowspan=4>Base</td>
       <td>:soon: Bayesian Learning</td>
       <td> </td>
       <td rowspan=4> </td>
-      <!-- <td rowspan=9> </td> -->
     </tr>
     <td>:soon: Advanced Deep Learning</td>
     <td> </td>
