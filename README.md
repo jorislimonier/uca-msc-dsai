@@ -90,7 +90,7 @@ Grades obtained:
     </tr>
     <tr>
       <td>Optimization for Data Science :heavy_check_mark:</td>
-      <td> </td>
+      <td> 16.31 </td>
     </tr>
     <tr>
       <td rowspan=3>Machine Learning</td>
