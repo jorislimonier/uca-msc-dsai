@@ -173,7 +173,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
 
 ### Year 2
 
-<table>
+<table width="100%">
   <thead>
     <th>Module</th>
     <th>Course</th>
