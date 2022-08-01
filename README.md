@@ -16,7 +16,7 @@ Grades obtained:
   </thead>
   <tbody>
     <tr>
-      <td colspan=4 style="text-align: center">Year 1</td>
+      <td colspan=4 align=center>Year 1</td>
     </tr>
     <tr>
       <!-- <td rowspan=22>Year 1</td> -->
@@ -125,7 +125,7 @@ Grades obtained:
       <td> </td>
     </tr>
     <tr>
-      <td colspan=4 style="text-align: center">Year 2</td>
+      <td colspan=4 align=center>Year 2</td>
     </tr>
     <tr>
       <!-- <td rowspan=9>Year 2</td> -->
