@@ -55,7 +55,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
 </table>
 
 ### Year 1
-
+#### Semester 1
 <table>
   <thead>
     <th>Module</th>
@@ -130,6 +130,18 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td align="center">19</td>
       <td rowspan=1 align="center">19</td>
     </tr>
+  </tbody>
+</table>
+
+#### Semester 2
+<table>
+  <thead>
+    <th>Module</th>
+    <th>Course</th>
+    <th>Course grade</th>
+    <th>Module grade</th>
+  </thead>
+  <tbody>
     <tr>
       <td rowspan=3>Statistical Learning</td>
       <td>:heavy_check_mark: Statistical Learning Theory</td>
@@ -159,7 +171,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td align="center">17</td>
     </tr>
     <tr>
-      <td rowspan=2>Machine Learning</td>
+      <td rowspan=2>Personal Work</td>
       <td>:heavy_check_mark: Case Studies</td>
       <td> </td>
       <td rowspan=2 align="center"> </td>
@@ -171,8 +183,9 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
   </tbody>
 </table>
 
-### Year 2
 
+### Year 2
+#### Semester 3
 <table>
   <thead>
     <th>Module</th>
@@ -219,6 +232,24 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
     <tr>
       <td>:soon: Inverse Problems in image processing</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+#### Semester 4
+<table>
+  <thead>
+    <th>Module</th>
+    <th>Course</th>
+    <th>Course grade</th>
+    <th>Module grade</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Personal Training </td>
+      <td>:soon: Internship</td>
+      <td> </td>
       <td> </td>
     </tr>
   </tbody>
