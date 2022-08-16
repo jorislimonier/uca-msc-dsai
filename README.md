@@ -222,7 +222,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:soon: Statistical Analysis of Graph</td>
+      <td>:soon: Statistical Analysis of Graphs</td>
       <td> </td>
       <td rowspan=3 align="center"> </td>
     </tr>
