@@ -21,15 +21,15 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       </td>
       <td align="center">
         17.484
-      </td>
-      <td rowspan=2>
+      </td align="center">
+      <td rowspan=2>16.94 (without internship)
       </td>
     </tr>
     <tr>
       <td>
         Semester 2
       </td>
-      <td align="center">
+      <td align="center">16.17 (without internship)
       </td>
     </tr>
     <tr>
@@ -145,12 +145,12 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     <tr>
       <td rowspan=3>Statistical Learning</td>
       <td>:heavy_check_mark: Statistical Learning Theory</td>
-      <td> </td>
-      <td rowspan=3 align="center"> </td>
+      <td align="center">20</td>
+      <td rowspan=3 align="center">18.10</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Model selection and resampling methods</td>
-      <td> </td>
+      <td align="center">18</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Optimization for Data Science</td>
@@ -173,7 +173,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     <tr>
       <td rowspan=2>Personal Work</td>
       <td>:heavy_check_mark: Case Studies</td>
-      <td> </td>
+      <td align="center">13.5</td>
       <td rowspan=2 align="center"> </td>
     </tr>
     <tr>
