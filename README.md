@@ -54,6 +54,8 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
   </tbody>
 </table>
 
+Semester grades are an average of each subject's grade, weighted by the subject's numbers of credits (ECTS).
+
 ### Year 1
 #### Semester 1
 <table>
