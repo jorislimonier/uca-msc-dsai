@@ -20,17 +20,15 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
         Semester 1
       </td>
       <td align="center">
-        17.484
-      </td align="center">
-      <td rowspan=2>16.94 (without internship)
+        17.48
       </td>
+      <td rowspan=2 align="center">16.80</td>
     </tr>
     <tr>
       <td>
         Semester 2
       </td>
-      <td align="center">16.17 (without internship)
-      </td>
+      <td align="center">16.12</td>
     </tr>
     <tr>
       <td rowspan=2>
@@ -53,6 +51,8 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     </tr>
   </tbody>
 </table>
+
+Semester grades are an average of each subject's grade, weighted by the subject's numbers of credits (ECTS).
 
 ### Year 1
 #### Semester 1
@@ -174,11 +174,11 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td rowspan=2>Personal Work</td>
       <td>:heavy_check_mark: Case Studies</td>
       <td align="center">13.5</td>
-      <td rowspan=2 align="center"> </td>
+      <td rowspan=2 align="center">15.375</td>
     </tr>
     <tr>
-      <td>:construction: Internship</td>
-      <td> </td>
+      <td>:heavy_check_mark: Internship</td>
+      <td align="center">16</td>
     </tr>
   </tbody>
 </table>
@@ -196,42 +196,42 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
   <tbody>
     <tr>
       <td rowspan=4>Base</td>
-      <td>:soon: Bayesian Learning</td>
+      <td>:construction: Bayesian Learning</td>
       <td> </td>
       <td rowspan=4 align="center"> </td>
     </tr>
-    <td>:soon: Advanced Deep Learning</td>
+    <td>:construction: Advanced Deep Learning</td>
     <td> </td>
     <tr>
-      <td>:soon: Introduction to Information Theory</td>
+      <td>:construction: Introduction to Information Theory</td>
       <td> </td>
     </tr>
     <tr>
-      <td>:soon: Model-Based statistical Learning</td>
+      <td>:construction: Model-Based statistical Learning</td>
       <td> </td>
     </tr>
     <tr>
       <td rowspan=2>Advanced methods in ML</td>
-      <td>:soon: Research Project</td>
+      <td>:construction: Research Project</td>
       <td> </td>
       <td rowspan=2 align="center"> </td>
     </tr>
     <tr>
-      <td>:soon: Federated Learning - Data Privacy</td>
+      <td>:construction: Federated Learning - Data Privacy</td>
       <td> </td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:soon: Statistical Analysis of Graphs</td>
+      <td>:construction: Statistical Analysis of Graphs</td>
       <td> </td>
       <td rowspan=3 align="center"> </td>
     </tr>
     <tr>
-      <td>:soon: Deep Learning for computer vision</td>
+      <td>:construction: Deep Learning for computer vision</td>
       <td> </td>
     </tr>
     <tr>
-      <td>:soon: Inverse Problems in image processing</td>
+      <td>:construction: Inverse Problems in image processing</td>
       <td> </td>
     </tr>
   </tbody>
