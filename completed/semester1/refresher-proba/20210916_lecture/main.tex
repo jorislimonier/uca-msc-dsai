@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+\title{Probabilities refreshers:\\Homework for lecture 2}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\[
+    f_X(t) =
+    \begin{cases}
+        2a & t \in [-1, 0] \\
+        a  & t \in [1, 4]  \\
+        0  & else          \\
+    \end{cases}
+\]
+
+\section{Value of a ?}
+
+\begin{align*}
+             & \int_{- \infty}^{\infty} f(t) dt = 1              \\
+    \implies & \int_{- 1}^{0} f(t) dt + \int_{1}^{4} f(t) dt = 1 \\
+    \implies & \int_{- 1}^{0} 2a dt + \int_{1}^{4} a dt = 1      \\
+    \implies & 2a[t]_{-1}^{0} + a[t]_{1}^{4} = 1                 \\
+    \implies & 2a + a(4 - 1) = 1                                 \\
+    \implies & a = 1/5                                           \\
+\end{align*}
+
+\section{Distribtuion of X ?}
+\[
+    F_X(t) =
+    \begin{cases}
+        0           & t \in [-\infty, -1] \\
+        2a(t+1)     & t \in [-1, 0]       \\
+        2a          & t \in [0, 1]        \\
+        2a + a(t-1) & t \in [1, 4]        \\
+        1           & t \in [4, + \infty] \\
+    \end{cases}
+\]
+
+\section{\(\P(X \in [-0.5, 2]) ?\)}
+\begin{align*}
+    \P(X \in [-0.5, 2])
+     & = F_X (2) - F_X(-0.5) \\
+     & = 3a - a              \\
+     & = 2a                  \\
+\end{align*}
+
+\section{Compute if possible expectation and variance of X}
+
+Since the support of \(X\) is included in \([-1, 4]\) and \(f(X)\) is a
+
+\begin{align*}
+    \E[X]
+     & = \int_{- 1}^{0} tf(t) \ dt + \int_{1}^{4} tf(t) \ dt                       \\
+     & = \int_{- 1}^{0} 2at \ dt + \int_{1}^{4} at \ dt                            \\
+     & = \left[ at^2 \right]_{- 1}^{0} 2at + \left[ \frac{at^2}{2} \right]_{1}^{4} \\
+     & = (0 - a) + (8a - a/2)                                                      \\
+     & = \frac{13a}{2}                                                             \\
+\end{align*}
+
+\begin{align*}
+     \E[X^2]
+     & = \int_{-\infty}^{\infty} x^2 f(x) \ dx \\
+     & = \int_{-1}^{0} x^2 f(x) \ dx + \int_{1}^{4} x^2 f(x) \ dx \\
+     & = \int_{-1}^{0} x^2 2a \ dx + \int_{1}^{4} x^2 a \ dx \\
+     & = 2a/3 \left[ x^3 \right]_{-1}^{0} + a/3\left[x^3\right]_{1}^{4} \\
+     & = 2a/3 + 63a/3 \\
+     & = 65a/3 \\
+\end{align*}
+ So \(Var(X) = \E[X^2] - \E[X]^2 = 65a/3 - \left( 13a/2 \right)^2 \)
+
+\end{document}

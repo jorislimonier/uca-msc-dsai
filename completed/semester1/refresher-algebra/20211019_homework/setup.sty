@@ -1,0 +1,52 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{setup}[latex for my bachelor thesis]
+
+%\newcommand{\hi}{Hello, this is my own package}
+%\let\myDate\date
+%\newcommand\GoodBye[1][\bfseries]{{#1Good Bye}}
+
+% FRONT MATTER
+\RequirePackage{graphicx}
+\RequirePackage[a4paper]{geometry}
+
+% GENERAL
+\RequirePackage{import}
+\RequirePackage[british]{babel}
+	\RequirePackage{hyperref}   % Hyper-references, possible to change color
+	\hypersetup{    % Color of hyper-references
+		linktoc = all,
+		colorlinks,
+		citecolor = black,
+		filecolor = black,
+		linkcolor = black,
+		urlcolor = black
+	}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}   % Ruler
+\RequirePackage{tabularx}
+
+% MATHS
+	\RequirePackage{amsmath}
+	\RequirePackage{amsfonts}
+	\RequirePackage{amsthm}
+		% \newtheorem{theorem}{Theorem}[chapter]
+		% \newtheorem{definition}[theorem]{Definition}
+		% \newtheorem{proposition}[theorem]{Proposition}
+		% \newtheorem{lemma}[theorem]{Lemma}
+		% \newtheorem{corollary}[theorem]{Corollary}
+		\newtheorem*{remark}{Remark}
+	\RequirePackage{mathrsfs}
+	\RequirePackage{enumitem}
+	\newcommand{\ie}{\textit{i.e. }}
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\C}{\mathbb{C}}
+	\newcommand{\E}{\mathbb{E}}
+	\newcommand{\thetaha}{\hat{\theta}}
+	\newcommand{\cov}{\operatorname{Cov}}
+	\newcommand{\var}{\operatorname{Var}}
+	\renewcommand{\P}{\mathbb{P}} % used to be some paragraph symbol
+
+
+
+\endinput

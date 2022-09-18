@@ -1,0 +1,381 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+
+\title{Probabilities refresher:\\
+Exam}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\section{Exercise 1}
+\subsection{Question 1}
+Let \(F_X\) be the distribution function of \(X\). From the plot, we have that:
+\[
+    F_X(x) :=
+    \begin{cases}
+        0    & \text{if } x \in ]-\infty, -3[ \\
+        0.05 & \text{if } x \in [-3,1[        \\
+        0.4  & \text{if } x \in [1,2[         \\
+        0.5  & \text{if } x \in [2,3[         \\
+        0.65 & \text{if } x \in [3,4[         \\
+        0.9  & \text{if } x \in [4,7[         \\
+        1    & \text{if } x \in [7, +\infty[
+    \end{cases}
+\]
+
+\subsection{Question 2}
+By definition, we know that the variance of \(X\) is defined as
+\[
+    Var(X) := \E[X^2] - \E[X]^2
+\]
+Let us compute the components of that equation. First we deduce by the distribution function that the mass function is given as:
+% \[
+%     f_X(x) :=
+%     \begin{cases}
+%         0.05 & \text{if } x = -3 \\
+%         0.35 & \text{if } x = 1  \\
+%         0.1  & \text{if } x = 2  \\
+%         0.15 & \text{if } x = 3  \\
+%         0.25 & \text{if } x = 4  \\
+%         0.1  & \text{if } x = 7  \\
+%         0    & \text{otherwise}
+%     \end{cases}
+% \]
+\[
+    \begin{array}{c|c|c|c|c|c|c}
+        k       & -3   & 1    & 2   & 3    & 4    & 7   \\
+        \hline
+        \P(X=k) & 0.05 & 0.35 & 0.1 & 0.15 & 0.25 & 0.1
+    \end{array}
+\]
+and the sample space \(\Omega\) is given by \(\Omega := \left\{ -3, 1, 2, 3, 4, 7 \right\}\). Therefore the expected value of \(X\) is given by:
+\begin{align*}
+    \E[X]
+     & := \sum_{k \in \Omega} k \P(X=k)                     \\
+     & = -3 \times 0.05 + 1 \times 0.35 + 2 \times 0.1      \\
+     & \quad + 3 \times 0.15 + 4 \times 0.25 + 7 \times 0.1 \\
+     & = -0.15 + 0.35 + 0.2 + 0.45 + 1 + 0.7                \\
+     & = 2.55                                               \\
+\end{align*}
+Similarly, the expected value of \(X^2\) is given by:
+\begin{align*}
+    \E[X^2]
+     & := \sum_{k \in \Omega} k^2 \P(X=k)                     \\
+     & = 9 \times 0.05 + 1 \times 0.35 + 4 \times 0.1         \\
+     & \quad + 9 \times 0.15 + 16 \times 0.25 + 49 \times 0.1 \\
+     & = 0.45 + 0.35 + 0.4 + 1.35 + 4 + 4.9                   \\
+     & = 11.45                                                \\
+\end{align*}
+Thus we obtain
+\begin{align*}
+    Var(X)
+     & := \E[X^2] - \E[X]^2 \\
+     & = 11.45 - 2.55^2     \\
+     & = 11.45 - 6.5025     \\
+     & = 4.9475
+\end{align*}
+
+\section{Exercise 2}
+\subsection{Question 1}
+
+We will use two pieces of knowledge. First, the probabilities over the sample space sum up to 1. Second, that the expectation of \(X\) is 1.8. \\
+Let \(\Omega\) be the sample space, with \(\Omega := \left\{ -1, 2, 3, 4, 5 \right\}\). We have on the one hand:
+\begin{align}
+    \nonumber
+             & \sum_{k \in \Omega} \P(X=k) = 1 \\
+    \nonumber
+    \implies & a + 0.1 + 0.1 + b + 0.1 = 1     \\
+    \nonumber
+    \implies & a + b + 0.3 = 1                 \\
+    \label{ex2.1 prob sum up to 1}
+    \implies & a + b = 0.7
+\end{align}
+We have on the other hand:
+\begin{align}
+    \nonumber
+     & \E[X] = 1.8                                                                          \\
+    \nonumber
+     & \implies \sum_{k \in \Omega} k\P(X=k) = 1.8                                          \\
+    \nonumber
+     & \implies -1 \times a + 2 \times 0.1 + 3 \times 0.1 + 4 \times b + 5 \times 0.1 = 1.8 \\
+    \nonumber
+     & \implies -a + 0.2 + 0.3 + 4b + 0.5 = 1.8                                             \\
+    \label{ex2.1 expect is 1.8}
+     & \implies -a + 4b= 0.8
+\end{align}
+Thus by combining \eqref{ex2.1 prob sum up to 1} and \eqref{ex2.1 expect is 1.8}, we obtain a system with two equations and two unknowns:
+\begin{align*}
+             & \begin{cases}
+        a + b = 0.7 \\
+        -a + 4b = 0.8
+    \end{cases} \\
+    \implies &
+    \begin{cases}
+        a + b = 0.7 \\
+        5b = 1.5
+    \end{cases}            \\
+    \implies &
+    \begin{cases}
+        a + b = 0.7 \\
+        b = 0.3
+    \end{cases}           \\
+    \implies &
+    \begin{cases}
+        a = 0.4 \\
+        b = 0.3
+    \end{cases}           \\
+\end{align*}
+
+\subsection{Question 2}
+Now from the table and question 1, it follows that the distribution function is given by:
+\[
+    \begin{cases}
+        0   & \text{if } x \in ]-\infty, -1[ \\
+        0.4 & \text{if } x \in [-1, 2[       \\
+        0.5 & \text{if } x \in [2, 3[        \\
+        0.6 & \text{if } x \in [3, 4[        \\
+        0.9 & \text{if } x \in [4, 5[        \\
+        1   & \text{if } x \in [5, +\infty[
+    \end{cases}
+\]
+
+\subsection{Question 3}
+By simply getting the desired informqtion from the table, we get that:
+\begin{align*}
+    \P(X \in \left\{ -1, 4, 5\right\})
+     & = \sum_{k \in \left\{ -1, 4, 5\right\}} \P(X=k) \\
+     & = a + b + 0.1                                   \\
+     & = 0.4 + 0.3 + 0.1                               \\
+     & = 0.8
+\end{align*}
+
+\section{Exercise 3}
+\subsection{Question 1}
+From the plot, we have that:
+\begin{equation}
+    \label{ex3.1: def of PDF}
+    f_X(x) =
+    \begin{cases}
+        a       & [-1, 1[          \\
+        -a(x-5) & [3, 5[           \\
+        0       & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+Now we know the following:
+\begin{align*}
+             & \int_{-\infty}^{\infty} f_X(x) dx = 1                           \\
+    \implies &
+    \int_{-1}^{1} f_X(x) dx + \int_{3}^{5} f_X(x) dx = 1                       \\
+    \implies &
+    \int_{-1}^{1} a \ dx + \int_{3}^{5} -a(x-5) \ dx = 1                       \\
+    \implies &
+    [ax]_{-1}^{1} - a \left[ \frac{x^2}{2} - 5x \right]_{3}^{5} = 1            \\
+    \implies &
+    a \left[ 1 + 1 \right] - a \left[ -\frac{25}{2} + \frac{21}{2} \right] = 1 \\
+    \implies &
+    2a + 2a = 1                                                                \\
+    \implies &
+    a = \frac{1}{4}                                                            \\
+\end{align*}
+
+\subsection{Question 2}
+As in previous exercises, we first compute the expected value of \(X\) and the expected value of \(X^2\).
+\begin{align*}
+    \E[X]
+     & := \int_{-\infty}^{+\infty} x f_X(x) \ dx                                                                            \\
+     & = \int_{-1}^{1} ax \ dx - \int_{3}^{5} ax(x-5) \ dx                                                                  \\
+     & = a \int_{-1}^{1} x \ dx - a \int_{3}^{5} x^2 - 5x \ dx                                                              \\
+     & = \underbrace{a \left[ \frac{x^2}{2} \right]_{-1}^{1}}_{=0} - a \left[\frac{x^3}{3} - 5\frac{x^2}{2} \right]_{3}^{5} \\
+     & = - a \left[\left( \frac{125}{3} - 5\frac{25}{2} \right) - \left( \frac{27}{3} - 5\frac{9}{2} \right)\right]         \\
+     & = - a \left[- \frac{125}{6} - \left( 9 - \frac{45}{2} \right)\right]                                                 \\
+     & = - a \left[- \frac{125}{6} + \frac{27}{2} \right]                                                                   \\
+     & = - a \left[- \frac{125}{6} + \frac{81}{6} \right]                                                                   \\
+     & = - a \left[- \frac{44}{6} \right]                                                                                   \\
+     & = \frac{22a}{3}                                                                                                      \\
+     & = \frac{11}{6}                                                                                                       \\
+\end{align*}
+
+Then:
+\begin{align*}
+    \E[X^2]
+     & := \int_{-\infty}^{+\infty} x^2 f_X(x) \ dx                                                                                      \\
+     & = \int_{-1}^{1} ax^2 \ dx - \int_{3}^{5} ax^2(x-5) \ dx                                                                          \\
+     & = a \int_{-1}^{1} x^2 \ dx - a \int_{3}^{5} x^3 - 5x^2 \ dx                                                                      \\
+     & = a \left[\frac{x^3}{3}\right]_{-1}^{1} - a \left[ \frac{x^4}{4} - 5\frac{x^3}{3} \right]_{3}^{5}                                \\
+     & = a \frac{2}{3} - a \left[ \left( \frac{5^4}{4} - 5\frac{5^3}{3} \right) - \left( \frac{3^4}{4} - 5\frac{3^3}{3} \right) \right] \\
+     & = a \frac{2}{3} - a \left[ - \frac{5^4}{12} - \left( \frac{81}{4} - \frac{135}{3} \right) \right]                                \\
+     & = a \frac{2}{3} - a \left[ - \frac{625}{12} - \frac{243}{12} + \frac{540}{12} \right]                                            \\
+     & = a \frac{8}{12} + a \frac{328}{12}                                                                                              \\
+     & = \frac{82a}{3}                                                                                                                  \\
+     & = \frac{41}{6}                                                                                                                   \\
+\end{align*}
+Thus we get that the variance of \(X\) \(Var(X)\) is given by:
+\begin{align*}
+    Var(X)
+     & = \E[X^2] - \E[X]^2                            \\
+     & = \frac{41}{6} - \left[ \frac{11}{6} \right]^2 \\
+     & = \frac{246}{36} - \frac{121}{36}              \\
+     & = \frac{125}{36}                               \\
+\end{align*}
+
+\subsection{Question 3}
+We know that the CDF (Cumulative Distribution Function) is defined as follows:
+\[
+    F_X(x) = \int_{-\infty}^{x} f_X(t) \ dt
+\]
+Then, reusing the definition of the PDF (Probability Density Function) from \eqref{ex3.1: def of PDF}, we get that:
+\begin{itemize}
+    \item If \(x \in ]-\infty, -1[\) then it is clear that \(F_X(x) = 0\).
+    \item If \(x \in [-1, 1[\)
+          \begin{align*}
+              F_X(x)
+               & = \int_{-\infty}^{x} f_X(t) \ dt                                                \\
+               & = \underbrace{\int_{-\infty}^{-1} f_X(t) \ dt}_{=0} + \int_{-1}^{x} f_X(t) \ dt \\
+               & = \int_{-1}^{x} a \ dt                                                          \\
+               & = \left[ at \right]_{-1}^{x}                                                    \\
+               & = a (x + 1)                                                                     \\
+               & = \frac{x + 1}{4}                                                               \\
+          \end{align*}
+    \item If \(x \in [1, 3[\)
+          \begin{align*}
+              F_X(x)
+               & = \int_{-\infty}^{x} f_X(t) \ dt                                                                     \\
+               & = \underbrace{\int_{-\infty}^{1} f_X(t) \ dt}_{=F_X(1)} + \int_{1}^{x} \underbrace{f_X(t)}_{=0} \ dt \\
+               & = a (1 + 1)                                                                                          \\
+               & = 2a                                                                                                 \\
+               & = \frac{1}{2}
+          \end{align*}
+    \item If \(x \in [3, 5[\)
+          \begin{align*}
+              F_X(x)
+               & = \int_{-\infty}^{x} f_X(t) \ dt                                                                      \\
+               & = \underbrace{\int_{-\infty}^{3} f_X(t) \ dt}_{=F_X(3)} + \int_{3}^{x} f_X(t) \ dt                    \\
+               & = 2a + \int_{3}^{x} -a(t-5) \ dt                                                                      \\
+               & = 2a - a \left[ \frac{t^2}{2} - 5t \right]_{3}^{x}                                                    \\
+               & = 2a - a \left[ \left( \frac{x^2}{2} - 5x \right) - \left( \frac{3^2}{2} - 5 \times 3 \right) \right] \\
+               & = 2a - a \left[ \frac{x^2}{2} - 5x + \frac{21}{2} \right]                                             \\
+               & = a \left[ - \frac{x^2}{2} + 5x - \frac{17}{2} \right]                                                \\
+               & = - \frac{x^2}{8} + \frac{5x}{4} - \frac{17}{8}                                                       \\
+          \end{align*}
+          (Here, we can easily check that when setting \(x=3\) and \(x=5\), we obtain respectively \(F_X(x) = \frac{1}{4}\) and \(F_X(x) = 1\), which is coherent with the plot.)
+    \item If \(x \in [5, + \infty[\) then it is clear that \(F_X(x) = 1\).
+\end{itemize}
+
+\subsection{Question 4}
+\begin{align*}
+     & \P (X \in [-0.1, 0.7] \cup [3.5, 7])                                                                                           \\
+     & = \P (X \in [-0.1, 0.7]) + \P (X \in [3.5, 7]) - \underbrace{\P (X \in [-0.1, 0.7] \cap [3.5, 7])}_{=0}                        \\
+     & = \left[ F_X(0.7) - F_X(-0.1) \right] + \left[ F_X(7) - F_X(3.5) \right]                                                       \\
+     & = \left[ a(0.7 + 1) - a(-0.1 + 1) \right] + \left[ 1 - a \left( -\frac{3.5^2}{2} + 5 \times 3.5 - \frac{17}{2} \right) \right] \\
+     & = \frac{8}{10}a + 1 - a \left( -\frac{49}{8} + \frac{35}{2} - \frac{17}{2} \right)                                             \\
+     & = \frac{8}{10}a + 1 - \frac{23}{8}a                                                                                            \\
+     & = 1 - \frac{83}{40}a                                                                                                           \\
+     & = \frac{77}{160}
+\end{align*}
+
+
+\section{Exercise 4}
+Let \(X\) be \(\mathcal{N}(10, 100)\). We center and scale \(X\) in order to get a \(\mathcal{N}(0,1)\). That is, we consider
+\[
+    Y := \frac{X - \E[X]}{\sqrt{Var(X)}} = \frac{X - 10}{10}
+\]
+Then we have that \(X = 10Y + 10\), therefore \(\forall a,b \in \R\) such that \(a \leq b\):
+\begin{align*}
+    \P(a \leq X \leq b)
+     & =
+    \P(a \leq 10Y + 10 \leq b)                          \\
+     & =
+    \P(a - 10 \leq 10Y \leq b - 10)                     \\
+     & =
+    \P(\frac{a - 10}{10} \leq Y \leq \frac{b - 10}{10}) \\
+\end{align*}
+Let \(\Phi\) be the CDF of \(\mathcal{N}(0,1)\).
+
+\subsection{Question 1}
+\begin{align*}
+    \P(X \in [12.5, 23.1])
+     & =
+    \P(\frac{12.5 - 10}{10} \leq Y \leq \frac{23.1 - 10}{10}) \\
+     & =
+    \P(0.25 \leq Y \leq 1.31)                                 \\
+     & =
+    \Phi(1.31) - \Phi(0.25)                                   \\
+     & =
+    0.9049 - 0.5987                                           \\
+     & =
+    0.3062                                                    \\
+\end{align*}
+
+\subsection{Question 2}
+\begin{align*}
+    \P(X \in [1.6, 6.9])
+     & =
+    \P(\frac{1.6 - 10}{10} \leq Y \leq \frac{6.9 - 10}{10})       \\
+     & =
+    \P(-0.84 \leq Y \leq -0.31)                                   \\
+     & =
+    \Phi(-0.31) - \Phi(-0.84)                                     \\
+     & =
+    \left[ 1 - \Phi(0.31) \right] - \left[ 1 - \Phi(0.84) \right] \\
+     & =
+    - \Phi(0.31) + \Phi(0.84)                                     \\
+     & =
+    - 0.5517 + 0.7995                                             \\
+     & =
+    0.2478                                                        \\
+\end{align*}
+
+\subsection{Question 3}
+On the one hand:
+\begin{align*}
+    \P(X \in [8.9, 9.5])
+     & =
+    \P(\frac{8.9 - 10}{10} \leq Y \leq \frac{9.5 - 10}{10})       \\
+     & =
+    \P(-0.11 \leq Y \leq -0.05)                                   \\
+     & =
+    \Phi(-0.05) - \Phi(-0.11)                                     \\
+     & =
+    \left[ 1 - \Phi(0.05) \right] - \left[ 1 - \Phi(0.11) \right] \\
+     & =
+    - \Phi(0.05) + \Phi(0.11)                                     \\
+     & =
+    - 0.5199 + 0.5438                                             \\
+     & =
+    0.0239                                                        \\
+\end{align*}
+On the other hand:
+\begin{align*}
+    \P(X \in [22.4, 43.2])
+     & =
+    \P(\frac{22.4 - 10}{10} \leq Y \leq \frac{43.2 - 10}{10}) \\
+     & =
+    \P(1.24 \leq Y \leq 3.32)                                 \\
+     & =
+    \Phi(3.32) - \Phi(1.24)                                   \\
+     & =
+    0.99955 - 0.8925                                          \\
+     & =
+    0.10705                                                   \\
+\end{align*}
+
+Therefore we get for the union:
+\begin{align*}
+    \P(X \in [8.9, 9.5] \cup [22.4, 43.2])
+    &=
+    \P(X \in [8.9, 9.5]) + \P(X \in [22.4, 43.2]) \\
+    & \quad - \underbrace{\P(X \in [8.9, 9.5] \cap [22.4, 43.2])}_{=0} \\
+    &=
+    0.0239 + 0.10705 \\
+    &=
+    0.13095 \\
+\end{align*}
+
+\end{document}

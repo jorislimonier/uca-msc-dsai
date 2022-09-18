@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\renewcommand{\P}{\mathbb{P}}
+
+\title{Probabilities refreshers:\\Description of the geometric distribution}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\section{State space, PMF and CDF}
+We know that the geometric distribution modelizes the number of tries in order for an event to occur (success). Hence, the state space of the geometric distribution is \(\Omega = \mathbb{N}^*\).\\
+Let us now determine the density function of the geometric distribution.\\
+Let \(p \in [0,1]\) be the probability of success of a given event. Getting the first success at the \(k\)-th try means that there had been \(k-1\) failures before the first success. Hence, for all \(k \in \Omega\), the probability to have the first success at time \(k\) is given by:
+\[
+    \P(X = k) = \underbrace{(1-p) \cdot \ldots \cdot (1-p)}_{k-1 \text{ terms}} \cdot p = (1-p)^{k-1} p
+\]
+Moreover the CDF of the geometric distribution at point \(k\) represents the probability to have the first success occuring at most at time \(k\). It is therefore equal to the sum of the probabilities of the first success happening at each of the times up to and including \(k\). In other words:
+\begin{align*}
+    \P(X \leq k)
+     & = \sum_{i=1}^{k} \P (X = i)           \\
+     & = \sum_{i=1}^{k} (1-p)^{i} p          \\
+     & = p \sum_{i=1}^{k} (1-p)^{i}          \\
+     & = p \sum_{i=1}^{k} (1-p)^{i}          \\
+     & = p \frac{1 - (1 - p)^{k}}{1 - (1-p)} \\
+     & = p \frac{1 - (1 - p)^{k}}{p}         \\
+     & = 1 - (1 - p)^{k}                     \\
+\end{align*}
+
+\section{Expectation and variance}
+By definition, the expectation is defined as:
+\begin{align*}
+    E[X]
+     & = \sum_{i=1}^{\infty} i \P(X = i)                               \\
+     & = \sum_{i=1}^{\infty} i (1-p)^{i-1}p                            \\
+     & = p \sum_{i=1}^{\infty} i (1-p)^{i-1}                           \\
+     & = p \frac{d}{dp} \left[ - \sum_{i=1}^{\infty} (1-p)^{i} \right] \\
+     & = p \frac{d}{dp} \left[ - \frac{1}{1 - (1-p)} \right]           \\
+     & = p \frac{d}{dp} \left[ - \frac{1}{p} \right]                   \\
+     & = p \frac{1}{p^2}                                               \\
+     & = \frac{1}{p}                                                   \\
+\end{align*}
+Now the variance is given by:
+\begin{align*}
+    Var(X)
+     & = E[X^2] - E[X]^2                                                                                           \\
+     & = \left[ \sum_{i=1}^{\infty} i^2 (1-p)^{i-1} p \right] - \left[ \sum_{i=1}^{\infty} i (1-p)^{i-1} p \right] \\
+     & = p \sum_{i=1}^{\infty} i (i-1) (1-p)^{i-1}                                                                 \\
+     & = p(1-p) \sum_{i=1}^{\infty} i (i-1) (1-p)^{i-2}                                                            \\
+     & = p(1-p) \frac{d^2}{dp^2} \sum_{i=1}^{\infty} (1-p)^{i}                                                     \\
+     & = p(1-p) \frac{d^2}{dp^2} \frac{1}{1 - (1-p)}                                                               \\
+     & = p(1-p) \frac{d^2}{dp^2} \frac{1}{p}                                                                       \\
+     & = p(1-p) \frac{d}{dp} \frac{-1}{p^2}                                                                        \\
+     & = p(1-p) \frac{2}{p^3}                                                                                      \\
+     & = \frac{2 (1-p)}{p^2}                                                                                       \\
+\end{align*}
+
+\end{document}
