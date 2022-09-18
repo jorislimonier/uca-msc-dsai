@@ -1,4 +1,0 @@
-mvfor i in $(seq 1 $1)
-do
-  mv "$2/$3$i" "$2/$3$i.txt"
-done "$1/*.txt"
