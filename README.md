@@ -1,8 +1,6 @@
 # UCA-MSc-DSAI
 
-:star::star::star:\
-**Please star this repo if you use it (especially extensively)**\
-:star::star::star:
+:star::star::star: **Please star this repo if you use it (especially extensively)** :star::star::star:
 
 Resources for my Master's of Data Science and Artificial Intelligence at the University Côte d'Azur.
 

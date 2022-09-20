@@ -1,5 +1,23 @@
 # Research Project
 
+## Introduction
+
+- The project is an opportunity to develop organizational skills and autonomy.
+- The subjects of research projects are deliberately complicated, and require, on the one hand, the
+mobilization of the skills acquired during the Master cycle and, on the other hand, the search for
+new knowledge.
+- The work carried out must be able to position itself in relation to existing work, whether in
+relation to a scientific state of the art or to a comparative study of similar tools/solutions.
+
+You will be evaluated on the basis of a scientific article you have written. This article must have at least 2 parts:
+- a state of the art i.e. a synthesis of 2 to 4 papers selected by the proposer
+- the highlighting of a research project based on the previous state of the art i.e. the definition of the first experiments to fill a gap in the state of the art or to use the state of the art to solve a new problem.
+
+You are expected to be expressive and creative. One day per week is dedicated to this research project, as well as two weeks full-time.
+Only the final report and the defense are evaluated.
+
+## Projects details
+
 **Title**: 3D Human Pose Estimation in Videos
 
 **Contact**: Frédéric Precioso, frederic.precioso@univ-cotedazur.fr
@@ -14,7 +32,7 @@ The estimation of human poses, i.e., of every joint of every visible human, in a
 
 This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ-cotedazur.fr/TRACTIVE/).
 
-## References
+### References
 - [1] C. Zheng et al., “Deep Learning-Based Human Pose Estimation: A Survey,” arXiv:2012.13392 [cs], Jan. 2021, Accessed: Jan. 12, 2022. [Online]. Available: http://arxiv.org/abs/2012.13392
 - [2] H.-Y. Wu, L. Nguyen, Y. Tabei, and L. Sassatelli, “Evaluation of deep pose detectors for automatic analysis of film style,” in EUROGRAPHICS Workshop on Intelligent Cinematography and Editing, Reims, France, 2022, p. 9.
 - [3] W. Li, H. Liu, H. Tang, P. Wang, and L. V. Gool, “MHFormer: Multi-Hypothesis Transformer for 3D Human Pose Estimation,” in 2022 IEEE/CVF International Conference on Computer Vision (ICCV), Montreal, QC, Canada, Jun. 2022.
