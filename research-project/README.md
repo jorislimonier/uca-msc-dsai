@@ -42,3 +42,8 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - [7] Z. Qiu, Q. Yang, J. Wang, and D. Fu, “IVT: An End-to-End Instance-guided Video Transformer for 3D Pose Estimation.” in ACM Internation Cnference on Multimedia, Oct. 2022. [Online]. Available: http://arxiv.org/abs/2208.03431
 - [8] Z. Li, B. Xu, H. Huang, C. Lu, and Y. Guo, “Deep Two-Stream Video Inference for Human Body Pose and Shape Estimation,” in 2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV), Waikoloa, HI, USA, Jan. 2022, pp. 637–646. doi: 10.1109/WACV51458.2022.00071.
 - [9] J. Zhang, Z. Tu, J. Yang, Y. Chen, and J. Yuan, “MixSTE: Seq2seq Mixed Spatio-Temporal Encoder for 3D Human Pose Estimation in Video,” in 2022 IEEE/CVF International Conference on Computer Vision (ICCV), Montreal, QC, Canada, Jun. 2022.
+
+### Deadlines
+- State of the Art (5-8 pages): November 30
+- Full project (8-12 pages): February 15
+- Oral presentation: Last week of February
