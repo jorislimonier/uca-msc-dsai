@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     # Mean lateness
     fig = lateness_mean(data)
-    fig.write_image("images/lateness_mean_test.png")
+    fig.write_image("images/lateness_mean.png")
 
     # Summed lateness
     fig = lateness_sum(data)
