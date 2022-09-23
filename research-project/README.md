@@ -51,10 +51,9 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - Full project (8-12 pages): February 15
 - Oral presentation: Last week of February
 
-<a name="paper notes"></a>
 ## Paper notes
 ### Deep Learning-Based Human Pose Estimation: A Survey
-
+- Meta analysis of >250 papers since 2014
 
 
 ## References
