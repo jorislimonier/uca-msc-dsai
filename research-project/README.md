@@ -1,7 +1,18 @@
 # Research Project
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
-1. Introduction
-2. [Paper Notes](#notes) 
+- [Introduction](#introduction)
+- [Projects details](#projects-details)
+  - [Deadlines](#deadlines)
+- [Paper notes](#paper-notes)
+  - [Deep Learning-Based Human Pose Estimation: A Survey](#deep-learning-based-human-pose-estimation-a-survey)
+- [References](#references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 
 ## Introduction
 
@@ -35,8 +46,12 @@ The estimation of human poses, i.e., of every joint of every visible human, in a
 
 This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ-cotedazur.fr/TRACTIVE/).
 
+### Deadlines
+- State of the Art (5-8 pages): November 30
+- Full project (8-12 pages): February 15
+- Oral presentation: Last week of February
 
-<a name="notes"></a>
+<a name="paper notes"></a>
 ## Paper notes
 ### Deep Learning-Based Human Pose Estimation: A Survey
 
@@ -53,7 +68,3 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - [8] Z. Li, B. Xu, H. Huang, C. Lu, and Y. Guo, “Deep Two-Stream Video Inference for Human Body Pose and Shape Estimation,” in 2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV), Waikoloa, HI, USA, Jan. 2022, pp. 637–646. doi: 10.1109/WACV51458.2022.00071.
 - [9] J. Zhang, Z. Tu, J. Yang, Y. Chen, and J. Yuan, “MixSTE: Seq2seq Mixed Spatio-Temporal Encoder for 3D Human Pose Estimation in Video,” in 2022 IEEE/CVF International Conference on Computer Vision (ICCV), Montreal, QC, Canada, Jun. 2022.
 
-### Deadlines
-- State of the Art (5-8 pages): November 30
-- Full project (8-12 pages): February 15
-- Oral presentation: Last week of February

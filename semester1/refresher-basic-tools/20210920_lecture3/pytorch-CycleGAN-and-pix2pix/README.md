@@ -1,3 +1,35 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [CycleGAN and pix2pix in PyTorch](#cyclegan-and-pix2pix-in-pytorch)
+  - [Talks and Course](#talks-and-course)
+  - [Colab Notebook](#colab-notebook)
+  - [Other implementations](#other-implementations)
+    - [CycleGAN](#cyclegan)
+    - [pix2pix](#pix2pix)
+  - [Prerequisites](#prerequisites)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [CycleGAN train/test](#cyclegan-traintest)
+    - [pix2pix train/test](#pix2pix-traintest)
+    - [Apply a pre-trained model (CycleGAN)](#apply-a-pre-trained-model-cyclegan)
+    - [Apply a pre-trained model (pix2pix)](#apply-a-pre-trained-model-pix2pix)
+  - [Docker](#docker)
+  - [Datasets](#datasets)
+  - [Training/Test Tips](#trainingtest-tips)
+  - [Frequently Asked Questions](#frequently-asked-questions)
+  - [Custom Model and Dataset](#custom-model-and-dataset)
+  - [Code structure](#code-structure)
+  - [Pull Request](#pull-request)
+  - [Citation](#citation)
+  - [Other Languages](#other-languages)
+  - [Related Projects](#related-projects)
+  - [Cat Paper Collection](#cat-paper-collection)
+  - [Acknowledgments](#acknowledgments)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 <img src='imgs/horse2zebra.gif' align="right" width=384>
 

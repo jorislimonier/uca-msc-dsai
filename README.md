@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [UCA-MSc-DSAI](#uca-msc-dsai)
+  - [Grades](#grades)
+    - [Recap](#recap)
+    - [Year 1](#year-1)
+      - [Semester 1](#semester-1)
+      - [Semester 2](#semester-2)
+    - [Year 2](#year-2)
+      - [Semester 3](#semester-3)
+      - [Semester 4](#semester-4)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # UCA-MSc-DSAI
 
 :star::star::star: **Please star this repo if you use it (especially extensively)** :star::star::star:

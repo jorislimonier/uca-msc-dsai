@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Notes on visualizing and Understanding Convolutional Networks](#notes-on-visualizing-and-understanding-convolutional-networks)
+  - [Notes on paper](#notes-on-paper)
+    - [1. Introduction](#1-introduction)
+    - [2. Approach](#2-approach)
+    - [3. Training details](#3-training-details)
+    - [4. Convnet visualization](#4-convnet-visualization)
+    - [5. Experiments](#5-experiments)
+      - [Varying ImageNet Model Sizes](#varying-imagenet-model-sizes)
+      - [Generalization](#generalization)
+  - [Remarks](#remarks)
+  - [Instructions for exam](#instructions-for-exam)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Notes on visualizing and Understanding Convolutional Networks
 ## Notes on paper
 ### 1. Introduction
