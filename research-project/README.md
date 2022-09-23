@@ -1,5 +1,8 @@
 # Research Project
 
+1. Introduction
+2. [Paper Notes](#notes) 
+
 ## Introduction
 
 - The project is an opportunity to develop organizational skills and autonomy.
@@ -32,7 +35,14 @@ The estimation of human poses, i.e., of every joint of every visible human, in a
 
 This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ-cotedazur.fr/TRACTIVE/).
 
-### References
+
+<a name="notes"></a>
+## Paper notes
+### Deep Learning-Based Human Pose Estimation: A Survey
+
+
+
+## References
 - [1] C. Zheng et al., “Deep Learning-Based Human Pose Estimation: A Survey,” arXiv:2012.13392 [cs], Jan. 2021, Accessed: Jan. 12, 2022. [Online]. Available: http://arxiv.org/abs/2012.13392
 - [2] H.-Y. Wu, L. Nguyen, Y. Tabei, and L. Sassatelli, “Evaluation of deep pose detectors for automatic analysis of film style,” in EUROGRAPHICS Workshop on Intelligent Cinematography and Editing, Reims, France, 2022, p. 9.
 - [3] W. Li, H. Liu, H. Tang, P. Wang, and L. V. Gool, “MHFormer: Multi-Hypothesis Transformer for 3D Human Pose Estimation,” in 2022 IEEE/CVF International Conference on Computer Vision (ICCV), Montreal, QC, Canada, Jun. 2022.
