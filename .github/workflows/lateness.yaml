@@ -1,9 +1,9 @@
 name: "Generate plots of professors' lateness"
 
-on: [push]
-  # push:
-    # paths: 
-    #   - "**.ods"
+on:
+  push:
+    paths: 
+      - "misc/lateness/lateness.ods"
 
 jobs:
   report:
