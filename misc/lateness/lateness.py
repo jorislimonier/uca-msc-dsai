@@ -14,11 +14,11 @@ def preprocess_data() -> pd.DataFrame:
     return data
 
 
-def lateness_mean(data) -> go.Figure:
+def lateness_mean(data: pd.DataFrame) -> go.Figure:
     """Return a figure of the mean lateness of each teacher."""
     av_late = (
         data.groupby("teacher")
-        .mean()
+        .mean(numeric_only=True)
         .sort_values(
             by="start_time",
             ascending=False,
@@ -34,10 +34,10 @@ def lateness_mean(data) -> go.Figure:
     )
 
 
-def lateness_sum(data) -> go.Figure:
+def lateness_sum(data: pd.DataFrame) -> go.Figure:
     sum_late = (
         data.groupby("teacher")
-        .sum()
+        .sum(numeric_only=True)
         .sort_values(
             "start_time",
             ascending=False,
@@ -53,10 +53,10 @@ def lateness_sum(data) -> go.Figure:
     )
 
 
-def lateness_median(data) -> go.Figure:
+def lateness_median(data: pd.DataFrame) -> go.Figure:
     median_late = (
         data.groupby("teacher")
-        .median()
+        .median(numeric_only=True)
         .sort_values(
             "start_time",
             ascending=False,
