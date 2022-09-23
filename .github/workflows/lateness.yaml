@@ -19,6 +19,6 @@ jobs:
           python-version: '3.10' 
         working-directory: misc/lateness
         run: |
-        realpath .
-        pip install -r requirements.txt
-        python lateness.py
+          realpath .
+          pip install -r requirements.txt
+          python lateness.py
