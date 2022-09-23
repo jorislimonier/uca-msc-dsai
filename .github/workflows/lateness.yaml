@@ -23,6 +23,10 @@ jobs:
         run: |
           realpath .
           pip install -r requirements.txt
-          echo Running lateness.py
           python lateness.py
-          echo Ran lateness.py
+      - name: Commit and push
+        run: |
+          git config --global user.name 'jorislimonier'
+          git config --global user.email 'joris.limonier@gmail.com'
+          git commit -am "Automated generation of lateness images"
+          git push
