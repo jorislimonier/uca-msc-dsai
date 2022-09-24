@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue, 
+}
+
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rcal}{\mathcal{R}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\thetahat}{\hat\theta}
+\newcommand{\ie}{\textit{i.e. }}
+\newcommand{\var}{\operatorname{Var}}
+
+
+\title{Statistical learning theory}
+\author{Joris LIMONIER}
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Proposed exercise lecture 02}
+\subsection{Home Exercise}
+\paragraph{Demonstrate that the MAP (Maximum A Posteriori) classification rule is quadratic with respect to $x^*$.}
+
+We have the following:
+\begin{equation}
+  \hat{y}^* = \arg \max_{k = 1, \ldots, k} \P \left( Y=k | X = x^* \right)
+\end{equation}
+We compute the probability:
+\begin{align*}
+  \arg \max_{k = 1, \ldots, k} \P \left( Y=k | X = x^* \right)
+   & \underbrace{=}_{\text{Bayes}} \frac{\P(Y=k) \P(X=x^* | Y=k)}{\P(X=x^*)}        \\
+   & \propto \P(Y=k) \P(X=x^* | Y=k)                                                \\
+   & \propto \hat{\Pi}_k \mathcal{N}\left( x^*, \hat{\mu}_k, \hat{\Sigma}_k \right) \\
+\end{align*}
+
+\begin{align*}
+  \hat{y}^*
+   & = \arg \max_{k = 1, \ldots, k} \hat{\Pi}_k \mathcal{N}\left( x^*, \hat{\mu}_k, \hat{\Sigma}_k \right)                                                                                                                \\
+   & = \arg \max_{k = 1, \ldots, k} \log \left[ \hat{\Pi}_k \right] + \log \left[\mathcal{N} \left( x^*, \hat{\mu}_k, \hat{\Sigma}_k \right) \right]                                                                      \\
+   & = \arg \max_{k = 1, \ldots, k} \log \left[ \hat{\Pi}_k \right] + \log \left[\frac{1}{(2 \pi)^{N / 2}|\Sigma|^{1 / 2}} e^{-\frac{1}{2}(x^*-\mu)^{\top} \Sigma^{-1}(x^*-\mu)} \right]                                  \\
+   & = \arg \max_{k = 1, \ldots, k} \underbrace{\log \left[ \hat{\Pi}_k \right]}_{\text{Constant w.r.t. } x^*} + \underbrace{\left[ -\frac{1}{2}(x^*-\mu)^{\top} \Sigma^{-1}(x^*-\mu) \right]}_{\text{Quadratic in } x^*} \\
+   & - \underbrace{\log \left[(2 \pi)^{N / 2}|\Sigma|^{1 / 2} \right]}_{\text{Constant w.r.t. } x^*}                                                                                                                      \\
+\end{align*}
+The second term is Quadratic in $x^*$, the others are constant w.r.t. $x^*$, which completes the proof.
+
+
+
+
+
+
+\end{document}
