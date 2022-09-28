@@ -4,6 +4,9 @@ import pathlib
 
 import matplotlib.pyplot as plt  # To plot and display stuff
 import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import torch
 import torch.optim as optim  # Where the optimization modules are
 import torchvision  # To be able to access standard datasets more easily
@@ -93,10 +96,36 @@ y_test_one_hot = torch.nn.functional.one_hot(
 ### Q2
 # Using the utilities in plt and numpy display some images
 # and check that the corresponding labels are consistent
-image = np.asarray(X_train[1])
-plt.imshow(image)
-plt.show()
+idx = 2
+nb_subplots = 12
+cols = 4
+if nb_subplots % cols:
+    rem = 1
+else:
+    rem = 0
+rows = nb_subplots // cols + rem
+fig = make_subplots(
+    rows=rows,
+    cols=cols,
+    subplot_titles=[f"Label: {int(y_train[idx])}" for idx in range(nb_subplots)],
+    shared_xaxes=True,
+    shared_yaxes=True,
+    horizontal_spacing=0.02,
+    vertical_spacing=0.1,
+)
 
+for idx in range(nb_subplots):
+    row = (idx // cols) + 1
+    col = idx % cols + 1
+    img = X_train[idx]
+    img = img.flip([0])
+    trace = px.imshow(img)
+    fig.add_trace(trace=trace.data[0], row=row, col=col)
+
+fig.update_layout(showlegend=False)
+fig.show()
+fig.write_image("data/labels.png")
+# %%
 
 # ### Q3
 # # Complete the code below so to have a MLP with one hidden layer with 300 neurons
@@ -145,3 +174,5 @@ plt.show()
 # acc = ??
 
 # print("Final accuracy on test", acc)
+
+# %%

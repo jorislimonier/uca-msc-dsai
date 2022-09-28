@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+% \newcommand{\thetahat}{\hat{\theta}}
+
+\newacronym{emr}{EMR}{Electronic Medical Record}
+\newacronym{bmi}{BMI}{Body Mass Index}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+
+\newgeometry{
+    left=25mm,
+    right=25mm,
+    top=25mm,
+    bottom=25mm}
+\pagenumbering{arabic}
+
+\section{Exercise 1}
+\section{Exercise 2}
+\subsection{Question 1}
+\subsection{Question 2}
+\subsection{Question 3}
+\subsection{Question 4}
+\subsection{Question 5}
+\subsection{Question 6}
+\subsection{Question 7}
+
+\end{document}
