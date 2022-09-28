@@ -1,7 +1,7 @@
 # ------------ CUSTOM ------------
 **/last-year/
 .vscode
-**/data/*/raw/
+**/data/*
 # ------------ PYTHON ------------
 
 # Byte-compiled / optimized / DLL files
