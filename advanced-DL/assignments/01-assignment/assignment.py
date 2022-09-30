@@ -133,7 +133,7 @@ X_train.shape
 # Remember that we want one-hot outputs
 
 # Now let us define the neural network we are using
-hidden_sizes = [10, 10]
+hidden_sizes = [300]
 
 layers = []
 for idx, h in enumerate(hidden_sizes):

@@ -22,7 +22,7 @@
 
 \pagenumbering{gobble}
 \tableofcontents
-% \listoffigures
+\listoffigures
 % \listoftables
 
 
@@ -41,7 +41,7 @@ I was not familiar with the PyTorch library, so I had to perform some research i
 \begin{enumerate}
     \item \href{https://discuss.pytorch.org/t/how-sgd-works-in-pytorch/8060/2}{https://discuss.pytorch.org/t/how-sgd-works-in-pytorch/8060/2}
     \item \href{https://discuss.pytorch.org/t/performing-mini-batch-gradient-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}{https://discuss.pytorch.org/t/performing-mini-batch-gradient} \\
-    \href{https://discuss.pytorch.org/t/performing-mini-batch-gradient-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}{-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}
+          \href{https://discuss.pytorch.org/t/performing-mini-batch-gradient-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}{-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}
 
     \item \href{https://pytorch.org/docs/stable/generated/torch.optim.SGD.html}{https://pytorch.org/docs/stable/generated/torch.optim.SGD.html}
 \end{enumerate}
@@ -50,6 +50,16 @@ It is my understanding that in order to perform actual mini-batch (\ie where $1 
 In our case, we use the full dataset in \texttt{outputs = net(inputs)}, which is why we perform full-batch GD, although we call the \texttt{optim.SGD} class.
 
 \subsection{Question 2}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cross-entropy-comparison-2-10-10.png}
+    \caption{Comparison of cross entropy loss between train and test dataset with linear scale (architecture $2 \times 10$ fully-connected).}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cross-entropy-comparison-2-10-10-log.png}
+    \caption{Comparison of cross entropy loss between train and test dataset with log scale (architecture $2 \times 10$ fully-connected).}
+\end{figure}
 \subsection{Question 3}
 \subsection{Question 4}
 \subsection{Question 5}
