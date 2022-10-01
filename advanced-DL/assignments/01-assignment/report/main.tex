@@ -37,7 +37,8 @@
 \section{Exercise 1}
 \section{Exercise 2}
 \subsection{Question 1}
-I was not familiar with the PyTorch library, so I had to perform some research in order to know how its methods/classes work. I consulted several sources, including the following, which were useful in order to answer this question:
+I was not familiar with the PyTorch library, so I had to perform some research in order to know how its methods/classes work.
+I consulted several sources, including the following, which were useful in order to answer this question:
 \begin{enumerate}
     \item \href{https://discuss.pytorch.org/t/how-sgd-works-in-pytorch/8060/2}{https://discuss.pytorch.org/t/how-sgd-works-in-pytorch/8060/2}
     \item \href{https://discuss.pytorch.org/t/performing-mini-batch-gradient-descent-or-stochastic-gradient-descent-on-a-mini-batch/21235}{https://discuss.pytorch.org/t/performing-mini-batch-gradient} \\
@@ -50,20 +51,37 @@ It is my understanding that in order to perform actual mini-batch (\ie where $1 
 In our case, we use the full dataset in \texttt{outputs = net(inputs)}, which is why we perform full-batch GD, although we call the \texttt{optim.SGD} class.
 
 \subsection{Question 2}
+Figures \ref{fig: loss comparison 2-10-10} and \ref{fig: loss comparison 1-300} show a comparison between train and test cross entropy loss.
+The leftmost diagrams is with a linear scale for the vertical axis, while the rightmost diagrams have a logarithmic scale for the vertical axis.
+Beware that the number of epochs varies significantly between figures.
+Indeed, more pararmeters in the network implies longer training times per epoch, which in turn means that running for the same time both experiments results in different number of epochs. \\
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/cross-entropy-comparison-2-10-10.png}
-    \caption{Comparison of cross entropy loss between train and test dataset with linear scale (architecture $2 \times 10$ fully-connected).}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-10-10.png}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-10-10-log.png}
+    \caption{Cross entropy loss, train vs test ($10-10$ fully-connected).}
+    \label{fig: loss comparison 2-10-10}
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/cross-entropy-comparison-2-10-10-log.png}
-    \caption{Comparison of cross entropy loss between train and test dataset with log scale (architecture $2 \times 10$ fully-connected).}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300.png}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300-log.png}
+    \caption{Cross entropy loss, train vs test ($300$ fully-connected).}
+    \label{fig: loss comparison 1-300}
 \end{figure}
+
+We see that in both experiments the train error keeps decreasing, while the test error stays constant.
+This means that our network is overfitting and there is no need to continue the experiment further.
+One way to prevent wasting time training when the network isn't making actual progress is to print the loss, or even to plot the loss curves, every couple iterations.
+
 \subsection{Question 3}
+
 \subsection{Question 4}
+
 \subsection{Question 5}
+
 \subsection{Question 6}
+
 \subsection{Question 7}
 
 \end{document}
