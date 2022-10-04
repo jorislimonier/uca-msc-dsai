@@ -51,8 +51,8 @@ It is my understanding that in order to perform actual mini-batch (\ie where $1 
 In our case, we use the full dataset in \texttt{outputs = net(inputs)}, which is why we perform full-batch GD, although we call the \texttt{optim.SGD} class.
 
 \subsection{Question 2}
-Figures \ref{fig: loss comparison 2-10-10} and \ref{fig: loss comparison 1-300} show a comparison between train and test cross entropy loss.
-The leftmost diagrams is with a linear scale for the vertical axis, while the rightmost diagrams have a logarithmic scale for the vertical axis.
+Figures \ref{fig: loss comparison 1-300}, \ref{fig: loss comparison 2-10-10} and \ref{fig: loss comparison 2-20-20} show a comparison between train and test cross entropy loss.
+The leftmost diagrams have a linear scale for the vertical axis, while the rightmost diagrams have a logarithmic scale for the vertical axis.
 Beware that the number of epochs varies significantly between figures.
 Indeed, more pararmeters in the network implies longer training times per epoch, which in turn means that running for the same time both experiments results in different number of epochs. \\
 \begin{figure}[ht]
@@ -76,12 +76,25 @@ Indeed, more pararmeters in the network implies longer training times per epoch,
     \caption{Cross entropy loss, train vs test ($20-20$ fully-connected).}
     \label{fig: loss comparison 2-20-20}
 \end{figure}
-
 We see that in both experiments the train error keeps decreasing, while the test error stays constant.
 This means that our network is overfitting and there is no need to continue the experiment further.
 One way to prevent wasting time training when the network isn't making actual progress is to print the loss, or even to plot the loss curves, every couple iterations.
+We estimate however that the over-fitting phenomenon isn't too extreme in our case.
 
 \subsection{Question 3}
+Let $\beta: \N^{l+1} \to \N$ denote the number of parameters in a fully connected neural network. Then $\beta$ is given by:
+\begin{equation}
+    \beta(h_0, \ldots, h_l) := \sum_{i=1}^{l} (h_{i-1} * h_{i}) + h_i
+\end{equation}
+Indeed, the multiplication term ``$h_{i-1} * h_{i}$'' accounts for the weights by counting the connections from a layer to the next.
+The last term ``$h_i$'' is responsible for counting the biases on each of the hidden layers, as well as the output layer. \\
+We compute $\beta$ for each of our network architectures above, with $h_0 = 28 * 28 = 784$ in all cases, since this is the size of the input:
+\begin{align*}
+    \beta(784, 10, 10, 10)
+     & = (784 * 10 + 10) + (10 * 10 + 10) + (10 * 10 + 10) \\
+     & = 7850 + 110 + 110                                  \\
+     & = 8070                                              \\
+\end{align*}
 
 
 \subsection{Question 4}

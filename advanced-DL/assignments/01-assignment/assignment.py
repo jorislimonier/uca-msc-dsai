@@ -189,7 +189,7 @@ def define_net(hidden_sizes: list[int]) -> torch.nn.modules.container.Sequential
     return net
 
 
-hidden_sizes = [20, 20]
+hidden_sizes = [16, 16]
 net = define_net(hidden_sizes=hidden_sizes)
 
 # Now we define the optimizer and the loss function
@@ -205,6 +205,9 @@ error_test = []
 
 inputs = torch.flatten(X_train, start_dim=1, end_dim=2)
 labels = y_train_one_hot
+
+# %%
+sum([p.numel() for p in net.parameters()])
 
 #%%
 ### Q4
