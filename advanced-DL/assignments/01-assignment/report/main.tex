@@ -57,6 +57,13 @@ Beware that the number of epochs varies significantly between figures.
 Indeed, more pararmeters in the network implies longer training times per epoch, which in turn means that running for the same time both experiments results in different number of epochs. \\
 \begin{figure}[ht]
     \centering
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300.png}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300-log.png}
+    \caption{Cross entropy loss, train vs test ($300$ fully-connected).}
+    \label{fig: loss comparison 1-300}
+\end{figure}
+\begin{figure}[ht]
+    \centering
     \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-10-10.png}
     \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-10-10-log.png}
     \caption{Cross entropy loss, train vs test ($10-10$ fully-connected).}
@@ -64,10 +71,10 @@ Indeed, more pararmeters in the network implies longer training times per epoch,
 \end{figure}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300.png}
-    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300-log.png}
-    \caption{Cross entropy loss, train vs test ($300$ fully-connected).}
-    \label{fig: loss comparison 1-300}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-20-20.png}
+    \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-2-20-20-log.png}
+    \caption{Cross entropy loss, train vs test ($20-20$ fully-connected).}
+    \label{fig: loss comparison 2-20-20}
 \end{figure}
 
 We see that in both experiments the train error keeps decreasing, while the test error stays constant.
