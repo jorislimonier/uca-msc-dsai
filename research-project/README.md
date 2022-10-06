@@ -53,7 +53,13 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 
 ## Paper notes
 ### Deep Learning-Based Human Pose Estimation: A Survey
+#### Acronyms
 - Meta analysis of >250 papers since 2014
+- 2D HPE is easy, 3D HPE is hard
+- 3 types of model:
+  - Kinematic model: only joints
+  - Planar model: Joints + rectangles to approximate human body
+  - Volumetric model: Fit to skin
 
 
 ## References
