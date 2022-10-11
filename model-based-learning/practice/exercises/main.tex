@@ -54,6 +54,20 @@ We compute the probability:
 \end{align*}
 The second term is Quadratic in $x^*$, the others are constant w.r.t. $x^*$, which completes the proof.
 
+\section{Proposed exercise lecture 05}
+\subsection{In-class Exercise}
+\paragraph{Compute the derivative with respect to the means.}
+\begin{align*}
+  \nabla_{\mu_k}\mathcal{L}(\theta)
+   & =
+  \nabla_{\mu_k} \sum_{n=1}^N \log \left[ \sum_{k=1}^K \pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)\right]                   \\
+   & =
+  \sum_{n=1}^N \frac{\pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)}{\sum_{k=1}^K \pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)} \\
+   & =
+  \sum_{n=1}^N \frac{\pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)}{\sum_{k=1}^K \pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)} \Sigma^{-1} (x_n - \mu_k)\\
+  %  & =
+  % \sum_{n=1}^N \frac{\pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)}{\sum_{k=1}^K \pi_k \mathcal{N}(x_n|\mu_k, \Sigma_k)} \Sigma^{-1} (x_n - \mu_k)\\
+\end{align*}
 
 
 
