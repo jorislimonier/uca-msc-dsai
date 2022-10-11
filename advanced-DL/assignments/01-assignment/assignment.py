@@ -209,6 +209,16 @@ labels = y_train_one_hot
 # %%
 sum([p.numel() for p in net.parameters()])
 
+# %%
+device = torch.device("cuda")
+X_train = X_train.to(device)
+X_test = X_test.to(device)
+y_train = y_train.to(device)
+y_test = y_test.to(device)
+net = net.to(device)
+inputs = inputs.to(device)
+labels = labels.to(device)
+y_test_one_hot = y_test_one_hot.to(device)
 #%%
 ### Q4
 # Complete the code below to perform a GD based optimization
@@ -218,6 +228,7 @@ for k in range(20000):
     optimizer.zero_grad()
 
     outputs = net(inputs)
+    outputs = outputs.to(device)
 
     # Define the empirical risk
     risk = loss(outputs, labels)
