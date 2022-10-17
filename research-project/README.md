@@ -51,6 +51,38 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - Full project (8-12 pages): February 15
 - Oral presentation: Last week of February
 
+### Datasets
+- COCO(2D): [Info & Download](https://cocodataset.org/#home)\
+  - 330 000 images
+  - 200 000 labeled subjects with keypoints
+  - 17 joints per person
+- Human3.6M (3D) [Info](http://vision.imar.ro/human3.6m/description.php), [Download](https://deepai.org/dataset/human3-6m)
+
+### Evaluation metrics
+#### 2D HPE
+- Percentage of Correct Parts (PCP):
+$$
+\text{error in localization of limb} < k \times \text{limb size}, \qquad k \in [0.1, 0.5]
+$$
+It over-penalizes small limbs.
+
+- Percentage of Correct Keypoints (PCK):
+$$
+\text{error in localization of limb} < k \times \text{torso size}, \qquad k \in [0.1, 0.5]
+$$
+
+#### 3D HPE
+- Mean Per Joint Position Error (MPJPE): 3D Euclidian distance between truth and predictions
+$$
+MPJPE = \frac{1}{n} \sum_{i=1}^n \| J_i - J_i^*\|_2
+$$
+- PMPJPE: reconstruction error
+- NMPJPE: MPJPE + normalization
+- MPBE: Euclidian distance between vertices
+- 3DPCK: 3D extension of PCK
+
+
+
 ## Paper notes
 ### Deep Learning-Based Human Pose Estimation: A Survey
 #### Acronyms
@@ -60,6 +92,8 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
   - Kinematic model: only joints
   - Planar model: Joints + rectangles to approximate human body
   - Volumetric model: Fit to skin
+
+
 
 
 ## References
