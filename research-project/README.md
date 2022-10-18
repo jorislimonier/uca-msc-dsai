@@ -194,12 +194,13 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
   $$
   AP = \frac{TP}{PP}
   $$
+
 - Average Recall (AR)
   $$
   AP = \frac{TP}{P}
   $$
-- Percentage of Correct Parts (PCP)
 
+- Percentage of Correct Parts (PCP)
   $$
   \text{error in localization of limb} < k \times \text{limb size}, \qquad k \in [0.1, 0.5]
   $$
