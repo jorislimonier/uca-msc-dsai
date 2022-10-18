@@ -179,9 +179,7 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 #### 2D HPE
 
 - Object-Keypoint Similarity (OKS)
-  $$
-  OKS = \frac{\sum_{i=1}^{n} \exp \left(-d_i^2 / 2s^2 \kappa_i^2\right) \delta_{v_i > 0}}{\sum_{i=1}^{n} \delta_{v_i > 0}}
-  $$
+  $$OKS = \frac{\sum_{i=1}^{n} \exp \left(-d_i^2 / 2s^2 \kappa_i^2\right) \delta_{v_i > 0}}{\sum_{i=1}^{n} \delta_{v_i > 0}}$$
   where:
   - $s$: object scale
   - $d_i$: Euclidian distance of predicted joint $i$ from ground truth
@@ -191,33 +189,23 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
     - 1 if labeled but not visible
     - 2 if labeled and visible
 - Average Precision (AP)
-  $$
-  AP = \frac{TP}{PP}
-  $$
+  $$AP = \frac{TP}{PP}$$
 
 - Average Recall (AR)
-  $$
-  AP = \frac{TP}{P}
-  $$
+  $$AP = \frac{TP}{P}$$
 
 - Percentage of Correct Parts (PCP)
-  $$
-  \text{error in localization of limb} < k \times \text{limb size}, \qquad k \in [0.1, 0.5]
-  $$
+  $$\text{error in localization of limb} < k \times \text{limb size}, \qquad k \in [0.1, 0.5]$$
 
   It over-penalizes small limbs.
 
 - Percentage of Correct Keypoints (PCK)
-  $$
-  \text{error in localization of limb} < k \times \text{torso size}, \qquad k \in [0.1, 0.5]
-  $$
+  $$\text{error in localization of limb} < k \times \text{torso size}, \qquad k \in [0.1, 0.5]$$
 
 #### 3D HPE
 
 - Mean Per Joint Position Error (MPJPE): 3D Euclidian distance between truth and predictions
-  $$
-  MPJPE = \frac{1}{n} \sum_{i=1}^n \| J_i - J_i^*\|_2
-  $$
+  $$MPJPE = \frac{1}{n} \sum_{i=1}^n \| J_i - J_i^*\|_2$$
 - PMPJPE: reconstruction error
 - NMPJPE: MPJPE + normalization
 - MPBE: Euclidian distance between vertices
