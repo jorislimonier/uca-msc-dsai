@@ -39,7 +39,7 @@ def laplace_solution(params, other_params, data, lik, priors):
   return [minimum.x, minimum.hess_inv]
 
 
-def laplace_solution_regression(expression, data, lik, priors):
+def laplace_solution_regression(expression: str, data, lik, priors):
   model_list = {"gaussian": norm, "uniform": uniform, "binomial": binom}
 
   def evaluate_log_post(params, var_names, data, lik, priors):
