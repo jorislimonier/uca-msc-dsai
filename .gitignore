@@ -3,6 +3,7 @@
 .vscode
 **/data/*
 bayesian-learning/assignments/assignment1/
+model-based-learning/assignments/assignment1/
 advanced-DL/assignments
 
 # ------------ PYTHON ------------
