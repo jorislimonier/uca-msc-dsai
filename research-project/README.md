@@ -3,13 +3,18 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-**Table of Contents**
-
 - [Introduction](#introduction)
 - [Projects details](#projects-details)
   - [Deadlines](#deadlines)
+  - [Datasets](#datasets)
+    - [2D](#2d)
+    - [3D](#3d)
+  - [Evaluation metrics](#evaluation-metrics)
+    - [2D HPE](#2d-hpe)
+    - [3D HPE](#3d-hpe)
 - [Paper notes](#paper-notes)
-  - [Deep Learning-Based Human Pose Estimation: A Survey](#deep-learning-based-human-pose-estimation-a-survey)
+  - [01 - Deep Learning-Based Human Pose Estimation: A Survey](#01---deep-learning-based-human-pose-estimation-a-survey)
+  - [02 - Evaluation of deep pose detectors for automatic analysis of film style](#02---evaluation-of-deep-pose-detectors-for-automatic-analysis-of-film-style)
 - [References](#references)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
