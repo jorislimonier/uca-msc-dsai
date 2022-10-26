@@ -1,3 +1,4 @@
+from typing import Type
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -9,6 +10,7 @@ from scipy.stats import beta, norm
 class Football:
   def __init__(self) -> None:
     self.football = pd.read_csv("football-dataset.txt")
+    self.football["point_diff"] = self.football["favorite"] - self.football["underdog"]
 
   @staticmethod
   def prob_X_given_Y(X: pd.Series, Y: pd.Series) -> float:
@@ -21,7 +23,7 @@ class Football:
 
   @staticmethod
   def print_result(question: int, prob_of: str, given: str, prob: float) -> None:
-    """Print the result"""
+    """Print the probabilities in a formated way."""
     prob = round(prob, 4)
     res = "\n\t".join(
       [
@@ -32,7 +34,48 @@ class Football:
     )
     print(res, end="\n\n")
 
-  def p1(self):
+  def plot_approx_distr(self, z: pd.Series, z_norm: Type[norm]) -> go.Figure:
+    """Plot a histogram of the
+    superimposed with the normal distribution
+    with mean and std inferred from z."""
+
+    z_val = np.linspace(start=z.min(), stop=z.max())
+    approx_pdf = z_norm.pdf(x=z_val)
+
+    # Get statistics of z
+    z_mean = z.mean()
+    z_std = z.std()
+    z_val = np.linspace(start=z.min(), stop=z.max())
+
+    # Create figure
+    fig = go.Figure()
+
+    # Add line to plot
+    line = go.Scatter(
+      x=z_val,
+      y=approx_pdf,
+      name="Approximated PDF",
+      mode="lines",
+    )
+    fig.add_trace(line)
+
+    # Add histogram to plot
+    hist = go.Histogram(
+      x=z,
+      histnorm="probability density",
+      opacity=0.5,
+      name="Sample Distribution",
+    )
+    fig.add_trace(hist)
+
+    # Add final touch to layout
+    fig.update_xaxes(title="z")
+    fig.update_yaxes(title="Probability")
+    fig.update_layout(title=f"mean of z: {z_mean:.4f},\t std of z: {z_std:.4f}")
+
+    return fig
+
+  def p1_freq(self, print_results: bool = False) -> float:
     # P1
     fav_won = self.football["favorite"] > self.football["underdog"]
     self.football["favorite_won"] = fav_won
@@ -41,37 +84,73 @@ class Football:
     Y = self.football["spread"] == 8
     prob = self.prob_X_given_Y(X=X, Y=Y)
 
-    self.print_result(
-      question=1,
-      prob_of="the favorite wins",
-      given="the point spread is 8",
-      prob=prob,
-    )
+    if print_results:
+      self.print_result(
+        question=1,
+        prob_of="the favorite wins",
+        given="the point spread is 8",
+        prob=prob,
+      )
+    return prob
 
-  def p2(self):
+  def p1_approx_distr(self, plot: bool = True) -> float:
+    df = self.football
+    x = df["spread"]
+    y = df["point_diff"]
+    z = y - x
+
+    # Get statistics of z
+    z_mean = z.mean()
+    z_std = z.std()
+
+    # Compute normal distribution based on z
+    z_norm = norm(loc=z_mean, scale=z_std)
+
+    prob = 1 - z_norm.cdf(-8)
+
+    if plot:
+      fig = self.plot_approx_distr(z=z, z_norm=z_norm)
+      return prob, fig
+
+    return prob
+
+  def p2_freq(self, print_results: bool = False) -> float:
     # P2
-    self.football["point_diff"] = self.football["favorite"] - self.football["underdog"]
     X = self.football["point_diff"] >= 8
     Y = self.football["spread"] == 8
     prob = self.prob_X_given_Y(X=X, Y=Y)
-    self.print_result(
-      question=2,
-      prob_of="the favorite wins by at least 8 points",
-      given="the point spread is 8",
-      prob=prob,
-    )
+    if print_results:
+      self.print_result(
+        question=2,
+        prob_of="the favorite wins by at least 8 points",
+        given="the point spread is 8",
+        prob=prob,
+      )
+    return prob
 
-  def p3(self):
+  def p3_freq(self, print_results: bool = False) -> float:
     # P3
     X = self.football["point_diff"] >= 8
     Y = (self.football["spread"] == 8) & self.football["favorite_won"]
     prob = self.prob_X_given_Y(X=X, Y=Y)
-    self.print_result(
-      question=3,
-      prob_of="the favorite wins by at least 8 points",
-      given="the point spread is 8 and the favorite wins",
-      prob=prob,
-    )
+    if print_results:
+      self.print_result(
+        question=3,
+        prob_of="the favorite wins by at least 8 points",
+        given="the point spread is 8 and the favorite wins",
+        prob=prob,
+      )
+    return prob
+
+  def display_results(self) -> tuple[pd.DataFrame, go.Figure, go.Figure, go.Figure]:
+    p1_freq = self.p1_freq()
+    p2_freq = self.p2_freq()
+    p3_freq = self.p3_freq()
+    p_freq = [p1_freq, p2_freq, p3_freq]
+
+    index = ["P1", "P2", "P3"]
+    results = pd.DataFrame(data={"Prob (freq)": p_freq}, index=index)
+    return results
 
 
 # Exercise 2
@@ -230,4 +309,3 @@ def compute_beta_stats() -> pd.DataFrame:
   )
 
   return beta_stats
-
