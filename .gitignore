@@ -1,7 +1,7 @@
 # ------------ CUSTOM ------------
 **/last-year/
 .vscode
-**/data/*
+**/data/
 bayesian-learning/assignments/assignment1/
 model-based-learning/assignments/assignment1/
 advanced-DL/assignments
