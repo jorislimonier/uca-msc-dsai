@@ -26,14 +26,17 @@ def laplace_solution(params, other_params, data, lik, priors):
 
     if len(other_params) > 0:
       log_lik = np.sum(
-        [model_list[lik].logpdf(point, *(params, other_params)) for point in data]
+        [model_lik.logpdf(point, *(params, other_params)) for point in data]
       )
     else:
-      log_lik = np.sum([model_list[lik].logpdf(point, *params) for point in data])
+      log_lik = np.sum([model_lik.logpdf(point, *params) for point in data])
     return -(log_lik + log_prior)
 
   minimum = minimize(
-    evaluate_log_post, params, args=(other_params, data, lik, priors), method="BFGS"
+    fun=evaluate_log_post,
+    x0=params,
+    args=(other_params, data, lik, priors),
+    method="BFGS",
   )
   print(minimum)
   return [minimum.x, minimum.hess_inv]
