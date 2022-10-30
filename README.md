@@ -235,21 +235,21 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td rowspan=2 align="center"> </td>
     </tr>
     <tr>
-      <td>:construction: Federated Learning - Data Privacy</td>
+      <td>:soon: Federated Learning - Data Privacy</td>
       <td> </td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:construction: Statistical Analysis of Graphs</td>
+      <td>:soon: Statistical Analysis of Graphs</td>
       <td> </td>
       <td rowspan=3 align="center"> </td>
     </tr>
     <tr>
-      <td>:construction: Deep Learning for computer vision</td>
+      <td>:soon: Deep Learning for computer vision</td>
       <td> </td>
     </tr>
     <tr>
-      <td>:construction: Inverse Problems in image processing</td>
+      <td>:soon: Inverse Problems in image processing</td>
       <td> </td>
     </tr>
   </tbody>
