@@ -120,10 +120,12 @@ Most certainly some trial and error is required, with close baby-sitting of trai
 
 
 \subsubsection{Question 4}
-In PyTorch, with NLLLoss meaning  Negative Log-Likelihood Loss:
+In PyTorch, with NLLLoss meaning Negative Log-Likelihood Loss:
 \begin{equation}
-  CrossEntropyLoss \iff SoftMax \circ NLLLoss
+  CrossEntropyLoss = SoftMax \circ NLLLoss
 \end{equation}
+The $NLLLoss$ part isn't too much of interest as it simply outputs the most likely class. The SoftMax function however is more interesting. Indeed, it acts as a normalized exponential and therefore outputs probabilities. This is not true with quadratic loss that can output any non-negative number.
+
 
 \subsubsection{Question 5}
 Using a single output means that the network give us one definitive answer and we have no idea of how certain it is.
