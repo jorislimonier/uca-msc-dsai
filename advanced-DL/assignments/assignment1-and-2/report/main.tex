@@ -158,6 +158,7 @@ Table \ref{table: figures per learning rate} gives a summary of associated figur
   \caption{Figure number per learning rate}
   \label{table: figures per learning rate}
 \end{table}
+The figures in table \ref{table: figures per learning rate} are located in appendix \ref{appendix: varying learning rates}.
 
 \paragraph{Result analysis}
 It is my understanding that learning rates are often of order $\eta = 10^{-k}$ for $k = 1, \ldots, 4$. In this case however, this is not what I found at all. Indeed, we see that learning rates $\eta \in \{ 0.001, 0.1, 0.3, 0.5, 0.7, 0.9, 1.2, 2 \}$ converge nicely even though converging rates vary. For instance, $\eta = 2$ converges faster than lower values. One may be tempted to increase $\eta$ even further. On the other hand, we see that larger learning rates such as $\eta \in \{ 5, 8 \}$ result in instabilities, but $\eta = 5$ still reaches good (low) values of cross entropy loss. \\
@@ -182,10 +183,19 @@ Several solutions can be implemented in order to solve the vanishing gradient pr
 
 
 \section{Assignment 2}
+I will start fresh for assignment 2 and reimplement some of the functions.
+\subsection{Exercise 1}
+\subsection{Exercise 2}
+\subsection{Exercise 3}
+\subsubsection{Question 1}
+\subsubsection{Question 2}
+\subsubsection{Question 3}
+\subsection{Exercise 4}
 
 \newpage
 \appendix
 \section{Varying learning rates}
+\label{appendix: varying learning rates}
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.49\textwidth]{images/cross-entropy-comparison-1-300-lr0.001.png}
