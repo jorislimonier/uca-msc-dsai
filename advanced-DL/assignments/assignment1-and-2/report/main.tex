@@ -184,8 +184,21 @@ Several solutions can be implemented in order to solve the vanishing gradient pr
 
 \section{Assignment 2}
 I will start fresh for assignment 2 and reimplement some of the functions.
+
 \subsection{Exercise 1}
+Please allow us to give an overall feeling from the experiments I have performed, rather than reporting for each learning rate, for each batch size the result after a given number of epochs. \\
+From the experiments conducted, we notice a few things. We will explain each of them.
+\paragraph{Epochs take much longer as the batch size decreases}
+This makes sense. As the batch size decreases, we have to go over more batches to complete one epoch. For each of these batches, we must compute the loss, compute the gradient and update the weights. As a result, there are more updates per epoch, which makes each epoch longer. This doesn't really matter though because instead of looking at the time per epoch, a more interesting metric would be the time per update. Although the time per epoch increases, there are actually $len(X\_train) / batch\_size$ updates per epoch, and each of these updates is faster than if the network had had to compute the gradients over the whole dataset.
+\paragraph{High learning rates are not acceptable anymore}
+This also makes sense. Consider the full-batch case (previously). Since the gradient was computed over the whole dataset, this was a (very long, but) very carefully chosen descent direction. As a result, it was acceptable to make a big step. In the minibatch setting however, the steps are way faster, but a bit more imprecise. For this reason, it is not wise anymore to take large steps anymore. Nevertheless, this option is still very interesting because we can take ``mostly correct'' steps very fast and make fast progress towards the minimum.
+\paragraph{Minibatch is still the best method overall}
+As mentioned previously, epochs do take longer and steps sizes must be reduced. We showed however that it doesn't matter because we make much more frequent updates, which are ``mostly in the right direction''. For this reason and according to our experiments, minibatch converges much faster than full batch. After only a couple epochs, we are already in a better place than after hundreds of epochs in the full batch case, which shows very interesting results in favor of mini batch.
+
 \subsection{Exercise 2}
+In the case where all parameters are set to 0, the network doesn't learn anything.
+
+
 \subsection{Exercise 3}
 \subsubsection{Question 1}
 \subsubsection{Question 2}
