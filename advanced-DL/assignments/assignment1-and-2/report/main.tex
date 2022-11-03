@@ -196,11 +196,14 @@ This also makes sense. Consider the full-batch case (previously). Since the grad
 As mentioned previously, epochs do take longer and steps sizes must be reduced. We showed however that it doesn't matter because we make much more frequent updates, which are ``mostly in the right direction''. For this reason and according to our experiments, minibatch converges much faster than full batch. After only a couple epochs, we are already in a better place than after hundreds of epochs in the full batch case, which shows very interesting results in favor of mini batch.
 
 \subsection{Exercise 2}
-In the case where all parameters are set to 0, the network doesn't learn anything.
+In the case where all parameters are set to 0, the network doesn't learn anything. After performing some searches, this is called the symmetry break. I will try to display my understanding without copy-pasting my sources (\href{https://stats.stackexchange.com/questions/45087/why-doesnt-backpropagation-work-when-you-initialize-the-weights-the-same-value}{1}, \href{https://stackoverflow.com/questions/20027598/why-should-weights-of-neural-networks-be-initialized-to-random-numbers}{2}). \\
+When going from one layer to the next, what is applied is basically a given number of dot products. Let us consider the case of going from the input layer $I$ (size 784) to the first hidden layer $H_1$ (size 300). Let us disregard the bias here because the explanation is the same, but it brings confusion into the dimensions. Then this transition is done by multiplying the input matrix of size $(\text{n\_samples} \times 784)$ by a weight matrix $W_1$ of size $(784 \times 300)$. This gives a hidden layer of size $(\text{n\_samples} \times 300)$. The matrix that has all weights 0 in this case is $W_1$. If $W_1 = 0 \in \mathcal{M}_{(784 \times 300)}$, then each input vector is put through a dot product with a vector of $0$'s to give the corresponding entry of the hidden layer. As a result, all values of the hidden layer are equal (in this case, equal to 0). Then they all go through the activation function and are propagated through the rest of the network. For gradient descent to ``work'' however, the hidden layer should not contain all same entries. If each unit in the hidden layer gets the same signal, it will not propagate varied, useful information through the network, but only limited, redundant information.
 
 
 \subsection{Exercise 3}
 \subsubsection{Question 1}
+% stubborn network
+
 \subsubsection{Question 2}
 \subsubsection{Question 3}
 \subsection{Exercise 4}

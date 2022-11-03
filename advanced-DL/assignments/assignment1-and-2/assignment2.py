@@ -120,6 +120,12 @@ optimizer = optim.SGD(model.parameters(), lr=lr)
 loss_fn = torch.nn.CrossEntropyLoss()
 
 
+train_ds[0][1].item()
+train_ds_sorted = sorted(train_ds, key=lambda x: x[1])
+
+#%%
+px.imshow(np.reshape([d[1].item() for d in train_ds_sorted], (300, -1)))
+#%%
 def fit_model(
   train_dl: DataLoader,
   test_dl: DataLoader,
@@ -176,7 +182,8 @@ def set_model_params_to_zero(model):
   return model
 
 
-model = set_model_params_to_zero(model=model)
+#%%
+# model = set_model_params_to_zero(model=model)
 
 fit_model(
   train_dl=train_dl,
@@ -189,4 +196,4 @@ fit_model(
 # %%
 
 
-model.hidden_layers[0]._parameters
+model.hidden_layers[0]._parameters["bias"].shape
