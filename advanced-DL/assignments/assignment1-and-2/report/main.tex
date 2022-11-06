@@ -201,12 +201,42 @@ When going from one layer to the next, what is applied is basically a given numb
 
 
 \subsection{Exercise 3}
+We sort digits and verify that they are indeed ordered by computing labels for each training example. Then we plot the image and obtain figure \ref{fig: sorted digits}. We see that as expected, the first layer (top of the image) contains all 0's, then come the 1's, then all the way until the 9's. \\
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/sorted-digits.png}
+  \caption{Image of the labels in the train dataset. One pixel represents one label.}
+  \label{fig: sorted digits}
+\end{figure}
+We understand that the sequence $e_n := z_{n \mod 60000}$  is not unique because for each given label, the samples can be shuffled to produce a new sequence. This new sequence still meets the property that any two labels 60000 positions apart still have the same labels. \\
+Let us called the dataset with labels in sorted order the ``stratified'' data set.
+
 \subsubsection{Question 1}
-% stubborn network
+When training the network on the stratified dataset, the network learns on all zeros first, then all ones, ...etc. Compare with SGD with batch size 1 where the network also learns on one sample at a time. In the first case, the network has very similar samples by period. In the second case, the network sees a variety of examples, one at a time. In both cases, we feed examples in a somewhat randomly fashion, with the only guarantee that the expectation of this randomness is ``close enough'' to the true gradient. In the stratified case however, by feeding only identical digits for long periods of time, it is almost like we feed the same example of a zero many times, the the same example of a one many times, and so on. As a result, the steps made by the gradient are similar so it is almost as if we had a very stubborn network that took many steps ``in the direction of a zero'', then many steps in ``the direction of a one'', and so on. \\
+We find that the network converges either very slowly, or not at all if the learning rate is not small enough. This is explained by the fact that the network make several steps almost in the same direction we presented with the same label multiple times. The stratified case shows all of the inconvenients of SGD with batch size 1, but pushed to the extreme. Very high learning rates like we had in the GD setting are not reasonable anymore. Learning rates on the order of $10^{-2}$ or even $10^{-3}$ are more appropriate for the stratified case.
 
 \subsubsection{Question 2}
+Because the diversity of examples shown to the network in SGD is much better than the one in the stratified case, the network is able to learn much faster. It also reaches better accuracies in a reasonable time. Maybe, if we let both the stratified and the simple SGD networks run for a long time (think ``in the limit''), both networks would reach similar accuracies. Indeed, in the end we feed both networks the same information and in both cases we hope that the expectation value will bring us (although with some zig-zags due to randomness) to a minimum; ideally ``global'', most realistically ``local''. Putting it crudlely, one could say that the central limit theorem ``takes longer'' to converge because locally the stratified case is less representative of the actual distribution we are trying to approximate.
+
 \subsubsection{Question 3}
+The convergence analysis of SGD in the lecture notes cannot be adapted to online gradients. Indeed, this analysis requires a few conditions. From slide 7 and using lecture 3's notation, these conditions are:
+\begin{enumerate}
+  \item The loss on the $i$-th batch ($f_i$) is continuous on the relevant spaces
+  \item The gradient of $f_i$ is smooth enough
+  \item The full dataset loss is not infinite on the negative side
+  \item The gradients on each given batch are not too far from the gradients on the whole dataset (their variance is bounded)
+\end{enumerate}
+Condition 1, 2 and 3 don't change in the case of online gradient. Condition 4 however is not met. Indeed, condition 4 ensures that the data on any given batch is not completely absurd when looking at the whole dataset. In the stratified case however, most batches contain a completely screwed distribution of data, representing only one digit (the only ones containing multiple digits are when passing from one digit to another, but these are very few compared to the whole dataset). As a result, the distance between the batch gradients and the gradient of the full dataset is non negligeable and may break the convergence result because of condition 4.
+
 \subsection{Exercise 4}
+According to my experiments, the difference between Adam and SGD is not huge in this problem. We notice however a few differences.
+\paragraph{Sensibility to the learning rate}
+We notice that SGD performs globally well over a wide range of learning rates. Adam on the other hand performs average-to-poorly with learning rates on the order of $10^{0}$ and $10^{-1}$. It improves greatly for learning rates on the order of $10^{-2}$ to $10^{-3}$ though. Quoting (the half-jokingly) Andrej Karpathy: \textit{3e-4 is the best learning rate for Adam, hands down.}. Although this is quite a strong generality, Andrej Karpathy is not completely wrong there because we notice that Adam performs much better with small learning rates.
+\paragraph{Speed of convergence}
+This is the biggest difference we have noticed between Adam and SGD. Adam converges in fewer epochs that SGD. The first few epochs usually have an order of magnitude difference in favor of Adam, however after a couple more epochs, the difference usually lessens.
+\paragraph{Final results on test set}
+According to the experiments I ran, Adam tends to overperform SGD with the right choice of the learning rate. Several sources online however mentioned that Adam sometimes strugle with generalization issues. For this reason, I suspect that either Adam behaves well on this dataset, or my few initializations were somewhat luckier with Adam than with SGD. Note that luck takes a non-zero place in this problem since the initialization of the weights does indeed matter for both methods, as well as the samples picked in the batch.
+
 
 \newpage
 \appendix
