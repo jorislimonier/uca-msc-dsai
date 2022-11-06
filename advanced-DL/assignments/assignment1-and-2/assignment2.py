@@ -103,28 +103,6 @@ class MnistMLP(nn.Module):
     return output
 
 
-model = MnistMLP(hidden_sizes=[300])
-lr = 0.5
-batch_size = 128
-
-
-nb_epochs = 101
-
-train_ds = TensorDataset(X_train, y_train)
-train_dl = DataLoader(dataset=train_ds, batch_size=batch_size, shuffle=True)
-
-test_ds = TensorDataset(X_test, y_test)
-test_dl = DataLoader(dataset=test_ds, batch_size=batch_size * 16)
-optimizer = optim.SGD(model.parameters(), lr=lr)
-
-loss_fn = torch.nn.CrossEntropyLoss()
-
-
-train_ds[0][1].item()
-train_ds_sorted = sorted(train_ds, key=lambda x: x[1])
-
-#%%
-px.imshow(np.reshape([d[1].item() for d in train_ds_sorted], (300, -1)))
 #%%
 def fit_model(
   train_dl: DataLoader,
@@ -183,17 +161,77 @@ def set_model_params_to_zero(model):
 
 
 #%%
-# model = set_model_params_to_zero(model=model)
+def plot_sorted_train_labels(train_ds: TensorDataset, write_image: bool = False):
+  """Plot the sorted training labels."""
+  train_ds_sorted = sorted(train_ds, key=lambda x: x[1])
+  fig = px.imshow(np.reshape([d[1].item() for d in train_ds_sorted], (200, -1)))
+  if write_image:
+    fig.write_image("data/sorted-digits.png")
 
+  return fig
+
+
+def get_data_objects(
+  X: torch.Tensor, y: torch.Tensor, batch_size: int, shuffle: bool = False
+):
+  ds = TensorDataset(X, y)
+  dl = DataLoader(dataset=ds, batch_size=batch_size, shuffle=shuffle)
+  return ds, dl
+
+
+#%%
+def get_strat_shuffled_X_y(y, ds):
+  # Assign samples to their label
+  digit_samples = 10 * [torch.Tensor().to(DEVICE)]
+
+  for X_sample, y_sample in ds:
+    digit_samples[y_sample] = torch.cat([digit_samples[y_sample], X_sample])
+
+  # After loop, reshape samples
+  digit_samples = [d.reshape(-1, 784) for d in digit_samples]
+  strat_shuffled_X = torch.cat(digit_samples)
+  strat_shuffled_y = y.sort().values
+
+  return strat_shuffled_X, strat_shuffled_y
+
+
+# strat_shuffled_X_train, strat_shuffled_y_train = get_strat_shuffled_X_y(
+#   y=y_train, ds=train_ds
+# )
+
+# strat_shuffled_train_ds, strat_shuffled_train_dl = get_data_objects(
+#   X=strat_shuffled_X_train, y=strat_shuffled_y_train, batch_size=64
+# )
+
+#%%
+# train_ds_sorted = sorted(train_ds, key=lambda x: x[1])
+#%%
+model = MnistMLP(hidden_sizes=[300])
+lr = 0.0005
+batch_size = 16
+nb_epochs = 101
+
+train_ds, train_dl = get_data_objects(
+  X=X_train,
+  y=y_train,
+  batch_size=batch_size,
+  shuffle=True,
+)
+test_ds, test_dl = get_data_objects(X=X_test, y=y_test, batch_size=batch_size * 16)
+
+sgd = optim.SGD(model.parameters(), lr=lr)
+
+loss_fn = torch.nn.CrossEntropyLoss()
+adam = optim.Adam(model.parameters(), lr=lr)
+
+# model = set_model_params_to_zero(model=model)
 fit_model(
   train_dl=train_dl,
   test_dl=test_dl,
   nb_epochs=nb_epochs,
   model=model,
-  optimizer=optimizer,
+  optimizer=adam,
   loss_fn=loss_fn,
 )
+
 # %%
-
-
-model.hidden_layers[0]._parameters["bias"].shape
