@@ -14,55 +14,55 @@ pio.templates.default = "plotly_white"
 
 
 # Exercise 1
-def beta_binom_distr(n: int, y: int, alpha: int, beta: int) -> np.array:
+def model(x1: float, x2: float) -> np.array:
   """
-  Compute the beta binomial distribution as seen during lesson 2.
+  Compute the model given in the exercise's instructions.
   """
   # Declare theta values
   theta_range = np.linspace(start=0, stop=1, num=100)
   # Compute the distribution
-  distr = theta_range ** (y + alpha - 1) * (1 - theta_range) ** (n + beta - y - 1)
+  distr = np.exp(-((x1 - theta_range) ** 2 + (x2 - theta_range) ** 2) / 2) / np.sqrt(
+    2 * np.pi
+  )
   return theta_range, distr
 
 
-def beta_binom_laplace_approx(n: int, y: int, alpha: int, beta: int) -> np.array:
+def laplace_approx(x1: float, x2: float) -> np.array:
   """
-  Returns the Laplace approximation of the beta binomial distribution
-  as computed inexercise 1.
+  Returns the Laplace approximation of the given model
+  as computed in exercise 1.
   """
-  theta_max = (y + alpha - 1) / (n + alpha + beta - 2)
-  hessian = -(y + alpha - 1) / (theta_max**2) - (n + beta - y - 1) / (
-    (1 - theta_max) ** 2
-  )
+  theta_max = (x1 + x2) / 2
+  hessian = -2
   variance = -1 / hessian
 
   # Scipy takes the std as a second argument, not the variance
   return norm(theta_max, np.sqrt(variance))
 
 
-def plot_beta_binom_vs_laplace(y: int, n: int, alpha: int, beta: int) -> go.Figure:
-  """Plot the comparison between"""
-  # Compute the beta-binomial PDF
-  theta_values, beta_binomial = beta_binom_distr(n=n, y=y, alpha=alpha, beta=beta)
+def plot_model_vs_laplace(x1: float, x2: float) -> go.Figure:
+  """Plot the comparison between the given model
+  and its Laplace approximation.
+  """
+  # Compute the PDF of the given model
+  theta_values, model_val = model(x1=x1, x2=x2)
 
   # Compute the Laplace approximation
-  laplace_approx = beta_binom_laplace_approx(n=n, y=y, alpha=alpha, beta=beta)
+  approx = laplace_approx(x1=x1, x2=x2)
 
   # Plot the results
   fig = go.Figure()
 
-  # Add beta-binomial trace
-  beta_binomial_norm = beta_binomial / np.sum(beta_binomial)
+  # Add model trace
+  model_val_norm = model_val / np.sum(model_val)
   approx_trace = go.Scatter(
     x=theta_values,
-    y=beta_binomial_norm,
-    name="PDF of Beta-Binomial distribution",
+    y=model_val_norm,
+    name="PDF of the given model",
   )
 
   # Add Laplace approximation trace
-  laplace_approx_norm = laplace_approx.pdf(theta_values) / np.sum(
-    laplace_approx.pdf(theta_values)
-  )
+  laplace_approx_norm = approx.pdf(theta_values) / np.sum(approx.pdf(theta_values))
   distr_trace = go.Scatter(
     x=theta_values,
     y=laplace_approx_norm,
@@ -78,6 +78,16 @@ def plot_beta_binom_vs_laplace(y: int, n: int, alpha: int, beta: int) -> go.Figu
 
 
 # Exercise 2
+def possible_animal_diversity_model() -> go.Figure:
+  fig = go.Figure()
+
+  x = np.linspace(0, 90, num=100)
+  y = np.flip(x) + np.random.normal(loc=0, scale=4, size=100)
+  trace = go.Scatter(x=x, y=y, mode="markers")
+
+  fig.add_trace(trace=trace)
+  return fig
+
 # Exercise 3
 # Exercise 4
 # Exercise 5
