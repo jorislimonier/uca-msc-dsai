@@ -2,13 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.figure_factory as ff
 import plotly.graph_objects as go
-import seaborn as sns
+import plotly.io as pio
+from plotly.subplots import make_subplots
 from scipy.optimize import minimize
 from scipy.special import logsumexp
 from scipy.stats import binom, multivariate_normal, norm, uniform
 from sklearn import datasets
-import plotly.io as pio
 
 pio.templates.default = "plotly_white"
 
@@ -88,7 +89,69 @@ def possible_animal_diversity_model() -> go.Figure:
   fig.add_trace(trace=trace)
   return fig
 
+
 # Exercise 3
+def plot_fox_col_distr(col: str) -> go.Figure:
+  """Plot the distribution of the `col` column
+  of the fox dataset.\
+  The plot consists of a histogram and a kernel density estimation.
+  """
+  fox = pd.read_csv("data.csv")
+  fig = ff.create_distplot(hist_data=[fox[col]], group_labels=["weight"])
+
+  fig.update_layout(title=f"Distribution of the {col} of foxes")
+  return fig
+
+
+def plot_dependent_var_vs_covariates() -> go.Figure:
+  """Make a plot of two subplots of `area` and `groupsize`
+  as a function of weight.
+  """
+  fox = pd.read_csv("data.csv")
+  fig = make_subplots(
+    rows=2, shared_xaxes=True, subplot_titles=["area vs weight", "groupsize vs weight"]
+  )
+  area_vs_weight_trace = go.Scatter(
+    x=fox["weight"],
+    y=fox["area"],
+    mode="markers",
+  )
+  fig.add_trace(area_vs_weight_trace, row=1, col=1)
+  groupsize_vs_weight_trace = go.Scatter(
+    x=fox["weight"],
+    y=fox["groupsize"],
+    mode="markers",
+  )
+  fig.add_trace(groupsize_vs_weight_trace, row=2, col=1)
+
+  fig.update_xaxes(title_text="weight")
+  fig.update_yaxes(title_text="area", row=1, col=1)
+  fig.update_yaxes(title_text="groupsize", row=2, col=1)
+  fig.update_layout(
+    showlegend=False,
+    title="Plot of dependent variable vs potential covariates",
+  )
+  return fig
+
+
+def sample_posterior_laplace(laplace_sol: list, n_samples: int) -> np.ndarray:
+  posterior_samples = np.random.multivariate_normal(
+    laplace_sol[0], laplace_sol[1], size=n_samples
+  )
+  return posterior_samples
+
+
+def print_posterior_samples_stats(laplace_sol: list, n_samples: int) -> None:
+  posterior_samples = sample_posterior_laplace(
+  laplace_sol=laplace_sol, n_samples=n_samples
+  )
+  result_string = f"""\
+  Mean of the parameters: {posterior_samples.mean(axis=0)}
+  Std of the parameters: {posterior_samples.std(axis=0)}
+  90% quantile bounds for the mean of each parameter are:
+  {np.quantile(a=posterior_samples, q=[0.05, 0.95], axis=0)}
+  """
+  print(result_string)
+
+
 # Exercise 4
-# Exercise 5
-# Exercise 6
