@@ -178,7 +178,6 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
   - 73 000 images
   - 20% occluded
 
-
 ### Evaluation metrics
 
 #### 2D HPE
@@ -234,6 +233,60 @@ Topics:
 - Quantification of on-screen character poses, potentially through HPE
 - Review of 1 non-film dataset + 2 film datasets (>2700 images in total)
 - Identify cases where current HPE methods fail on non-film data
+
+## Notes
+
+- SOTA = survey (s'inspirer du paper 1)
+- Sections
+
+  - Intro
+    - Challenges pour la tâche
+      - Vidéo = frames --> pas de temporalité
+      - 2D + occlusion
+      - 3D (coordonnées spatiales)
+        - Manque de labels
+      - Pas de 2D car «problème résolu»
+  - Related work
+
+    - Task description
+    - Approaches (section 3)
+    - Datasets & Metrics
+
+      - Challenges de chaque dataset
+      - Caractéristiques de chaque dataset
+
+        - Comment sont acquises les données ? --> en découle la pertinence de chaque dataset
+        - Difficultés
+
+      - Datasets **vidéos** & 3D
+        - Table 4, 5, 6
+      - Disponibilité de datasets + code
+
+    - Evaluation & comparison
+
+      - Méthodes représentatives par section
+      - Comparaison sur un dataset pour plusieurs méthodes (regrouper plusieurs articles sur les mêmes métriques + datasets)
+
+    - Conclusions & Perspectives
+
+      - Conclusions
+
+        - Analyse sur les datasets
+        - Analyse sur les méthodes
+
+      - Perspectives
+        - Sur quoi allons-nous nous focaliser pour la suite ?
+        - Difficultés anticipées pour la suite
+
+- Chercher datasets des papiers 3, 4, 5, 6, 7 (qui sont plus récents que le survey)
+
+- Optionel:
+  - Trous à combler (analyse critique)
+    - Datasets
+    - Métriques
+
+| Méthode | Métrique | Dataset |
+| ------- | -------- | ------- |
 
 ## References
 
