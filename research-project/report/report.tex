@@ -5,20 +5,28 @@
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
 \renewcommand\UrlFont{\color{blue}\rmfamily}
-
+\usepackage{acronym}
+\acrodef{hpe}[HPE]{Human Pose Estimation}
 
 
 \begin{document}
-\title{Contribution Title}
+\title{Temporally-aware Human Pose Estimation on 3D videos: A study of the State of the Art}
 
-\author{Joris LIMONIER\inst{1}\orcidID{0000-0002-0393-2247}}
+\author{
+  Joris LIMONIER \inst{1} \orcidID{0000-0002-0393-2247} \and
+  Frédéric PRECIOSO \inst{2} \orcidID{0000-0001-8712-1443} \and
+  Lucile SASSATELLI \inst{2} \orcidID{0000-0003-1232-1787}
+}
 %
-\authorrunning{F. Author et al.}
+\authorrunning{J. LIMONIER et al.}
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
-\institute{Université Côte d'Azur, Biot, France
-  \email{joris.limonier@etu.unice.fr}}
+\institute{
+  Université Côte d'Azur, Biot, France
+  \email{joris.limonier@etu.univ-cotedazur.fr} \and
+  \email{\{frederic.precioso, lucile.sassatelli\}@univ-cotedazur.fr}
+}
 %
 \maketitle              % typeset the header of the contribution
 %
@@ -26,13 +34,23 @@
   The abstract should briefly summarize the contents of the paper in
   15--250 words.
 
-  \keywords{Computer Vision \and Human Pose Estimation \and 3D Human Pose Estimation}
+  \keywords{Computer Vision \and Human Pose Estimation \and 3D Human Pose Estimation \and Human Pose Estimation in Videos}
 \end{abstract}
 
 
-\section{State of the Art}
-\subsection{Introduction}
-The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in Computer Vision. New architectures arose and new techniques suggested numbers of parameters that hadn't been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}.
+\section{Introduction}
+The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in the field of Computer Vision. New architectures arose and new techniques suggested numbers of parameters that hadn't been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}. Such complex networks manage to segment images, detect objects images or identify the pose of a person. Our interest goes to the latter task. The task of \ac{hpe} aims at detecting joints of a human being in a frame. This could be considered a solved problem in the 2D case when the person is clearly visible. Some other cases are more challenging, one of which is when some body parts are hidden (occlusions) in a 2D image. Another challenging case is finding spatial coordinates in a 3D image, this will be our focus throughout this study. \\
+Furthermore, one can consider \ac{hpe} applied to images but also \ac{hpe} applied to videos. We want to focus on videos, as well as the interest of considering the temporal dimension rather than a frame-per-frame joints detection. Doing so brings its set of challenges and its complexity to the problem, which makes it even more interesting. \\
+We want to study the current state of the art for 3D \ac{hpe} on videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. Finally, we will give our conclusions and propose study pathways for the future of this study.
+
+\section{Related Work}
+\section{Datasets and Metrics}
+\subsection{Datasets}
+\subsection{Metrics}
+\section{Evaluation and Comparison}
+\section{Conclusion and Perspectives}
+\subsection{Conclusion}
+\subsection{Perspectives}
 
 
 \bibliographystyle{splncs04}
