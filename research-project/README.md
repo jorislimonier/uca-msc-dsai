@@ -237,50 +237,46 @@ Topics:
 
 ## Notes
 
-- SOTA = survey (s'inspirer du paper 1)
+### Meeting 2022-11-23
+
+- SOTA --> s'inspirer du survey (paper 1)
 - Sections
 
-  - Intro
-    - Challenges pour la tâche
+  - Introduction
+
+    - Défis de la tâche
       - Vidéo = frames --> pas de temporalité
       - 2D + occlusion
       - 3D (coordonnées spatiales)
         - Manque de labels
-      - Pas de 2D car «problème résolu»
+      - Pas de travail sur 2D car «problème résolu»
+
   - Related work
 
     - Task description
-    - Approaches (section 3)
-    - Datasets & Metrics
+    - Approaches (section 3 du survey)
 
-      - Challenges de chaque dataset
-      - Caractéristiques de chaque dataset
+  - Datasets & Metrics
 
-        - Comment sont acquises les données ? --> en découle la pertinence de chaque dataset
-        - Difficultés
+    - Caractéristiques de chaque dataset
+      - Comment sont acquises les données ? --> en découle la pertinence de chaque dataset
+    - Défis de chaque dataset
+    - Datasets **vidéos** & 3D
+      - Voir papier 1, Table 4, 5, 6
+    - Disponibilité de datasets + code ?
 
-      - Datasets **vidéos** & 3D
-        - Table 4, 5, 6
-      - Disponibilité de datasets + code
-
-    - Evaluation & comparison
-
-      - Méthodes représentatives par section
-      - Comparaison sur un dataset pour plusieurs méthodes (regrouper plusieurs articles sur les mêmes métriques + datasets)
-
-    - Conclusions & Perspectives
-
-      - Conclusions
-
-        - Analyse sur les datasets
-        - Analyse sur les méthodes
-
-      - Perspectives
-        - Sur quoi allons-nous nous focaliser pour la suite ?
-        - Difficultés anticipées pour la suite
+  - Evaluation & comparison
+    - Méthodes représentatives par section
+    - Comparaison sur un dataset pour plusieurs méthodes (regrouper plusieurs articles sur les mêmes métriques + datasets)
+  - Conclusions & Perspectives
+    - Conclusions
+      - Analyse critique sur les datasets
+      - Analyse critique sur les méthodes
+    - Perspectives
+      - Focus pour la suite ?
+      - Difficultés anticipées pour la suite
 
 - Chercher datasets des papiers 3, 4, 5, 6, 7 (qui sont plus récents que le survey)
-
 - Optionel:
   - Trous à combler (analyse critique)
     - Datasets
