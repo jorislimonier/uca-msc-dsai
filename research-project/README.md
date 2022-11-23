@@ -15,6 +15,7 @@
 - [Paper notes](#paper-notes)
   - [01 - Deep Learning-Based Human Pose Estimation: A Survey](#01---deep-learning-based-human-pose-estimation-a-survey)
   - [02 - Evaluation of deep pose detectors for automatic analysis of film style](#02---evaluation-of-deep-pose-detectors-for-automatic-analysis-of-film-style)
+- [Notes](#notes)
 - [References](#references)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
