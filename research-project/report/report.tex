@@ -39,15 +39,28 @@
 
 
 \section{Introduction}
+\label{section: introduction}
 The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in the field of Computer Vision. New architectures arose and new techniques suggested numbers of parameters that hadn't been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}. Such complex networks manage to segment images, detect objects images or identify the pose of a person. Our interest goes to the latter task. The task of \ac{hpe} aims at detecting joints of a human being in a frame. This could be considered a solved problem in the 2D case when the person is clearly visible. Some other cases are more challenging, one of which is when some body parts are hidden (occlusions) in a 2D image. Another challenging case is finding spatial coordinates in a 3D image, this will be our focus throughout this study. \\
 Furthermore, one can consider \ac{hpe} applied to images but also \ac{hpe} applied to videos. We want to focus on videos, as well as the interest of considering the temporal dimension rather than a frame-per-frame joints detection. Doing so brings its set of challenges and its complexity to the problem, which makes it even more interesting. \\
 We want to study the current state of the art for 3D \ac{hpe} on videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. Finally, we will give our conclusions and propose study pathways for the future of this study.
 
 \section{Related Work}
+\ac{hpe} encompasses several subtasks, not all of which we are interested in. In this section, we describe the tasks we want to tackle, then we describe existing approaches.
+
+\subsection{Task Description}
+As mentioned in section \ref{section: introduction}, \ac{hpe} can be applied in 2D (planar coordinates), as well as in 3D (spatial coordinates), our focus is on the 3D case. This means that we want to predict the 3D location of body joints. Several industries find applications of these techniques, namely the movie \& animation industry and the sport industry, only to name a few. \\
+When talking about images that have been taken from one viewpoint only, we talk about \textit{monocular} images. Such images result in a projection from the 3D space we live in to the 2D space that is the image. As such, each point in the image is the projection of one of an infinite number of points (namely, the whole straight line starting at the camera and going infinitely in the direction of the projected point). For this reason, the 3D \ac{hpe} monocular problem is ill-posed. \\
+Although ill-posed, inferences could be made in the the 3D \ac{hpe} monocular problem thanks to the temporal awareness. This is why we want to work with videos and take advantage of the consecutiveness of their frames. We want the algorithm to understand that the frames are in a sequence, not simply making a frame-per-frame prediction. Predicting one frame at a time is the simplest approach, but completely diregards the advantage given by a video over an equivalent number of independent frames.
+
+\subsection{Approaches}
+Several methods tried to solve the 3D, temporally-aware video \ac{hpe} problem, we will detail them in this section.
+
 \section{Datasets and Metrics}
 \subsection{Datasets}
 \subsection{Metrics}
+
 \section{Evaluation and Comparison}
+
 \section{Conclusion and Perspectives}
 \subsection{Conclusion}
 \subsection{Perspectives}
