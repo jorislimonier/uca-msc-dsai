@@ -7,10 +7,12 @@
 \renewcommand\UrlFont{\color{blue}\rmfamily}
 \usepackage{acronym}
 \acrodef{hpe}[HPE]{Human Pose Estimation}
+\acrodef{hmr}[HMR]{Human Mesh Recovery}
 
 
 \begin{document}
-\title{Temporally-aware Human Pose Estimation on 3D videos: A study of the State of the Art}
+\title{Temporally-aware Human Pose Estimation on 3D videos: A review of the State of the Art}
+\titlerunning{Temporally-aware HPE on 3D videos: A review of the State of the Art}
 
 \author{
   Joris LIMONIER \inst{1} \orcidID{0000-0002-0393-2247} \and
@@ -53,7 +55,13 @@ When talking about images that have been taken from one viewpoint only, we talk 
 Although ill-posed, inferences could be made in the the 3D \ac{hpe} monocular problem thanks to the temporal awareness. This is why we want to work with videos and take advantage of the consecutiveness of their frames. We want the algorithm to understand that the frames are in a sequence, not simply making a frame-per-frame prediction. Predicting one frame at a time is the simplest approach, but completely diregards the advantage given by a video over an equivalent number of independent frames.
 
 \subsection{Approaches}
-Several methods tried to solve the 3D, temporally-aware video \ac{hpe} problem, we will detail them in this section.
+Several methods can be used to solve the 3D, temporally-aware video \ac{hpe} problem, we will detail them in this section.
+
+\subsubsection{3D HPE from monocular RGB videos}
+This is the simplest case where one uses a unique conventional camera to capture videos. As mentioned previously, this is however an ill-posed problem as the captured 2D images come from a projection of the 3D space onto a 2D screen. Reverting the operation seems impossible in the general, mathematically-posed problem but using some commonsensical tricks could help achieve better results in some cases. For instance, the length of a human arm lies within a given interval for all human beings, which a smart algorithm could use to infer a set of plausible positions to lift such an arm from 2D to 3D. \\
+We consider the case of single-person videos for now. In this setting, we distinguish two types of tasks: estimating the spatial coordinates of the skeleton and \ac{hmr}, which aims at superimposing a 3D body model correctly in space.
+% \paragraph{a}
+
 
 \section{Datasets and Metrics}
 \subsection{Datasets}
