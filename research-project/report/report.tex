@@ -59,8 +59,11 @@ Several methods can be used to solve the 3D, temporally-aware video \ac{hpe} pro
 
 \subsubsection{3D HPE from monocular RGB videos}
 This is the simplest case where one uses a unique conventional camera to capture videos. As mentioned previously, this is however an ill-posed problem as the captured 2D images come from a projection of the 3D space onto a 2D screen. Reverting the operation seems impossible in the general, mathematically-posed problem but using some commonsensical tricks could help achieve better results in some cases. For instance, the length of a human arm lies within a given interval for all human beings, which a smart algorithm could use to infer a set of plausible positions to lift such an arm from 2D to 3D. \\
-We consider the case of single-person videos for now. In this setting, we distinguish two types of tasks: estimating the spatial coordinates of the skeleton and \ac{hmr}, which aims at superimposing a 3D body model correctly in space.
-% \paragraph{a}
+We consider the case of single-person videos for now. In this setting, we distinguish three types of tasks:  skeleton-only, the kinematic model and \ac{hmr}. We will detail each of these techniques in their own paragraph. \\
+\textbf{The Skeleton-only} method aims at predicting the spatial (\textit{i.e.} 3D) coordinates of the joints of a person. Estimating a 3D skeleton can be done in two ways. The first way is called direct estimation. It consists of training a neural network to predict the 3D joints directly from the image. The other way is to use an existing 2D joint predictor, which are very performant as we mentioned before, then try to lift the joints from 2D to 3D with a custom neural network. \\
+\textbf{The kinematic model} is another task which consists in estimating the segments between joints. This task allows to pass custom rules to the network and leverage prior knowledge such as restricting joint rotation angles or fixing bone-length ratios.
+\\
+\textbf{\ac{hmr}} is the final task in this list. It aims at superimposing a 3D, volumetric body model correctly in space. The body is seen as a unique, connected (in the topological sense) structure where the limbs are able to evolve within their respective ranges of motion.
 
 
 \section{Datasets and Metrics}
