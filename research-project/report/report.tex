@@ -79,6 +79,8 @@ In this setting, there are two main approaches. These are the top-down approache
 
 
 \paragraph{Multi-view 3D \ac{hpe}.}
+We previously mentioned that occlusions were challenging for 3d \ac{hpe}. While this is true for single view \ac{hpe}, it is not for the multi-view setting. Indeed in this case, an occlusion in a given view may not occure in another view. The complexity however lies in getting multi-view data and locating cameras with respect to one another. The multi-view setting is mostly used for multi-person cases \cite{survey}, which is why we do not precise whether we work with single-person or multi-person images. \\
+Although 3D methods are more likely to solve occlusions' challenges, reconstructing the 3D relative location of cameras is computationally expensive, especially for multi-person 3D \ac{hpe}. To suppress this constraint, it may be worth noting that some effort has been made to remove the need for 3D reconstruction before performing 3D \ac{hpe} \cite{Multi-view Pose transformer}, in particular through the use of transformers.
 
 \section{Datasets and Metrics}
 \subsection{Datasets}
@@ -102,5 +104,6 @@ In this setting, there are two main approaches. These are the top-down approache
   \bibitem{FCOS} Tian, Z., Shen, C., Chen, H. and He, T., 2019. Fcos: Fully convolutional one-stage object detection. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 9627-9636).
   \bibitem{CenterNet} Duan, K., Bai, S., Xie, L., Qi, H., Huang, Q. and Tian, Q., 2019. Centernet: Keypoint triplets for object detection. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 6569-6578).
   \bibitem{Hybrid Task Cascade} Chen, K., Pang, J., Wang, J., Xiong, Y., Li, X., Sun, S., Feng, W., Liu, Z., Shi, J., Ouyang, W. and Loy, C.C., 2019. Hybrid task cascade for instance segmentation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 4974-4983).
+  \bibitem{Multi-view Pose transformer} Zhang, J., Cai, Y., Yan, S. and Feng, J., 2021. Direct multi-view multi-person 3d pose estimation. Advances in Neural Information Processing Systems, 34, pp.13153-13164.
 \end{thebibliography}
 \end{document}
