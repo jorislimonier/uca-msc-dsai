@@ -81,7 +81,15 @@ We previously mentioned that occlusions were challenging for 3d \ac{hpe}. While 
 Although 3D methods are more likely to solve occlusions' challenges, reconstructing the 3D relative location of cameras is computationally expensive, especially for multi-person 3D \ac{hpe}. To suppress this constraint, it may be worth noting that some effort has been made to remove the need for 3D reconstruction before performing 3D \ac{hpe} \cite{Multi-view Pose transformer}, in particular through the use of transformers.
 
 \section{Datasets and Metrics}
+Now that we introduced the approaches that can be used to identify people in images, we need two things: data and ways to evaluate these mathods. Our first focus will be to present datasets, what they offer, why they could be interesting and their pitfalls. Then we will dive into the various metrics that exist in the 3D case, which also come with their share of strengths and weaknesses.
+
 \subsection{Datasets}
+One of the challenges when working on 3D images is to find appropriate datasets. Indeed, in comparison, the 2D setting has many datasets to offer, mainly because data collection and annotation is fairly easy. In the 3D world however, collecting data requires sensors to be placed on the protagonists' joints or to use some other tricks. Moreover, annotating joints in the 3D space is also a harder task than in the 2D world. \\
+We will review a few datasets in depth, then mention a few others that may be less interesting for our problem. \\
+\textbf{Humans3.6M} \cite{Human3.6M} is a dataset containing 3.6 millions of 3D human poses along with their respective annotations from accurate sensors. These sensors were placed on 11 actors (6 men, 5 women) performing 17 tasks. The tasks being performed include smoking, taking photo and talking on the phone. There exists a conventional train-test-split called Protocol \#1 where subjects S1, S5, S6 and S7 are used for training and subjects S9 and S11 are used for testing. This dataset is commonly regarded as one of the most, if not the most, famous datasets for indoor 3D \ac{hpe}. One of the reasons for its popularity may be that it can easily be downloaded from the internet. \\
+\textbf{MPI-INF-3DHP} \cite{MPI-INF-3DHP} is a dataset of 1.3 million frames captured in a multi-camera, green screen setting. It encompasses 8 actors (4 men, 4 women) performing 8 types of action, some of which are not dynamic. Some are indeed dynamic, such as exercising or doing sports, but some aren't like sitting on a chair of being on the ground. Thanks to the green screen setting, actors can easily be segmented, as well as modified (\textit{e.g.} augmented) in finalized clips. This dataset can also be easily downloaded from the internet. \\
+\textbf{MuPoTS-3D} \cite{MuPoTS-3D} 
+
 \subsection{Metrics}
 
 \section{Evaluation and Comparison}
@@ -103,5 +111,8 @@ Although 3D methods are more likely to solve occlusions' challenges, reconstruct
   \bibitem{CenterNet} Duan, K., Bai, S., Xie, L., Qi, H., Huang, Q. and Tian, Q., 2019. Centernet: Keypoint triplets for object detection. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 6569-6578).
   \bibitem{Hybrid Task Cascade} Chen, K., Pang, J., Wang, J., Xiong, Y., Li, X., Sun, S., Feng, W., Liu, Z., Shi, J., Ouyang, W. and Loy, C.C., 2019. Hybrid task cascade for instance segmentation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (pp. 4974-4983).
   \bibitem{Multi-view Pose transformer} Zhang, J., Cai, Y., Yan, S. and Feng, J., 2021. Direct multi-view multi-person 3d pose estimation. Advances in Neural Information Processing Systems, 34, pp.13153-13164.
+  \bibitem{Human3.6M} Ionescu, C., Papava, D., Olaru, V. and Sminchisescu, C., 2013. Human3. 6m: Large scale datasets and predictive methods for 3d human sensing in natural environments. IEEE transactions on pattern analysis and machine intelligence, 36(7), pp.1325-1339.
+  \bibitem{MPI-INF-3DHP} Mehta, D., Rhodin, H., Casas, D., Fua, P., Sotnychenko, O., Xu, W. and Theobalt, C., 2017, October. Monocular 3d human pose estimation in the wild using improved cnn supervision. In 2017 international conference on 3D vision (3DV) (pp. 506-516). IEEE.
+  \bibitem{MuPoTS-3D} Mehta, D., Sotnychenko, O., Mueller, F., Xu, W., Sridhar, S., Pons-Moll, G. and Theobalt, C., 2018, September. Single-shot multi-person 3d pose estimation from monocular rgb. In 2018 International Conference on 3D Vision (3DV) (pp. 120-130). IEEE.
 \end{thebibliography}
 \end{document}
