@@ -5,9 +5,15 @@
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
 \renewcommand\UrlFont{\color{blue}\rmfamily}
+\hypersetup{
+  hidelinks
+}
 \usepackage{acronym}
 \acrodef{hpe}[HPE]{Human Pose Estimation}
 \acrodef{hmr}[HMR]{Human Mesh Recovery}
+\acrodef{mpjpe}[MPJPE]{Mean Per Joint Position Error}
+\acrodef{nmpjpe}[NMPJPE]{Normalized \ac{mpjpe}}
+\acrodef{mpve}[MPVE]{Mean Per Vertex Error}
 
 
 \begin{document}
@@ -73,7 +79,7 @@ In this setting, there are two main approaches. These are the top-down approache
 
 \textbf{The top-down approaches} start by detecting each individual person in the frame, then they find a so-called ``root'' for each person, which represents a center joint, almost like a center of mass. Subsequently, these approaches use the root of each person in order to infer their respective 3D poses and position the joints in space. Two of the best-performing techniques for top-down approaches are HMOR \cite{HMOR} and the technique by Yu Cheng et al. \cite{graph and temporal convolutional network}.
 
-\textbf{The bottom-up approaches}, contrary to the top-down approaches, first find two things. On the one hand, they identify all body joints in the image. On the other hand, they produce depth maps, which are used to group joints and roots into a person's joints and therefore deduce the pose. The difficulty in bottom-up methods lies in the grouping of joints after they have been detected. Grouping methods run from more sophisticated ones, defining custom limb scores \cite{limb score}, to less sophisticated ones, simply using 3D euclidian distance from the head joint (most confident join) \cite{bottom up 3D distance}.
+\textbf{The bottom-up approaches}, contrary to the top-down approaches, first find two things. On the one hand, they identify all body joints in the image. On the other hand, they produce depth maps, which are used to group joints and roots into a person's joints and therefore deduce the pose. The difficulty in bottom-up methods lies in the grouping of joints after they have been detected. Grouping methods run from more sophisticated ones, defining custom limb scores \cite{limb score}, to less sophisticated ones, simply using 3D Euclidian distance from the head joint (most confident join) \cite{bottom up 3D distance}.
 Two performant bottom-up methods are XNect \cite{XNect} and SMAP \cite{SMAP}.
 
 \textbf{Comparison of top-down and bottom-up approaches.} Top-down approaches tend to outperform bottom-up ones, at a cost of super-linear time complexity. Indeed, they manage to leverage 2D person detection methods, which as mentioned previously are extremely pertformant. However, the computational complexity (and therefore the inference time) may increase drastically with respect to the number of people in the scene. Increased time and computation is further enhanced when compared to the computation and time complexity of bottom-up approaches which is linear with respect to the number of people. This can be explained by the fact that top-down approaches need to optimize joint detection on each and every individual in the scene after finding their roots. This leads to multiple optimization processes going on, and therefore results in potentially important computational complexity and inference times. Moreover, since the top-down approaches set bounding boxes around the identified people in the image, they discard everything that is outside these bounding boxes and as a result they may loose contextual information. In conclusion, bottom-up approaches tend to be not as good as top-down approaches, but they may be faster and less computationally intense, especially as the number of people in the scene increases.
@@ -82,17 +88,33 @@ Two performant bottom-up methods are XNect \cite{XNect} and SMAP \cite{SMAP}.
 We previously mentioned that occlusions were challenging for 3D \ac{hpe}. While this is true for single view \ac{hpe}, it is not for the multi-view setting. Indeed in this case, an occlusion in a given view may not occur in another view. The complexity however lies in getting multi-view data and locating cameras with respect to one another. The multi-view setting is mostly used for multi-person cases \cite{survey}, which is why we do not precise whether we work with single-person or multi-person images. \\
 Although 3D methods are more likely to solve occlusions' challenges, reconstructing the 3D relative location of cameras is computationally expensive, especially for multi-person 3D \ac{hpe}. To suppress this constraint, it may be worth noting that some effort has been made to remove the need for 3D reconstruction before performing 3D \ac{hpe} \cite{Multi-view Pose transformer}, in particular through the use of transformers.
 
+\paragraph{Conclusion.} The last couple of years saw great improvements in 2D \ac{hpe}, which bounced into the 3D world thanks to their tight relationship (\textit{c.f.} the lifting methods above). These improvements are qualified, however, by the lack of abundant, real-world, diverse data in comparison the 2D setting. \\
+Maybe also because the links between 2D and 3D are so tight, we see the same kind of problems regarding occlusions and computation as the number of people in the scene grows. Indeed, having an occluded and/or crowded scene on which one performs 2D \ac{hpe}, then lifting still means that 2D \ac{hpe} must be performed, hence the logical commonality between challenges in 2D and 3D.
+
 \section{Datasets and Metrics}
 Now that we introduced the approaches that can be used to identify people in images, we need two things: data and ways to evaluate these mathods. Our first focus will be to present datasets, what they offer, why they could be interesting and their pitfalls. Then we will dive into the various metrics that exist in the 3D case, which also come with their share of strengths and weaknesses.
 
 \subsection{Datasets}
 One of the challenges when working on 3D images is to find appropriate datasets. Indeed, in comparison, the 2D setting has many datasets to offer, mainly because data collection and annotation is fairly easy. In the 3D world however, collecting data requires sensors to be placed on the protagonists' joints or to use some other tricks. Moreover, annotating joints in the 3D space is also a harder task than in the 2D world. \\
-We will review a few datasets in depth, then mention a few others that may be less interesting for our problem. \\
-\textbf{Humans3.6M} \cite{Human3.6M} is a dataset containing 3.6 millions of 3D human poses along with their respective annotations from accurate sensors. These sensors were placed on 11 actors (6 men, 5 women) performing 17 tasks. The tasks being performed include smoking, taking photo and talking on the phone. There exists a conventional train-test-split called Protocol \#1 where subjects S1, S5, S6 and S7 are used for training and subjects S9 and S11 are used for testing. This dataset is commonly regarded as one of the most, if not the most, famous datasets for indoor 3D \ac{hpe}. One of the reasons for its popularity may be that it can easily be downloaded from the internet. \\
-\textbf{MPI-INF-3DHP} \cite{MPI-INF-3DHP} is a dataset of 1.3 million frames captured in a multi-camera, green screen setting. It encompasses 8 actors (4 men, 4 women) performing 8 types of action, some of which are not dynamic. Some are indeed dynamic, such as exercising or doing sports, but some aren't like sitting on a chair of being on the ground. Thanks to the green screen setting, actors can easily be segmented, as well as modified (\textit{e.g.} augmented) in finalized clips. This dataset can also be easily downloaded from the internet. \\
-\textbf{MuPoTS-3D} \cite{MuPoTS-3D}
+We will review a few datasets in depth, then mention a few others that may be less interesting for our problem.
+\paragraph{Humans3.6M} \cite{Human3.6M} is a dataset containing 3.6 millions of 3D human poses along with their respective annotations from accurate sensors. These sensors were placed on 11 actors (6 men, 5 women) performing 17 tasks. The tasks being performed include smoking, taking photo and talking on the phone. There exists a conventional train-test-split called Protocol \#1 where subjects S1, S5, S6 and S7 are used for training and subjects S9 and S11 are used for testing. This dataset is commonly regarded as one of the most, if not the most, famous datasets for indoor 3D \ac{hpe}. One of the reasons for its popularity may be that it can easily be downloaded from the internet.
+\paragraph{MPI-INF-3DHP} \cite{MPI-INF-3DHP} is a dataset of 1.3 million frames captured in a multi-camera, green screen setting. It encompasses 8 actors (4 men, 4 women) performing 8 types of action, some of which are not dynamic. Some are indeed dynamic, such as exercising or doing sports, but some aren't like sitting on a chair of being on the ground. Thanks to the green screen setting, actors can easily be segmented, as well as modified (\textit{e.g.} augmented) in finalized clips. This dataset can also be easily downloaded from the internet.
+% \textbf{MuPoTS-3D} \cite{MuPoTS-3D}
 
 \subsection{Metrics}
+We saw different approaches and datasets in this paper, but we need some common ground to evaluate them. Metrics in 3D \ac{hpe} are quite different from the usual accuracy, recall, f1-score that the data science community may be more used to. For this reason, we will detail them in this subsection.
+\paragraph{\ac{mpjpe}} is the most commonly used metric to evaluate 3D \ac{hpe} algorithms. It is computed as the average 3D Euclidian distance between predicted joints and their respective ground truth. \\
+Let $J_i$ and $J_i^*$ be the coordinates of the ground truth and prediction of the $i-th$ joint respectively. Let $N$ be the number of joints. Then, the \ac{mpjpe} is given by:
+\begin{equation}
+  MPJPE = \frac{1}{N} \sum_{i=1}^N \|J_i - J_i^*\|_2
+\end{equation}
+\paragraph{\ac{nmpjpe}} is similar to \ac{mpjpe}, but after normalizing the prediction coordinates with respect to the reference.
+\paragraph{\ac{mpve}} computes the 3D Euclidian distance between the ground truth vertices and the predicted ones. \\
+Let $V$ and $V_i^*$ be the ground truth and the predicted coordinates for the $i$-th vertex. Then the \ac{mpve} is given by:
+\begin{equation}
+  MPVE = \frac{1}{N} \sum_{i=1}^N \|V_i - V_i^*\|_2
+\end{equation}
+
 \section{Evaluation and Comparison}
 
 \section{Conclusion and Perspectives}
@@ -122,6 +144,6 @@ We will review a few datasets in depth, then mention a few others that may be le
   \bibitem{SMAP} Zhen J, Fang Q, Sun J, Liu W, Jiang W, Bao H, Zhou X. Smap: Single-shot multi-person absolute 3d pose estimation. InEuropean Conference on Computer Vision 2020 Aug 23 (pp. 550-566). Springer, Cham.
   \bibitem{Human3.6M} Ionescu C, Papava D, Olaru V, Sminchisescu C. Human3. 6m: Large scale datasets and predictive methods for 3d human sensing in natural environments. IEEE transactions on pattern analysis and machine intelligence. 2013 Dec 12;36(7):1325-39.
   \bibitem{MPI-INF-3DHP} Mehta D, Rhodin H, Casas D, Fua P, Sotnychenko O, Xu W, Theobalt C. Monocular 3d human pose estimation in the wild using improved cnn supervision. In2017 international conference on 3D vision (3DV) 2017 Oct 10 (pp. 506-516). IEEE.
-  \bibitem{MuPoTS-3D} Mehta D, Sotnychenko O, Mueller F, Xu W, Sridhar S, Pons-Moll G, Theobalt C. Single-shot multi-person 3d pose estimation from monocular rgb. In2018 International Conference on 3D Vision (3DV) 2018 Sep 5 (pp. 120-130). IEEE.
+  % \bibitem{MuPoTS-3D} Mehta D, Sotnychenko O, Mueller F, Xu W, Sridhar S, Pons-Moll G, Theobalt C. Single-shot multi-person 3d pose estimation from monocular rgb. In2018 International Conference on 3D Vision (3DV) 2018 Sep 5 (pp. 120-130). IEEE.
 \end{thebibliography}
 \end{document}
