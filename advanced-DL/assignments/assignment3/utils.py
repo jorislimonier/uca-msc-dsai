@@ -38,6 +38,10 @@ def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=N
   # Weight values accordingly
   output_values = torch.matmul(attention, v)
 
+  # print(v.shape)
+  # print(output_values.shape)
+  # print(attention.shape)
+
   return output_values, attention
 
 
@@ -54,8 +58,8 @@ class MultiheadAttention(nn.Module):
 
     # Create linear layers for both qkv and output
     # TIP: Stack all weight matrices 1...h together for efficiency
-    self.qkv_proj = nn.Linear(in_features=input_dim, out_features=embed_dim * 3)
     self.o_proj = nn.Linear(in_features=embed_dim, out_features=embed_dim)
+    self.qkv_proj = nn.Linear(in_features=input_dim, out_features=embed_dim * 3)
 
     self._reset_parameters()
 
@@ -80,17 +84,17 @@ class MultiheadAttention(nn.Module):
     q, k, v = qkv.chunk(3, dim=-1)
 
     # Apply Dot Product Attention to qkv ()
-    values, attention = scaled_dot_product(q=q, k=k, v=v)
+    attention_values, attention = scaled_dot_product(q=q, k=k, v=v)
 
     # Concatenate heads to [Batch, SeqLen, Embed Dim]
-    attention = attention.reshape(
+    attention_values = attention_values.reshape(
       batch_dim,
       seq_length,
-      # self.embed_dim,
+      self.embed_dim,
     )
 
     # Output projection
-    o = self.o_proj(attention)
+    o = self.o_proj(attention_values)
 
     if return_attention:
       return o, attention
@@ -254,19 +258,19 @@ class TransformerPredictor(nn.Module):
     # Create positional encoding for sequences
     self.positional_encoding = PositionalEncoding(d_model=self.model_dim)
 
-    # Create transformer Encoder
-    self.transformer = TransformerEncoder(
-      num_layers=self.num_layers,
-      input_dim=self.input_dim,
-      num_heads=self.num_heads,
-      dim_feedforward=model_dim,
-      dropout_prob=self.input_dropout,
-    )
+    # # Create transformer Encoder
+    # self.transformer = TransformerEncoder(
+    #   num_layers=self.num_layers,
+    #   input_dim=self.input_dim,
+    #   num_heads=self.num_heads,
+    #   dim_feedforward=model_dim,
+    #   dropout_prob=self.input_dropout,
+    # )
 
-    # Create output classifier per sequence element Model_dim -> num_classes
-    self.output_net = nn.Linear(
-      in_features=self.model_dim, out_features=self.num_classes
-    )
+    # # Create output classifier per sequence element Model_dim -> num_classes
+    # self.output_net = nn.Linear(
+    #   in_features=self.model_dim, out_features=self.num_classes
+    # )
 
   def forward(self, x, mask=None, add_positional_encoding=True):
     """
