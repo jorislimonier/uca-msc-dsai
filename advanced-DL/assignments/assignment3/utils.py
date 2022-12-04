@@ -16,6 +16,8 @@ import torch.optim as optim
 import torch.utils.data as data
 from tqdm.notebook import tqdm
 
+device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+
 
 def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=None):
   """Return:
@@ -117,7 +119,7 @@ class EncoderBlock(nn.Module):
     # FILL IT YOURSELF!
 
     # Create Attention layer
-    self.mh_attention = MultiheadAttention(
+    self.self_attn = MultiheadAttention(
       input_dim=input_dim,
       embed_dim=input_dim,  # We assume it according to exercise
       num_heads=num_heads,
@@ -131,16 +133,16 @@ class EncoderBlock(nn.Module):
     )
 
     # Layers to apply in between the main layers (Layer Norm and Dropout)
-    self.layer_norm_mh_attention = nn.LayerNorm(normalized_shape=input_dim)
-    # self.dropout_mh_attention = nn.Dropout(p=dropout_prob)
+    self.layer_norm_self_attn = nn.LayerNorm(normalized_shape=input_dim)
+    # self.dropout_self_attn = nn.Dropout(p=dropout_prob)
 
     self.layer_norm_ffn = nn.LayerNorm(normalized_shape=input_dim)
     # self.dropout_ffn = nn.Dropout(p=dropout_prob)
 
   def forward(self, x, mask=None):
     # Compute Attention part
-    attended = self.mh_attention(x)
-    x = self.layer_norm_mh_attention(x + attended)
+    attended = self.self_attn(x)
+    x = self.layer_norm_self_attn(x + attended)
 
     # Compute MLP part
     fedforward = self.ffn(x)
@@ -251,26 +253,26 @@ class TransformerPredictor(nn.Module):
     self.input_net = EncoderBlock(
       input_dim=self.input_dim,
       num_heads=self.num_heads,
-      dim_feedforward=model_dim,
+      dim_feedforward=self.model_dim,
       dropout_prob=self.input_dropout,
     )
 
     # Create positional encoding for sequences
-    self.positional_encoding = PositionalEncoding(d_model=self.model_dim)
+    self.positional_encoding = PositionalEncoding(d_model=self.input_dim)
+    # Create transformer Encoder
+    self.transformer = TransformerEncoder(
+      num_layers=self.num_layers,
+      input_dim=self.input_dim,
+      num_heads=self.num_heads,
+      dim_feedforward=model_dim,
+      dropout_prob=self.input_dropout,
+    )
 
-    # # Create transformer Encoder
-    # self.transformer = TransformerEncoder(
-    #   num_layers=self.num_layers,
-    #   input_dim=self.input_dim,
-    #   num_heads=self.num_heads,
-    #   dim_feedforward=model_dim,
-    #   dropout_prob=self.input_dropout,
-    # )
-
-    # # Create output classifier per sequence element Model_dim -> num_classes
-    # self.output_net = nn.Linear(
-    #   in_features=self.model_dim, out_features=self.num_classes
-    # )
+    # Create output classifier per sequence element Model_dim -> num_classes
+    self.output_net = nn.Linear(
+      in_features=self.input_dim,
+      out_features=self.num_classes,
+    )
 
   def forward(self, x, mask=None, add_positional_encoding=True):
     """
@@ -282,7 +284,7 @@ class TransformerPredictor(nn.Module):
     """
     x = self.input_net(x)
     if add_positional_encoding:
-      x = self.positional_encoding(x)
+      x = self.positional_encoding(x)  # Issue here
     x = self.transformer(x, mask=mask)
     x = self.output_net(x)
     return x
