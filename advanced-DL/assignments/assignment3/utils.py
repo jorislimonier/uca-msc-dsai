@@ -83,7 +83,11 @@ class MultiheadAttention(nn.Module):
     values, attention = scaled_dot_product(q=q, k=k, v=v)
 
     # Concatenate heads to [Batch, SeqLen, Embed Dim]
-    attention = attention.reshape(batch_dim, seq_length, self.embed_dim)
+    attention = attention.reshape(
+      batch_dim,
+      seq_length,
+      # self.embed_dim,
+    )
 
     # Output projection
     o = self.o_proj(attention)
@@ -139,6 +143,25 @@ class EncoderBlock(nn.Module):
     x = self.layer_norm_ffn(x + fedforward)
 
     return x
+
+
+class TransformerEncoder(nn.Module):
+  def __init__(self, num_layers, **block_args):
+    super().__init__()
+    self.layers = nn.ModuleList([EncoderBlock(**block_args) for _ in range(num_layers)])
+
+  def forward(self, x, mask=None):
+    for layer in self.layers:
+      x = layer(x, mask=mask)
+    return x
+
+  def get_attention_maps(self, x, mask=None):
+    attention_maps = []
+    for layer in self.layers:
+      _, attn_map = layer.self_attn(x, mask=mask, return_attention=True)
+      attention_maps.append(attn_map)
+      x = layer(x)
+    return attention_maps
 
 
 class PositionalEncoding(nn.Module):
@@ -221,12 +244,29 @@ class TransformerPredictor(nn.Module):
     # FILL IT YOURSELF!
 
     # Create a Generic Input Encoder Input dim -> Model dim with input dropout
+    self.input_net = EncoderBlock(
+      input_dim=self.input_dim,
+      num_heads=self.num_heads,
+      dim_feedforward=model_dim,
+      dropout_prob=self.input_dropout,
+    )
 
     # Create positional encoding for sequences
+    self.positional_encoding = PositionalEncoding(d_model=self.model_dim)
 
     # Create transformer Encoder
+    self.transformer = TransformerEncoder(
+      num_layers=self.num_layers,
+      input_dim=self.input_dim,
+      num_heads=self.num_heads,
+      dim_feedforward=model_dim,
+      dropout_prob=self.input_dropout,
+    )
 
     # Create output classifier per sequence element Model_dim -> num_classes
+    self.output_net = nn.Linear(
+      in_features=self.model_dim, out_features=self.num_classes
+    )
 
   def forward(self, x, mask=None, add_positional_encoding=True):
     """
