@@ -127,23 +127,24 @@ class EncoderBlock(nn.Module):
       nn.Linear(in_features=input_dim, out_features=dim_feedforward),
       nn.ReLU(),
       nn.Linear(in_features=dim_feedforward, out_features=input_dim),
+      nn.Dropout(p=dropout_prob),
     )
 
     # Layers to apply in between the main layers (Layer Norm and Dropout)
     self.layer_norm_self_attn = nn.LayerNorm(normalized_shape=input_dim)
-    # self.dropout_self_attn = nn.Dropout(p=dropout_prob)
+    self.dropout_self_attn = nn.Dropout(p=dropout_prob)
 
     self.layer_norm_ffn = nn.LayerNorm(normalized_shape=input_dim)
-    # self.dropout_ffn = nn.Dropout(p=dropout_prob)
+    self.dropout_ffn = nn.Dropout(p=dropout_prob)
 
   def forward(self, x, mask=None):
     # Compute Attention part
     attended = self.self_attn(x)
-    x = self.layer_norm_self_attn(x + attended)
+    x = self.layer_norm_self_attn(x + self.dropout_self_attn(attended))
 
     # Compute MLP part
     fedforward = self.ffn(x)
-    x = self.layer_norm_ffn(x + fedforward)
+    x = self.layer_norm_ffn(x + self.dropout_ffn(fedforward))
 
     return x
 
@@ -247,32 +248,34 @@ class TransformerPredictor(nn.Module):
     # FILL IT YOURSELF!
 
     # Create a Generic Input Encoder Input dim -> Model dim with input dropout
-    self.input_net = EncoderBlock(
-      input_dim=self.input_dim,
-      num_heads=self.num_heads,
-      dim_feedforward=self.model_dim,
-      dropout_prob=self.input_dropout,
+    self.input_net = nn.Sequential(
+      nn.Linear(in_features=self.input_dim, out_features=self.model_dim),
+      nn.Dropout(p=input_dropout),
     )
 
     # Create positional encoding for sequences
-    self.positional_encoding = PositionalEncoding(d_model=self.input_dim)
+    self.positional_encoding = PositionalEncoding(d_model=self.model_dim)
 
     # Create transformer Encoder
     self.transformer = TransformerEncoder(
       num_layers=self.num_layers,
-      input_dim=self.input_dim,
+      input_dim=self.model_dim,
       num_heads=self.num_heads,
-      dim_feedforward=self.model_dim,
+      dim_feedforward=2 * self.model_dim,
       dropout_prob=self.input_dropout,
     )
 
     # Create output classifier per sequence element Model_dim -> num_classes
     self.output_net = nn.Sequential(
       nn.Linear(
-        in_features=self.input_dim,
+        in_features=self.model_dim,
+        out_features=self.model_dim,
+      ),
+      nn.ReLU(),
+      nn.Linear(
+        in_features=self.model_dim,
         out_features=self.num_classes,
       ),
-      nn.Softmax()
     )
 
   def forward(
