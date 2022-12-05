@@ -3,6 +3,7 @@ import os
 import random
 import urllib.request
 from functools import partial
+from typing import Optional
 from urllib.error import HTTPError
 
 import matplotlib
@@ -35,14 +36,10 @@ def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=N
     attention = attention.masked_fill(mask == 0, -(10**14))
 
   # Pass through softmax
-  attention = F.softmax(attention, dim=1)
+  attention = F.softmax(attention, dim=-1)
 
   # Weight values accordingly
   output_values = torch.matmul(attention, v)
-
-  # print(v.shape)
-  # print(output_values.shape)
-  # print(attention.shape)
 
   return output_values, attention
 
@@ -259,22 +256,31 @@ class TransformerPredictor(nn.Module):
 
     # Create positional encoding for sequences
     self.positional_encoding = PositionalEncoding(d_model=self.input_dim)
+
     # Create transformer Encoder
     self.transformer = TransformerEncoder(
       num_layers=self.num_layers,
       input_dim=self.input_dim,
       num_heads=self.num_heads,
-      dim_feedforward=model_dim,
+      dim_feedforward=self.model_dim,
       dropout_prob=self.input_dropout,
     )
 
     # Create output classifier per sequence element Model_dim -> num_classes
-    self.output_net = nn.Linear(
-      in_features=self.input_dim,
-      out_features=self.num_classes,
+    self.output_net = nn.Sequential(
+      nn.Linear(
+        in_features=self.input_dim,
+        out_features=self.num_classes,
+      ),
+      nn.Softmax()
     )
 
-  def forward(self, x, mask=None, add_positional_encoding=True):
+  def forward(
+    self,
+    x: torch.Tensor,
+    mask: Optional[torch.Tensor] = None,
+    add_positional_encoding: bool = True,
+  ):
     """
     Args:
         x: Input features of shape [Batch, SeqLen, input_dim]
@@ -284,13 +290,18 @@ class TransformerPredictor(nn.Module):
     """
     x = self.input_net(x)
     if add_positional_encoding:
-      x = self.positional_encoding(x)  # Issue here
+      x = self.positional_encoding(x)
     x = self.transformer(x, mask=mask)
     x = self.output_net(x)
     return x
 
   @torch.no_grad()
-  def get_attention_maps(self, x, mask=None, add_positional_encoding=True):
+  def get_attention_maps(
+    self,
+    x: torch.Tensor,
+    mask: Optional[torch.Tensor] = None,
+    add_positional_encoding: bool = True,
+  ):
     """Function for extracting the attention matrices of the whole Transformer for a single batch.
 
     Input arguments same as the forward pass.
