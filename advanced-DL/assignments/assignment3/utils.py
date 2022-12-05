@@ -21,7 +21,11 @@ device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("
 
 
 def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=None):
-  """Return:
+  """
+  Perform scaled dot product which links what we are looking for (the queries `q`) to what
+  the attention has to offer (the keys `k`), using their relative importance (the values `v`)
+  inferred by the attention mechanism.
+  Return:
   - `output_values` which is the scaled dot product attention : $softmax( \frac{QK^T}{\sqrt{d_k}} ) V$
   - `attention` which is the same as `output_values`, but without multiplying by $V$
   """
@@ -32,6 +36,9 @@ def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=N
   attention /= d_k ** (1 / 2)
 
   # Apply mask if not None
+  # The mask gives very big negative values to elements
+  # that should be ignore my the attention mechanism.
+  # Such values get sent to 0 by the softmax function.
   if mask is not None:
     attention = attention.masked_fill(mask == 0, -(10**14))
 
@@ -40,11 +47,18 @@ def scaled_dot_product(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask=N
 
   # Weight values accordingly
   output_values = torch.matmul(attention, v)
-
   return output_values, attention
 
 
 class MultiheadAttention(nn.Module):
+  """
+  Perform multi-head attention on the `q`, `k` and `v` matrices.
+
+  Each of the heads is responsible for understanding one aspect of the input sequence.
+  For example, in a transliteration (such as translation) task, one head may be
+  responsible for the order of the words, one head for the grammatical structures... etc.
+  """
+
   def __init__(self, input_dim: int, embed_dim: int, num_heads: int):
     super().__init__()
 
@@ -57,8 +71,11 @@ class MultiheadAttention(nn.Module):
 
     # Create linear layers for both qkv and output
     # TIP: Stack all weight matrices 1...h together for efficiency
+    # `qkv_proj` outputs `3*embed_dim` because each of `q`, `k` and `v`
+    # have their own coefficients in the output layer.
+    # This is also why we chunk them in the `forward` method.
     self.o_proj = nn.Linear(in_features=embed_dim, out_features=embed_dim)
-    self.qkv_proj = nn.Linear(in_features=input_dim, out_features=embed_dim * 3)
+    self.qkv_proj = nn.Linear(in_features=input_dim, out_features=3 * embed_dim)
 
     self._reset_parameters()
 
@@ -72,6 +89,11 @@ class MultiheadAttention(nn.Module):
     self.o_proj.bias.data.fill_(0)
 
   def forward(self, x: torch.Tensor, mask=None, return_attention=False):
+    """
+    Perform a forward pass on the multi-head attention block.
+
+    This outputs the result of the two linear layers, with the scaled dot product in between.
+    """
     # FILL IT YOURSELF!
     batch_dim, seq_length, input_dim = x.shape
 
@@ -79,8 +101,8 @@ class MultiheadAttention(nn.Module):
     # QKV: [Batch, Head, SeqLen, Dims]
     qkv = self.qkv_proj(x)
     qkv = qkv.reshape(batch_dim, seq_length, self.num_heads, 3 * self.head_dim)
-    qkv.permute(0, 2, 1, 3)
-    q, k, v = qkv.chunk(3, dim=-1)
+    qkv = qkv.permute(0, 2, 1, 3)
+    q, k, v = qkv.chunk(3, dim=-1)  # chunk by 3 because out_features=3 * embed_dim
 
     # Apply Dot Product Attention to qkv ()
     attention_values, attention = scaled_dot_product(q=q, k=k, v=v)
@@ -106,6 +128,8 @@ class EncoderBlock(nn.Module):
     self, input_dim: int, num_heads: int, dim_feedforward: int, dropout_prob=0.0
   ):
     """
+    Perform Multi-Head attention + 1-hidden-layer feed-forward network.
+
     Args:
         input_dim: Dimensionality of the input
         num_heads: Number of heads to use in the attention block
@@ -123,14 +147,19 @@ class EncoderBlock(nn.Module):
     )
 
     # Create Two-layer MLP with dropout
+    # Dropout is done on the hidden layer to help with the network make
+    # progress and to prevent the vanishing gradient problem.
     self.ffn = nn.Sequential(
       nn.Linear(in_features=input_dim, out_features=dim_feedforward),
-      nn.ReLU(),
-      nn.Linear(in_features=dim_feedforward, out_features=input_dim),
       nn.Dropout(p=dropout_prob),
+      nn.ReLU(inplace=True),  # Adds non-linearity to the network.
+      nn.Linear(in_features=dim_feedforward, out_features=input_dim),
     )
 
     # Layers to apply in between the main layers (Layer Norm and Dropout)
+    # We could probably use the same dropout for attention and ffn
+    # because PyTorch most certainly doesn't use any backward operation on them,
+    # but it also doesn't hurt to have two different objects.
     self.layer_norm_self_attn = nn.LayerNorm(normalized_shape=input_dim)
     self.dropout_self_attn = nn.Dropout(p=dropout_prob)
 
@@ -140,16 +169,22 @@ class EncoderBlock(nn.Module):
   def forward(self, x, mask=None):
     # Compute Attention part
     attended = self.self_attn(x)
-    x = self.layer_norm_self_attn(x + self.dropout_self_attn(attended))
+    x = self.layer_norm_self_attn(x + self.dropout_self_attn(attended))  # add and norm
 
     # Compute MLP part
     fedforward = self.ffn(x)
-    x = self.layer_norm_ffn(x + self.dropout_ffn(fedforward))
+    x = self.layer_norm_ffn(x + self.dropout_ffn(fedforward))  # add and norm
 
     return x
 
 
 class TransformerEncoder(nn.Module):
+  """
+  Compute the encoder block.
+
+  This block contains `num_layers` layers of encoder block.
+  The forward pass iterates over them.
+  """
   def __init__(self, num_layers, **block_args):
     super().__init__()
     self.layers = nn.ModuleList([EncoderBlock(**block_args) for _ in range(num_layers)])
@@ -160,6 +195,11 @@ class TransformerEncoder(nn.Module):
     return x
 
   def get_attention_maps(self, x, mask=None):
+    """Return the attention maps of each encoder block.
+    This can be used to (try to) understand the behaviour of the transformer.
+    In particular, this shows how much attention is put on each part of the input,
+    then the human can make hypotheses about what pattern is identified by each head.
+    """
     attention_maps = []
     for layer in self.layers:
       _, attn_map = layer.self_attn(x, mask=mask, return_attention=True)
@@ -169,6 +209,11 @@ class TransformerEncoder(nn.Module):
 
 
 class PositionalEncoding(nn.Module):
+  """
+  This is a smart way of choosing functions in order to let the network know
+  the order in which the sequence goes. By doing so, it is able to infer the "temporal"
+  dimension of the input sequence (e.g. the order of the words in a transliteration task).
+  """
   def __init__(self, d_model, max_len=5000):
     """
     Args
@@ -261,7 +306,7 @@ class TransformerPredictor(nn.Module):
       num_layers=self.num_layers,
       input_dim=self.model_dim,
       num_heads=self.num_heads,
-      dim_feedforward=2 * self.model_dim,
+      dim_feedforward=self.model_dim,
       dropout_prob=self.input_dropout,
     )
 
