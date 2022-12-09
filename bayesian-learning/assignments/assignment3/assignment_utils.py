@@ -10,13 +10,18 @@ import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
+import plotly.io as pio
 import stan
 from scipy.special import logsumexp
 from scipy.stats import binom, norm
 from tqdm.notebook import tqdm, tqdm_notebook, trange
 
+# Make stan work
 nest_asyncio.apply()
 pd.set_option("mode.chained_assignment", None)
+
+# Set Plotly's background
+pio.templates.default = "plotly_white"
 
 
 class ADNI:
@@ -65,15 +70,36 @@ class ADNI:
     #   marginal="box",
     #   histnorm="probability",
     # )
+
+    # Create distplot with KDE of age
     fig = ff.create_distplot([self.diag["AGE"]], group_labels=["AGE"], show_hist=False)
+
+    # Compute normal distribution with same mean and std
     age_range = np.linspace(start=self.diag["AGE"].min(), stop=self.diag["AGE"].max())
     age_mean = self.diag["AGE"].mean()
     age_std = self.diag["AGE"].std()
     y_norm = norm.pdf(age_range, loc=age_mean, scale=age_std)
+
+    # Plot normal distribution with same mean and std
     normal_trace = go.Scatter(x=age_range, y=y_norm, name="Normal fit")
     fig.add_trace(normal_trace)
 
+    # Add title
+    fig.update_layout(
+      title=f"""Comparison between the age distribution and a normal
+distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
+    )
+
     return fig
+
+  def plot_apoe4(self):
+    return px.histogram(
+      self.diag,
+      x="APOE4",
+      nbins=20,
+      histnorm="probability",
+      title="Distribution of the APOE4 variable.",
+    )
 
   def run_stan_model(
     self,
