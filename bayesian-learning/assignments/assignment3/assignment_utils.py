@@ -31,6 +31,7 @@ class ADNI:
 
   def __init__(self) -> None:
     self._load_data()
+    self._restrict_data_80_yo()
 
   @staticmethod
   def _normalize(x: pd.Series) -> pd.Series:
@@ -57,19 +58,18 @@ class ADNI:
     self.diag["norm_brain"] = self._normalize(self.diag["norm_brain"])
     self.diag.dropna(inplace=True)
 
-  def plot_kde_vs_norm(self):
+  def _restrict_data_80_yo(self) -> None:
+    """
+    Restrict the ADNI dataset to people of exactly 80 years old only.
+    """
+    self.eighty = self.diag.copy()
+    self.eighty = self.eighty.query(expr="AGE == 80")
+
+  def plot_kde_vs_norm(self) -> go.Figure:
     """
     Plot the Kernel Density Estimation (KDE) vs a normal distribution with
     similar mean and standard deviation.
     """
-    # fig = px.histogram(
-    #   data_frame=self.diag,
-    #   x="AGE",
-    #   nbins=30,
-    #   title=f"Distribution of the AGE variable in the ADNI dataset",
-    #   marginal="box",
-    #   histnorm="probability",
-    # )
 
     # Create distplot with KDE of age
     fig = ff.create_distplot([self.diag["AGE"]], group_labels=["AGE"], show_hist=False)
@@ -92,7 +92,7 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
 
     return fig
 
-  def plot_apoe4(self):
+  def plot_apoe4(self) -> go.Figure:
     return px.histogram(
       self.diag,
       x="APOE4",
@@ -100,6 +100,19 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
       histnorm="probability",
       title="Distribution of the APOE4 variable.",
     )
+
+  def _get_appropriate_data(self, data_name: str) -> pd.DataFrame:
+    """
+    Return either the whole ADNI dataset, or the restriction to
+    80 years old only according to `data_name`.
+    """
+    match data_name:
+      case "all":
+        return self.diag
+      case "80 yo":
+        return self.eighty
+      case other:
+        raise ValueError(f"Name {other} is not an acceptable data name.")
 
   def run_stan_model(
     self,
@@ -109,6 +122,7 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     seed: Optional[int] = None,
     num_chains: int = 4,
     num_samples: int = 1000,
+    data_name: str = "all",
   ) -> pd.DataFrame:
     """
     Use PyStan's Markov Chain Monte Carlo (MCMC) to obtain a parametric distribution
@@ -123,6 +137,8 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
       - `num_samples` : The number of samples per chain used by PyStan
     """
 
+    data = self._get_appropriate_data(data_name=data_name)
+
     # Format useful data for Stan
     # Initialize dict
     data_to_stan = {}
@@ -130,11 +146,11 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     # Add features to Stan data
     for feat_idx, feat in enumerate(features):
       var_name = f"x{feat_idx+1}"  # Enforce variable names x1, x2, ...etc.
-      data_to_stan[var_name] = np.array(self.diag[feat])
+      data_to_stan[var_name] = np.array(data[feat])
 
     # Add target & number of data points to Stan
-    data_to_stan["y"] = np.array(self.diag[target])
-    data_to_stan["N"] = len(self.diag[target])
+    data_to_stan["y"] = np.array(data[target])
+    data_to_stan["N"] = len(data[target])
 
     # Make the Stan model
     posterior = stan.build(
@@ -148,7 +164,9 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     print(type(fit))
     return fit
 
-  def get_waic(self, fit: stan.fit.Fit, sample_size_waic: int = 1000) -> float:
+  def get_waic(
+    self, fit: stan.fit.Fit, sample_size_waic: int = 1000, data_name: str = "all"
+  ) -> float:
     """
     Compute the WAIC from `fit`.
 
@@ -158,10 +176,15 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
         This parameter defaults to the minimum between the number of samples computed by Stan
         and the value passed. If the value passed it the largest, an informational message is shown.
     """
+
+    data = self._get_appropriate_data(data_name=data_name)
+
+    # Get probabilities
     p_i = fit["p_i"]
 
     n_data_points, n_samples_computed = p_i.shape
 
+    # Adjust number of samples to be less than maximum available
     if sample_size_waic > n_samples_computed:
       print(
         f"{sample_size_waic = } is greater than {n_samples_computed = }.",
@@ -169,21 +192,32 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
       )
       sample_size_waic = n_samples_computed
 
+    # Initialize lppd and list for variances
     lppd = []
     pwaic = []
 
+    # Iterate over data points
     for post_idx in tqdm(range(n_data_points)):
       id_log_lik = []
+
+      # Iterate over draws
       for sample_idx in range(sample_size_waic):
         p = p_i[post_idx, sample_idx]
-        id_log_lik.append(binom.logpmf(k=self.diag["DX"].values[post_idx], n=1, p=p))
+
+        # Compute likelihood (with log for stability)
+        id_log_lik.append(binom.logpmf(k=data["DX"].values[post_idx], n=1, p=p))
+
+      # Use logsumexp to stably sum vector of logs
       lppd.append(logsumexp(id_log_lik) - np.log(len(id_log_lik)))
       pwaic.append(np.var(id_log_lik))
 
     waic = -2 * (np.sum(lppd) - np.sum(pwaic))
+
     return waic
 
-  def get_box_plot(self, fit: stan.fit.Fit, model_params: list[str]):
+  def get_params_box_plot(
+    self, fit: stan.fit.Fit, model_params: list[str]
+  ) -> go.Figure:
     """
     Compute a box plot of the parameters from PyStan modeling.
 
