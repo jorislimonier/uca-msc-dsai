@@ -8,10 +8,11 @@ import nest_asyncio
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import stan
 from scipy.special import logsumexp
-from scipy.stats import binom
+from scipy.stats import binom, norm
 from tqdm.notebook import tqdm, tqdm_notebook, trange
 
 nest_asyncio.apply()
@@ -50,6 +51,29 @@ class ADNI:
     self.diag["norm_brain"] = self.diag["WholeBrain.bl"] / self.diag["ICV"]
     self.diag["norm_brain"] = self._normalize(self.diag["norm_brain"])
     self.diag.dropna(inplace=True)
+
+  def plot_kde_vs_norm(self):
+    """
+    Plot the Kernel Density Estimation (KDE) vs a normal distribution with
+    similar mean and standard deviation.
+    """
+    # fig = px.histogram(
+    #   data_frame=self.diag,
+    #   x="AGE",
+    #   nbins=30,
+    #   title=f"Distribution of the AGE variable in the ADNI dataset",
+    #   marginal="box",
+    #   histnorm="probability",
+    # )
+    fig = ff.create_distplot([self.diag["AGE"]], group_labels=["AGE"], show_hist=False)
+    age_range = np.linspace(start=self.diag["AGE"].min(), stop=self.diag["AGE"].max())
+    age_mean = self.diag["AGE"].mean()
+    age_std = self.diag["AGE"].std()
+    y_norm = norm.pdf(age_range, loc=age_mean, scale=age_std)
+    normal_trace = go.Scatter(x=age_range, y=y_norm, name="Normal fit")
+    fig.add_trace(normal_trace)
+
+    return fig
 
   def run_stan_model(
     self,
@@ -101,6 +125,12 @@ class ADNI:
   def get_waic(self, fit: stan.fit.Fit, sample_size_waic: int = 1000) -> float:
     """
     Compute the WAIC from `fit`.
+
+    Arguments:
+      - `fit` : A fit from PyStan modeling.
+      - `sample_size_waic` : How many samples should be used to compute the WAIC.
+        This parameter defaults to the minimum between the number of samples computed by Stan
+        and the value passed. If the value passed it the largest, an informational message is shown.
     """
     p_i = fit["p_i"]
 
@@ -126,3 +156,27 @@ class ADNI:
 
     waic = -2 * (np.sum(lppd) - np.sum(pwaic))
     return waic
+
+  def get_box_plot(self, fit: stan.fit.Fit, model_params: list[str]):
+    """
+    Compute a box plot of the parameters from PyStan modeling.
+
+    Arguments:
+      - `fit` : A fit from PyStan modeling.
+      - `model_params` : The name of the parameters computed in Pystan's modeling.
+        These must be in the columns of `fit`.
+    """
+
+    # Convert fit object to df
+    df_post = fit.to_frame()
+
+    # Reverse model params to show from top to bottom
+    reversed_params = model_params[::-1]
+
+    # Compute and return box plot
+    return px.box(
+      data_frame=df_post,
+      x=reversed_params,
+      points="all",
+      title=f"Box plot of the model parameters ({', '.join(model_params)}).",
+    )
