@@ -62,7 +62,13 @@ class ADNI:
   @staticmethod
   def _generate_pystan_code(param_distr: dict[str, str], p_i_formula: str):
     """
-    Generate the C code to be passed to the `program_code` argument of `stan.build`.
+    Generate the C code to be passed to the `program_code` argument of `stan.build`. \\
+    This function adds the boilerplate around the actual important information: the
+    parameter names, their respective distribution and the formula for `p_i`.
+
+    This function enforces that the variables are called `x1`, `x2`, ...etc. The
+    coherence of parameter names is not actually checked, but will raise an error
+    at runtime (when building the Pystan model) in case some of them are not defined.
 
     Arguments:
       - `param_distr` : A dict of format `{parameter_name: parameter_distribution}`
@@ -70,11 +76,13 @@ class ADNI:
     """
 
     # data
-    data = """
-    data {
+    formatted_var = "\n".join([f"real x{i}[N];" for i in range(1, len(param_distr))])
+    data = f"""
+    data {{
       int<lower=1> N;
       int y[N];
-    }"""
+      {formatted_var}
+    }}"""
     data = dedent(data)
 
     param_names = param_distr.keys()
