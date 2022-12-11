@@ -2,6 +2,7 @@
 Utility functions for assignment 3 of the Bayesian Learning course.
 """
 
+from textwrap import dedent
 from typing import Optional
 
 import nest_asyncio
@@ -57,6 +58,53 @@ class ADNI:
     self.diag["norm_brain"] = self.diag["WholeBrain.bl"] / self.diag["ICV"]
     self.diag["norm_brain"] = self._normalize(self.diag["norm_brain"])
     self.diag.dropna(inplace=True)
+
+  @staticmethod
+  def _generate_pystan_code(param_distr: dict[str, str], p_i_formula: str):
+    """
+    Generate the C code to be passed to the `program_code` argument of `stan.build`.
+
+    Arguments:
+      - `param_distr` : A dict of format `{parameter_name: parameter_distribution}`
+      - `p_i_formula` : The formula to be optimized
+    """
+
+    # data
+    data = """
+    data {
+      int<lower=1> N;
+      int y[N];
+    }"""
+    data = dedent(data)
+
+    param_names = param_distr.keys()
+    formatted_params = "\n".join([f"real {param};" for param in param_names])
+
+    # parameters
+    parameters = f"""
+    parameters {{
+      {formatted_params}
+    }}"""
+    parameters = dedent(parameters)
+
+    # transformed_parameters
+    transformed_parameters = f"""
+    transformed parameters {{
+      vector[N] p_i;
+      for (i in 1:N) {{
+        {p_i_formula} 
+        }}
+    }}"""
+    transformed_parameters = dedent(transformed_parameters)
+
+    formatted_distr = "\n".join([f"{par} ~ {dis};" for par, dis in param_distr.items()])
+    model = f"""
+    model {{
+      {formatted_distr}
+      y ~ binomial(1, p_i);
+    }}"""
+    model = dedent(model)
+    return "\n".join([data, parameters, transformed_parameters, model])
 
   def _restrict_data_80_yo(self) -> None:
     """
