@@ -75,7 +75,9 @@ class ADNI:
       - `p_i_formula` : The formula to be optimized
     """
 
-    # data
+    # Data
+    ## Enforce variable names to be start with "x" and increment an index
+    ## from 1 to the number of parameters - 1.
     formatted_var = "\n".join([f"real x{i}[N];" for i in range(1, len(param_distr))])
     data = f"""
     data {{
@@ -88,14 +90,14 @@ class ADNI:
     param_names = param_distr.keys()
     formatted_params = "\n".join([f"real {param};" for param in param_names])
 
-    # parameters
+    # Parameters
     parameters = f"""
     parameters {{
       {formatted_params}
     }}"""
     parameters = dedent(parameters)
 
-    # transformed_parameters
+    # Transformed_parameters
     transformed_parameters = f"""
     transformed parameters {{
       vector[N] p_i;
@@ -105,6 +107,7 @@ class ADNI:
     }}"""
     transformed_parameters = dedent(transformed_parameters)
 
+    # Model
     formatted_distr = "\n".join([f"{par} ~ {dis};" for par, dis in param_distr.items()])
     model = f"""
     model {{
@@ -112,6 +115,7 @@ class ADNI:
       y ~ binomial(1, p_i);
     }}"""
     model = dedent(model)
+
     return "\n".join([data, parameters, transformed_parameters, model])
 
   def _restrict_data_80_yo(self) -> None:
@@ -220,6 +224,14 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     print(type(fit))
     return fit
 
+  @staticmethod
+  def print_ci_param(fit: stan.fit.Fit, param_name: str, level: float = 0.95):
+    """
+    ...
+    """
+    
+    # quantiles= np.quantile()
+
   def get_waic(
     self, fit: stan.fit.Fit, sample_size_waic: int = 1000, data_name: str = "all"
   ) -> float:
@@ -270,6 +282,14 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     waic = -2 * (np.sum(lppd) - np.sum(pwaic))
 
     return waic
+
+  @staticmethod
+  def pretty_print_waic(waic: dict):
+    """
+    Format the `waic` dictionary into its model name, a repetition of delimiters,
+    then the value of the WAIC.
+    """
+    print(*[f"{k + ' ':.<50}{v:>8.5f}" for k, v in waic.items()], sep="\n")
 
   def get_params_box_plot(
     self, fit: stan.fit.Fit, model_params: list[str]
