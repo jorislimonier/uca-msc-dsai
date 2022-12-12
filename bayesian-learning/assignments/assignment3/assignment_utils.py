@@ -221,16 +221,23 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
 
     # Fit the Stan model
     fit = posterior.sample(num_chains=num_chains, num_samples=num_samples)
-    print(type(fit))
+    
     return fit
 
   @staticmethod
   def print_ci_param(fit: stan.fit.Fit, param_name: str, level: float = 0.95):
     """
-    ...
+    Print confidence interval lower and upper thresholds, as well as the median
+    for a given parameter `param_name` (which must be in the columns of `fit`).
     """
-    
-    # quantiles= np.quantile()
+    q_val = [(1 - level) / 2, 0.5, 1 - (1 - level) / 2]
+    quantiles = np.quantile(q=q_val, a=fit[param_name])
+    q_display = ["Median" if q == 0.5 else f"{q:.1%} threshold" for q in q_val]
+    print(
+      f"{level:.0%} confidence interval for {param_name!r}:",
+      *[f"\t--> {disp:.<30} {q:>8.5f}" for disp, q in zip(q_display, quantiles)],
+      sep="\n",
+    )
 
   def get_waic(
     self, fit: stan.fit.Fit, sample_size_waic: int = 1000, data_name: str = "all"
@@ -289,7 +296,7 @@ distribution with same mean (={age_mean:.2f}) and std (={age_std:.2f})."""
     Format the `waic` dictionary into its model name, a repetition of delimiters,
     then the value of the WAIC.
     """
-    print(*[f"{k + ' ':.<50}{v:>8.5f}" for k, v in waic.items()], sep="\n")
+    print(*[f"{k + ' ':.<50} {v:>8.7f}" for k, v in waic.items()], sep="\n")
 
   def get_params_box_plot(
     self, fit: stan.fit.Fit, model_params: list[str]
