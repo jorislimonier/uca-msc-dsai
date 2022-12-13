@@ -221,7 +221,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <td>:construction: Advanced Deep Learning</td>
     <td> </td>
     <tr>
-      <td>:construction: Introduction to Information Theory</td>
+      <td>:soon: Introduction to Information Theory</td>
       <td> </td>
     </tr>
     <tr>
