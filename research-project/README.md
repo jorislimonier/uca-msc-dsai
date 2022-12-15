@@ -285,6 +285,23 @@ Topics:
 | Méthode | Métrique | Dataset |
 | ------- | -------- | ------- |
 
+## Réunion 2022-12-15
+
+- Sélectionner méthodes prometteuses, évaluées sur datasets difficiles vs simples
+- Ne considérer **que des images 2D**, même si les prédictions sont des coordonnées tridimensionelles
+- Y a-t-il des méthodes qui prédisent les coordonnées 3D à partir de datasets 2D ? Comment les auteurs évaluent-ils leurs modèles ? Voir articles qui mentionnent "monocular 3D HPE" par exemple
+- Voir papiers 12-19 du SOTA + [LCR-Net++](https://arxiv.org/pdf/1803.00455.pdf) + [DOPE](https://arxiv.org/pdf/2008.09457.pdf).
+  - Chercher
+    - GitHub
+    - Papier
+    - Dataset
+  - Commencer par les plus récents (qui devraient battre les plus anciens)
+  - Ne considérer des articles plus anciens que s'ils ne sont pas comparés avec les nouveaux dans leur repo/papier
+  - Présentation rapide des algo des 2 ou 3 meilleurs pour voir ce que l'on change pour les améliorer
+- Organiser réunion après vacances
+- Considérer toutes techniques (top-down, bottom-up, lifting...etc.)
+- Envoyer papiers sélectionnés en avance à LS et FP pendant vacances si possible
+
 ## References
 
 - [1] C. Zheng et al., “Deep Learning-Based Human Pose Estimation: A Survey,” arXiv:2012.13392 [cs], Jan. 2021, Accessed: Jan. 12, 2022. [Online]. Available: http://arxiv.org/abs/2012.13392
