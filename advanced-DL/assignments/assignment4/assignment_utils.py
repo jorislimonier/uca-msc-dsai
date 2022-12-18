@@ -15,6 +15,7 @@ import plotly.io as pio
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 from plotly.subplots import make_subplots
@@ -22,12 +23,13 @@ from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader, Dataset, Subset
 from torchvision import datasets, models, transforms
 from torchvision.datasets import CIFAR10
+from torchvision.models import resnet18
 
 pio.templates.default = "plotly_white"
 
 
 class Data:
-  def __init__(self, dl_num_workers: int = 4, dl_batch_size: int = 256) -> None:
+  def __init__(self, dl_num_workers: int = -1, dl_batch_size: int = 512) -> None:
     self.DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     self._load_data(dl_num_workers=dl_num_workers, dl_batch_size=dl_batch_size)
 
@@ -36,7 +38,7 @@ class Data:
     dl_num_workers: int,
     dl_batch_size: int,
     use_subset: bool = True,
-    subset_n_samples: int = 32,
+    subset_n_samples: int = 4096,
   ) -> None:
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
@@ -104,6 +106,17 @@ class Data:
       num_workers=dl_num_workers,
     )
 
+  def _imshow(self, inp: torch.Tensor, title: list = None) -> go.Figure:
+    """
+    Display `inp` images, along with their labels if `title` is passed.
+    """
+    inp = inp.numpy().transpose((1, 2, 0))  # reconvert to numpy tensor
+    inp = self.TRAIN_STDS * inp + self.TRAIN_MEANS  # take out normalization
+    inp = np.clip(inp, 0, 1)
+    fig = px.imshow(inp, title=", ".join(title))
+
+    return fig
+
   def imshow_train_val(self, num_img) -> None:
     """Visualize images from train and val datasets"""
     # Get a batch of training/valid data
@@ -116,13 +129,81 @@ class Data:
         inp=out, title=[self.class_names[c] for c in classes[:num_img]]
       ).show()
 
-  def _imshow(self, inp: torch.Tensor, title: list = None) -> go.Figure:
-    """
-    Display `inp` images, along with their labels if `title` is passed.
-    """
-    inp = inp.numpy().transpose((1, 2, 0))  # reconvert to numpy tensor
-    inp = self.TRAIN_STDS * inp + self.TRAIN_MEANS  # take out normalization
-    inp = np.clip(inp, 0, 1)
-    fig = px.imshow(inp, title=", ".join(title))
+  def train_one_epoch(self, model, train_dl, loss, optim, device):
+    """Function to iterate over data while training."""
+    model.train()  # Set model to training mode
+    cur_loss, cur_acc = 0.0, 0.0
+    for x, y in train_dl:
+      x, y = x.to(device), y.to(device)
 
-    return fig
+      # zero the parameter gradients
+      optim.zero_grad()
+
+      # forward
+      outputs = model(x)
+      preds = torch.argmax(outputs, 1)
+      l = loss(outputs, y)
+
+      # backward + optimize
+      l.backward()
+      optim.step()
+
+      # statistics
+      cur_loss += l.item() * x.size(0)
+      cur_acc += torch.sum(preds == y.data)
+
+    epoch_loss = cur_loss / len(train_dl.dataset)
+    epoch_acc = cur_acc.double() / len(train_dl.dataset)
+    return epoch_loss, epoch_acc
+
+  # Function to iterate over data while evaluating
+  def eval_one_epoch(self, model, val_dl, loss, device):
+    model.eval()  # Set model to training mode
+    cur_loss, cur_acc = 0.0, 0.0
+    with torch.no_grad():
+      for x, y in val_dl:
+        x, y = x.to(device), y.to(device)
+
+        # forward
+        outputs = model(x)
+        preds = torch.argmax(outputs, 1)
+        l = loss(outputs, y)
+
+        # statistics
+        cur_loss += l.item() * x.size(0)
+        cur_acc += torch.sum(preds == y.data)
+
+    epoch_loss = cur_loss / len(val_dl.dataset)
+    epoch_acc = cur_acc.double() / len(val_dl.dataset)
+    return epoch_loss, epoch_acc
+
+  def train_model(self, model, train_dl, val_dl, loss, optim, num_epochs=25):
+    model.to(self.DEVICE)
+    since = time.time()
+    # best_model_wts = copy.deepcopy(model.state_dict())
+    best_acc = 0.0
+
+    for epoch in range(num_epochs):
+      print(f"Epoch {epoch}/{num_epochs - 1}")
+      print("-" * 10)
+
+      train_loss, train_acc = self.train_one_epoch(
+        model=model, train_dl=train_dl, loss=loss, optim=optim, device=self.DEVICE
+      )
+      print(f"Train Loss: {train_loss:<15f} Acc: {train_acc:<15f}")
+
+      val_loss, val_acc = self.eval_one_epoch(model, val_dl, loss, self.DEVICE)
+      print(f"Val Loss:   {val_loss:<15f} Acc: {val_acc:<17f}\n")
+
+      # save the best model
+      if val_acc > best_acc:
+        best_acc = val_acc
+        torch.save(model.state_dict(), "temp_model.pt")
+
+    time_elapsed = time.time() - since
+    print(f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
+    print(f"Best val Acc: {best_acc:4f}")
+
+    # load best model weights
+    model.load_state_dict(torch.load("temp_model.pt"))
+    return model
