@@ -30,10 +30,13 @@ class Data:
   def __init__(self, dl_num_workers: int = 4, dl_batch_size: int = 256) -> None:
     self.DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     self._load_data(dl_num_workers=dl_num_workers, dl_batch_size=dl_batch_size)
-    self._set_data_loaders(num_workers=dl_num_workers, batch_size=dl_batch_size)
 
   def _load_data(
-    self, dl_num_workers: int, dl_batch_size: int, use_subset: bool = True
+    self,
+    dl_num_workers: int,
+    dl_batch_size: int,
+    use_subset: bool = True,
+    subset_n_samples: int = 32,
   ) -> None:
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
@@ -80,6 +83,15 @@ class Data:
     print("Val size:", val_size)
     print("Class names:", self.class_names)
 
+    # Use subset dataset if instructed to
+    if use_subset:
+      self.train_dataset = Subset(
+        dataset=self.train_dataset, indices=[*range(subset_n_samples)]
+      )
+      self.val_dataset = Subset(
+        dataset=self.val_dataset, indices=[*range(subset_n_samples)]
+      )
+
     self.train_dl = DataLoader(
       self.train_dataset,
       shuffle=True,
@@ -92,7 +104,19 @@ class Data:
       num_workers=dl_num_workers,
     )
 
-  def imshow(self, inp: torch.Tensor, title: list = None) -> go.Figure:
+  def imshow_train_val(self, num_img) -> None:
+    """Visualize images from train and val datasets"""
+    # Get a batch of training/valid data
+    for d in [self.train_dl, self.val_dl]:
+      x, classes = next(iter(d))
+
+      # Make a grid from batch
+      out = torchvision.utils.make_grid(x[:num_img])
+      self._imshow(
+        inp=out, title=[self.class_names[c] for c in classes[:num_img]]
+      ).show()
+
+  def _imshow(self, inp: torch.Tensor, title: list = None) -> go.Figure:
     """
     Display `inp` images, along with their labels if `title` is passed.
     """
@@ -102,6 +126,3 @@ class Data:
     fig = px.imshow(inp, title=", ".join(title))
 
     return fig
-
-  def set_sample_data(self, n_samples: int):
-    return Subset(dataset=self.train_dataset, indices=[*range(n_samples)])
