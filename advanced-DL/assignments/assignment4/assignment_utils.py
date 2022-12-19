@@ -5,6 +5,7 @@ Utility functions for assignment 4.
 import copy
 import os
 import time
+from typing import Callable
 import zipfile
 
 import matplotlib.pyplot as plt
@@ -29,7 +30,7 @@ pio.templates.default = "plotly_white"
 
 
 class Data:
-  def __init__(self, dl_num_workers: int = -1, dl_batch_size: int = 512) -> None:
+  def __init__(self, dl_num_workers: int = 4, dl_batch_size: int = 16) -> None:
     self.DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     self._load_data(dl_num_workers=dl_num_workers, dl_batch_size=dl_batch_size)
 
@@ -38,7 +39,7 @@ class Data:
     dl_num_workers: int,
     dl_batch_size: int,
     use_subset: bool = True,
-    subset_n_samples: int = 4096,
+    subset_n_samples: int = 256,
   ) -> None:
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
@@ -129,8 +130,16 @@ class Data:
         inp=out, title=[self.class_names[c] for c in classes[:num_img]]
       ).show()
 
-  def train_one_epoch(self, model, train_dl, loss, optim, device):
+  def train_one_epoch(
+    self,
+    model: nn.Module,
+    train_dl: DataLoader,
+    loss: Callable,
+    optim: optim.Optimizer,
+    device: torch.device,
+  ):
     """Function to iterate over data while training."""
+
     model.train()  # Set model to training mode
     cur_loss, cur_acc = 0.0, 0.0
     for x, y in train_dl:
@@ -156,8 +165,10 @@ class Data:
     epoch_acc = cur_acc.double() / len(train_dl.dataset)
     return epoch_loss, epoch_acc
 
-  # Function to iterate over data while evaluating
-  def eval_one_epoch(self, model, val_dl, loss, device):
+  def eval_one_epoch(
+    self, model: nn.Module, val_dl: DataLoader, loss: Callable, device: torch.device
+  ):
+    """Iterate over data while evaluating"""
     model.eval()  # Set model to training mode
     cur_loss, cur_acc = 0.0, 0.0
     with torch.no_grad():
@@ -177,7 +188,16 @@ class Data:
     epoch_acc = cur_acc.double() / len(val_dl.dataset)
     return epoch_loss, epoch_acc
 
-  def train_model(self, model, train_dl, val_dl, loss, optim, num_epochs=25):
+  def train_model(
+    self,
+    model: nn.Module,
+    train_dl: DataLoader,
+    val_dl: DataLoader,
+    loss: Callable,
+    optim: optim.Optimizer,
+    num_epochs: int = 25,
+  ):
+    """Train the given `model` on specified dataloaders."""
     model.to(self.DEVICE)
     since = time.time()
     # best_model_wts = copy.deepcopy(model.state_dict())
