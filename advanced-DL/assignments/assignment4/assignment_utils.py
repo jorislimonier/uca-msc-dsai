@@ -5,8 +5,8 @@ Utility functions for assignment 4.
 import copy
 import os
 import time
-from typing import Callable
 import zipfile
+from typing import Callable
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,6 +19,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
+from livelossplot import PlotLosses
 from plotly.subplots import make_subplots
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader, Dataset, Subset
@@ -27,11 +28,11 @@ from torchvision.datasets import CIFAR10
 from torchvision.models import resnet18
 
 pio.templates.default = "plotly_white"
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class Data:
   def __init__(self, dl_num_workers: int = 4, dl_batch_size: int = 16) -> None:
-    self.DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     self._load_data(dl_num_workers=dl_num_workers, dl_batch_size=dl_batch_size)
 
   def _load_data(
@@ -39,7 +40,7 @@ class Data:
     dl_num_workers: int,
     dl_batch_size: int,
     use_subset: bool = True,
-    subset_n_samples: int = 1024,
+    subset_n_samples: int = 2048,
   ) -> None:
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
@@ -130,6 +131,16 @@ class Data:
         inp=out, title=[self.class_names[c] for c in classes[:num_img]]
       ).show()
 
+
+class Prediction:
+  """
+  Class for everything related to prediction.
+  It contains the functions to train each variation of the models.
+  """
+
+  def __init__(self) -> None:
+    pass
+
   def train_one_epoch(
     self,
     model: nn.Module,
@@ -163,6 +174,7 @@ class Data:
 
     epoch_loss = cur_loss / len(train_dl.dataset)
     epoch_acc = cur_acc.double() / len(train_dl.dataset)
+
     return epoch_loss, epoch_acc
 
   def eval_one_epoch(
@@ -197,33 +209,67 @@ class Data:
     optim: optim.Optimizer,
     num_epochs: int = 25,
   ):
-    """Train the given `model` on specified dataloaders."""
-    model.to(self.DEVICE)
-    since = time.time()
+    """
+    Train the given `model` on specified dataloaders.
+    Also plot the train & val accuracy, as well as the train & val loss.
+    """
+
+    model.to(DEVICE)  # Move model to gpu if available
+
+    since = time.time()  # Measure training time
+
     # best_model_wts = copy.deepcopy(model.state_dict())
+
+    # Initialize variables
     best_acc = 0.0
+    liveloss = PlotLosses()
 
     for epoch in range(num_epochs):
+      logs = {}
+
       print(f"Epoch {epoch}/{num_epochs - 1}")
       print("-" * 10)
 
+      # Compute train metrics
       train_loss, train_acc = self.train_one_epoch(
-        model=model, train_dl=train_dl, loss=loss, optim=optim, device=self.DEVICE
+        model=model,
+        train_dl=train_dl,
+        loss=loss,
+        optim=optim,
+        device=DEVICE,
       )
       print(f"Train Loss: {train_loss:<15f} Acc: {train_acc:<15f}")
 
-      val_loss, val_acc = self.eval_one_epoch(model, val_dl, loss, self.DEVICE)
+      # Compute val metrics
+      val_loss, val_acc = self.eval_one_epoch(
+        model=model,
+        val_dl=val_dl,
+        loss=loss,
+        device=DEVICE,
+      )
       print(f"Val Loss:   {val_loss:<15f} Acc: {val_acc:<17f}\n")
 
-      # save the best model
+      # Save if best model
       if val_acc > best_acc:
         best_acc = val_acc
         torch.save(model.state_dict(), "temp_model.pt")
 
-    time_elapsed = time.time() - since
+      # Compute logs to be passed to liveloss
+      logs["loss"] = train_loss
+      logs["accuracy"] = train_acc.cpu()
+      logs["val_loss"] = val_loss
+      logs["val_accuracy"] = val_acc.cpu()
+
+      liveloss.update(logs)
+      liveloss.send()
+
+    time_elapsed = time.time() - since  # Compute train time
+
+    # Print final results
     print(f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
     print(f"Best val Acc: {best_acc:4f}")
 
-    # load best model weights
+    # Load best model weights
     model.load_state_dict(torch.load("temp_model.pt"))
+    
     return model
