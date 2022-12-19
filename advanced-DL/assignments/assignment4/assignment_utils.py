@@ -39,7 +39,7 @@ class Data:
     dl_num_workers: int,
     dl_batch_size: int,
     use_subset: bool = True,
-    subset_n_samples: int = 256,
+    subset_n_samples: int = 1024,
   ) -> None:
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
