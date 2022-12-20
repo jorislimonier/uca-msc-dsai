@@ -32,8 +32,21 @@ DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class Data:
-  def __init__(self, dl_num_workers: int = 4, dl_batch_size: int = 16) -> None:
-    self._load_data(dl_num_workers=dl_num_workers, dl_batch_size=dl_batch_size)
+  def __init__(
+    self,
+    dl_num_workers: int = 4,
+    dl_batch_size: int = 16,
+    use_subset: bool = True,
+    subset_n_samples: int = 2048,
+  ) -> None:
+
+    # Load data
+    self._load_data(
+      dl_num_workers=dl_num_workers,
+      dl_batch_size=dl_batch_size,
+      use_subset=use_subset,
+      subset_n_samples=subset_n_samples,
+    )
 
   def _load_data(
     self,
@@ -42,14 +55,29 @@ class Data:
     use_subset: bool = True,
     subset_n_samples: int = 2048,
   ) -> None:
+    """
+    Perform all data loading operations.
+    """
     self.TRAIN_DIR = "data/cifar10_train"
     self.VAL_DIR = "data/cifar10_val"
 
-    # Define means and stds to normalize data
+    # Define means and stds to normalize data.
+    # This prevents having to load the entire dataset, computing
+    # its means & std, then having to fo through the whole dataset again
+    # to normalize it.
+    # Values obtained from https://github.com/kuangliu/pytorch-cifar/issues/19
     self.TRAIN_MEANS = (0.4914, 0.4822, 0.4465)
     self.TRAIN_STDS = (0.247, 0.243, 0.261)
 
-    # Data augmentation and normalization for training
+    # Data augmentation and normalization for training.
+    # This allows to increase the dataset size by:
+    #   - Cropping the edges of the image
+    #   - Performing a horizontal flip. Our images should still be classifiable
+    #     even if they are horizontally flipped, this is not always acceptable
+    #     depending on the problem.
+    #   - Convert to tensor (this is a type formality, not very interesting in terms
+    #     of data augmentation)
+    #   - Normalizing (center & scale) the images to prevent scale differences
     self.train_transforms = transforms.Compose(
       [
         transforms.RandomResizedCrop(size=224, scale=[0.75, 1.0]),
@@ -58,6 +86,7 @@ class Data:
         transforms.Normalize(mean=self.TRAIN_MEANS, std=self.TRAIN_STDS),
       ]
     )
+
     # Just normalization for validation
     self.val_transforms = transforms.Compose(
       [
@@ -153,6 +182,7 @@ class Prediction:
 
     model.train()  # Set model to training mode
     cur_loss, cur_acc = 0.0, 0.0
+    
     for x, y in train_dl:
       x, y = x.to(device), y.to(device)
 
@@ -208,7 +238,8 @@ class Prediction:
     loss: Callable,
     optim: optim.Optimizer,
     num_epochs: int = 25,
-  ):
+    print_epoch_res: bool = False,
+  ) -> nn.Module:
     """
     Train the given `model` on specified dataloaders.
     Also plot the train & val accuracy, as well as the train & val loss.
@@ -224,52 +255,63 @@ class Prediction:
     best_acc = 0.0
     liveloss = PlotLosses()
 
-    for epoch in range(num_epochs):
-      logs = {}
+    # Use try block to print final results
+    # even if it encounters KeyboardInterrupt
+    try:
+      for epoch in range(num_epochs):
+        logs = {}
 
-      print(f"Epoch {epoch}/{num_epochs - 1}")
-      print("-" * 10)
+        print(f"Epoch {epoch}/{num_epochs - 1}")
+        print("-" * 10)
 
-      # Compute train metrics
-      train_loss, train_acc = self.train_one_epoch(
-        model=model,
-        train_dl=train_dl,
-        loss=loss,
-        optim=optim,
-        device=DEVICE,
-      )
-      print(f"Train Loss: {train_loss:<15f} Acc: {train_acc:<15f}")
+        # Compute train metrics
+        train_loss, train_acc = self.train_one_epoch(
+          model=model,
+          train_dl=train_dl,
+          loss=loss,
+          optim=optim,
+          device=DEVICE,
+        )
+        if print_epoch_res:
+          print(f"Train Loss: {train_loss:<15f} Acc: {train_acc:<15f}")
 
-      # Compute val metrics
-      val_loss, val_acc = self.eval_one_epoch(
-        model=model,
-        val_dl=val_dl,
-        loss=loss,
-        device=DEVICE,
-      )
-      print(f"Val Loss:   {val_loss:<15f} Acc: {val_acc:<17f}\n")
+        # Compute val metrics
+        val_loss, val_acc = self.eval_one_epoch(
+          model=model,
+          val_dl=val_dl,
+          loss=loss,
+          device=DEVICE,
+        )
+        if print_epoch_res:
+          print(f"Val Loss:   {val_loss:<15f} Acc: {val_acc:<17f}\n")
 
-      # Save if best model
-      if val_acc > best_acc:
-        best_acc = val_acc
-        torch.save(model.state_dict(), "temp_model.pt")
+        # Save if best model
+        if val_acc > best_acc:
+          best_acc = val_acc
+          torch.save(model.state_dict(), "temp_model.pt")
 
-      # Compute logs to be passed to liveloss
-      logs["loss"] = train_loss
-      logs["accuracy"] = train_acc.cpu()
-      logs["val_loss"] = val_loss
-      logs["val_accuracy"] = val_acc.cpu()
+        # Compute logs to be passed to liveloss
+        logs["loss"] = train_loss
+        logs["accuracy"] = train_acc.cpu()
+        logs["val_loss"] = val_loss
+        logs["val_accuracy"] = val_acc.cpu()
 
-      liveloss.update(logs)
-      liveloss.send()
+        liveloss.update(logs)
+        liveloss.send()
 
-    time_elapsed = time.time() - since  # Compute train time
+    # Do not raise error for KeyboardInterrupt
+    except KeyboardInterrupt:
+      pass
 
-    # Print final results
-    print(f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
-    print(f"Best val Acc: {best_acc:4f}")
+    # Print results even if user interrupted training
+    finally:
+      time_elapsed = time.time() - since  # Compute train time
 
-    # Load best model weights
-    model.load_state_dict(torch.load("temp_model.pt"))
-    
+      # Print final results
+      print(f"Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s")
+      print(f"Best val Acc: {best_acc:4f}")
+
+      # Load best model weights
+      model.load_state_dict(torch.load("temp_model.pt"))
+
     return model
