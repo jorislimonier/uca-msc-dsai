@@ -105,9 +105,9 @@ class Data:
     val_size = len(self.val_dataset)
     self.class_names = self.train_dataset.classes
 
-    print("Train size:", train_size)
-    print("Val size:", val_size)
-    print("Class names:", ", ".join(self.class_names))
+    print(f"{'Train size:':<15}", train_size)
+    print(f"{'Val size:':<15}", val_size)
+    print(f"{'Class names:':<15}", ", ".join(self.class_names))
 
     # Use subset dataset if instructed to
     if use_subset:
