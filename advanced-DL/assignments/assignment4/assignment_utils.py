@@ -2,10 +2,7 @@
 Utility functions for assignment 4.
 """
 
-import copy
-import os
 import time
-import zipfile
 from typing import Callable, Optional
 
 import matplotlib.pyplot as plt
@@ -22,7 +19,7 @@ import torchvision
 from livelossplot import PlotLosses
 from plotly.subplots import make_subplots
 from torch.optim import lr_scheduler
-from torch.utils.data import DataLoader, Dataset, Subset
+from torch.utils.data import DataLoader, Dataset, Subset, TensorDataset
 from torchvision import datasets, models, transforms
 from torchvision.datasets import CIFAR10
 from torchvision.models import resnet18
@@ -162,6 +159,23 @@ class Prediction:
 
   def __init__(self) -> None:
     pass
+
+  def extract_features(self, model: nn.Module, dl: DataLoader, device: torch.device):
+    """
+    Make dataset with extracted features.
+    """
+    model.to(device)
+    x_extr, y_extr = [], []
+    with torch.no_grad():
+      for x, y in dl:
+        x, y = x.to(device), y.to(device)
+        preds = model(x)
+        x_extr.append(preds)
+        y_extr.append(y)
+      x_extr = torch.cat(x_extr, dim=0)
+      y_extr = torch.cat(y_extr, dim=0)
+      dataset_extr = TensorDataset(x_extr, y_extr)
+    return dataset_extr
 
   def train_one_epoch(
     self,
