@@ -6,7 +6,7 @@ import copy
 import os
 import time
 import zipfile
-from typing import Callable
+from typing import Callable, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,6 +29,7 @@ from torchvision.models import resnet18
 
 pio.templates.default = "plotly_white"
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+NUM_CLASSES = 10
 
 
 class Data:
@@ -106,7 +107,7 @@ class Data:
 
     print("Train size:", train_size)
     print("Val size:", val_size)
-    print("Class names:", self.class_names)
+    print("Class names:", ", ".join(self.class_names))
 
     # Use subset dataset if instructed to
     if use_subset:
@@ -231,6 +232,7 @@ class Prediction:
     optim: optim.Optimizer,
     num_epochs: int = 25,
     print_epoch_res: bool = False,
+    max_train_time: Optional[float | int] = None,
   ) -> nn.Module:
     """
     Train the given `model` on specified dataloaders.
@@ -246,11 +248,11 @@ class Prediction:
     # Initialize variables
     best_acc = 0.0
     liveloss = PlotLosses()
-
+    epoch = 0
     # Use try block to print final results
     # even if it encounters KeyboardInterrupt
     try:
-      for epoch in range(num_epochs):
+      while epoch < num_epochs:
         logs = {}
 
         print(f"Epoch {epoch}/{num_epochs - 1}")
@@ -290,6 +292,13 @@ class Prediction:
 
         liveloss.update(logs)
         liveloss.send()
+
+        # Break from training loop if max time is specified and reached.
+        if max_train_time is not None and since + max_train_time <= time.time():
+          print(f"Max training time reached ({max_train_time}), breaking.")
+          break
+
+        epoch += 1
 
     # Do not raise error for KeyboardInterrupt
     except KeyboardInterrupt:
