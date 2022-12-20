@@ -108,12 +108,9 @@ class Data:
 
     # Use subset dataset if instructed to
     if use_subset:
-      self.train_dataset = Subset(
-        dataset=self.train_dataset, indices=[*range(subset_n_samples)]
-      )
-      self.val_dataset = Subset(
-        dataset=self.val_dataset, indices=[*range(subset_n_samples)]
-      )
+      indices = [*range(subset_n_samples)]
+      self.train_dataset = Subset(dataset=self.train_dataset, indices=indices)
+      self.val_dataset = Subset(dataset=self.val_dataset, indices=indices)
 
     self.train_dl = DataLoader(
       self.train_dataset,
@@ -160,21 +157,29 @@ class Prediction:
   def __init__(self) -> None:
     pass
 
-  def extract_features(self, model: nn.Module, dl: DataLoader, device: torch.device):
+  def extract_features(self, dl: DataLoader):
     """
     Make dataset with extracted features.
     """
-    model.to(device)
+    cnn_model = models.resnet18(weights=torchvision.models.ResNet18_Weights)
+    cnn_model.fc = torch.nn.Identity()
+    print(next(cnn_model.parameters()).device)
+    cnn_model.to(DEVICE)
+
     x_extr, y_extr = [], []
     with torch.no_grad():
       for x, y in dl:
-        x, y = x.to(device), y.to(device)
-        preds = model(x)
+        x, y = x.to(DEVICE), y.to(DEVICE)
+        preds = cnn_model(x)
+
         x_extr.append(preds)
         y_extr.append(y)
+
       x_extr = torch.cat(x_extr, dim=0)
       y_extr = torch.cat(y_extr, dim=0)
+
       dataset_extr = TensorDataset(x_extr, y_extr)
+
     return dataset_extr
 
   def train_one_epoch(
