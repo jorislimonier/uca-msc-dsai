@@ -70,14 +70,6 @@ class Data:
     self.TRAIN_STDS = (0.247, 0.243, 0.261)
 
     # Data augmentation and normalization for training.
-    # This allows to increase the dataset size by:
-    #   - Cropping the edges of the image
-    #   - Performing a horizontal flip. Our images should still be classifiable
-    #     even if they are horizontally flipped, this is not always acceptable
-    #     depending on the problem.
-    #   - Convert to tensor (this is a type formality, not very interesting in terms
-    #     of data augmentation)
-    #   - Normalizing (center & scale) the images to prevent scale differences
     self.train_transforms = transforms.Compose(
       [
         transforms.RandomResizedCrop(size=224, scale=[0.75, 1.0]),
@@ -182,7 +174,7 @@ class Prediction:
 
     model.train()  # Set model to training mode
     cur_loss, cur_acc = 0.0, 0.0
-    
+
     for x, y in train_dl:
       x, y = x.to(device), y.to(device)
 
