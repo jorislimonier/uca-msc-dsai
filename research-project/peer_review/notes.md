@@ -10,7 +10,8 @@
   - Figure 2 helps understanding and illustrating, nice.
 - 2.1
   - The explanation of concepts is well done and clear (_e.g._ the Swiss tournament)
-- 2.2
+- 3.1
+  - Write numbers in letters
 - Size
   - The article is 9 pages. It was supposed to be 5-8 pages, including sources.
 - I believe that citations should be at the end of a sentence, as an addition, not making it the subject of the sentence. E.g. "Some methods implement this awesome feature [4].", not like "Method [4] implements this awesome feature."
