@@ -215,6 +215,45 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - MPBE: Euclidian distance between vertices
 - 3DPCK: 3D extension of PCK
 
+## Papers retained
+
+List of best papers with video input from the survey.
+
+[DOPE](https://github.com/naver/dope)
+
+### Introduction on 2D pose detectors
+
+These are the 2D detectors used before lifting.
+
+#### Cascade Pyramid Network (CPN)
+
+[Paper](https://arxiv.org/pdf/1711.07319v1.pdf).
+
+- GlobalNet: Feature pyramid network to predict invisible keypoints
+- RefineNet: Network to integrate all levels of features from the GlobalNet with a keypoint mining loss
+- Cascade Pyramid Network (CPN) = GlobalNet + RefineNet
+  - Good performance to predict invisible keypoints
+
+#### HRNet ?
+
+...
+
+### Methods
+
+#### MHFormer
+
+[Paper](https://arxiv.org/pdf/2111.12707.pdf) | [Repo](https://github.com/Vegetebird/MHFormer)
+
+- CVPR 2022
+- 2D pose detector: CPN
+
+#### Motion Guided 3D Pose Estimation from Videos
+
+[Paper](https://arxiv.org/pdf/2004.13985.pdf) | [Repo (unofficial)](https://github.com/tamasino52/UGCN)
+
+- ECCV 2020
+- 2D pose detector: HRNet
+
 ## Notes
 
 ### Meeting 2022-11-23
