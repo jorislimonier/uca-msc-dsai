@@ -12,10 +12,9 @@
   - [Evaluation metrics](#evaluation-metrics)
     - [2D HPE](#2d-hpe)
     - [3D HPE](#3d-hpe)
-- [Paper notes](#paper-notes)
-  - [01 - Deep Learning-Based Human Pose Estimation: A Survey](#01---deep-learning-based-human-pose-estimation-a-survey)
-  - [02 - Evaluation of deep pose detectors for automatic analysis of film style](#02---evaluation-of-deep-pose-detectors-for-automatic-analysis-of-film-style)
 - [Notes](#notes)
+  - [Meeting 2022-11-23](#meeting-2022-11-23)
+  - [Réunion 2022-12-15](#r%C3%A9union-2022-12-15)
 - [References](#references)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -216,25 +215,6 @@ This TER lies in the framework of the ANR TRACTIVE project (https://www.i3s.univ
 - MPBE: Euclidian distance between vertices
 - 3DPCK: 3D extension of PCK
 
-## Paper notes
-
-### 01 - Deep Learning-Based Human Pose Estimation: A Survey
-
-- Meta analysis of >250 papers since 2014
-- 2D HPE is easy, 3D HPE is hard
-- 3 types of model:
-  - Kinematic model: only joints
-  - Planar model: Joints + rectangles to approximate human body
-  - Volumetric model: Fit to skin
-
-### 02 - Evaluation of deep pose detectors for automatic analysis of film style
-
-Topics:
-
-- Quantification of on-screen character poses, potentially through HPE
-- Review of 1 non-film dataset + 2 film datasets (>2700 images in total)
-- Identify cases where current HPE methods fail on non-film data
-
 ## Notes
 
 ### Meeting 2022-11-23
@@ -284,8 +264,9 @@ Topics:
 
 | Méthode | Métrique | Dataset |
 | ------- | -------- | ------- |
+| ...     | ...      | ...     |
 
-## Réunion 2022-12-15
+### Réunion 2022-12-15
 
 - Sélectionner méthodes prometteuses, évaluées sur datasets difficiles vs simples
 - Ne considérer **que des images 2D**, même si les prédictions sont des coordonnées tridimensionelles
