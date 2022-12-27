@@ -234,9 +234,9 @@ These are the 2D detectors used before lifting.
 - Cascade Pyramid Network (CPN) = GlobalNet + RefineNet
   - Good performance to predict invisible keypoints
 
-#### HRNet ?
+#### HRNet
 
-...
+[Paper](https://arxiv.org/pdf/1902.09212.pdf) | [Repo](https://github.com/leoxiaobin/deep-high-resolution-net.pytorch)
 
 ### Methods
 
