@@ -220,7 +220,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
   </thead>
   <tbody>
     <tr>
-      <td rowspan=4>Base</td>
+      <td rowspan=4>Compulsory courses</td>
       <td>:construction: Bayesian Learning</td>
       <td align="center">TBD</td>
       <td rowspan=4 align="center">TBD</td>
