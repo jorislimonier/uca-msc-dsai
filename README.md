@@ -247,16 +247,16 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:soon: Advanced Learning: Functional, Mixed and Text data</td>
+      <td>:soon: Deep Learning for computer vision</td>
       <td align="center">TBD</td>
       <td rowspan=3 align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Deep Learning for computer vision</td>
+      <td>:soon: Inverse Problems in image processing</td>
       <td align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Inverse Problems in image processing</td>
+      <td>:soon: Advanced Learning: Functional, Mixed and Text data</td>
       <td align="center">TBD</td>
     </tr>
   </tbody>
