@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [UCA-MSc-DSAI](#uca-msc-dsai)
   - [Grades](#grades)
@@ -21,7 +22,9 @@
 Resources for my Master's of Data Science and Artificial Intelligence at the University Côte d'Azur.
 
 ## Grades
+
 ### Recap
+
 <table>
   <thead>
     <th>Year</th>
@@ -73,7 +76,9 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
 Semester grades are an average of each subject's grade, weighted by the subject's numbers of credits (ECTS).
 
 ### Year 1
+
 #### Semester 1
+
 <table>
   <thead>
     <th>Module</th>
@@ -152,6 +157,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
 </table>
 
 #### Semester 2
+
 <table>
   <thead>
     <th>Module</th>
@@ -201,9 +207,10 @@ Semester grades are an average of each subject's grade, weighted by the subject'
   </tbody>
 </table>
 
-
 ### Year 2
+
 #### Semester 3
+
 <table>
   <thead>
     <th>Module</th>
@@ -215,47 +222,48 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <tr>
       <td rowspan=4>Base</td>
       <td>:construction: Bayesian Learning</td>
-      <td> </td>
-      <td rowspan=4 align="center"> </td>
+      <td align="center">TBD</td>
+      <td rowspan=4 align="center">TBD</td>
     </tr>
     <td>:construction: Advanced Deep Learning</td>
-    <td> </td>
+    <td align="center">TBD</td>
     <tr>
       <td>:soon: Introduction to Information Theory</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td>:construction: Model-Based statistical Learning</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td rowspan=2>Advanced methods in ML</td>
       <td>:construction: Research Project</td>
-      <td> </td>
-      <td rowspan=2 align="center"> </td>
+      <td align="center">TBD</td>
+      <td rowspan=2 align="center">TBD</td>
     </tr>
     <tr>
       <td>:soon: Federated Learning - Data Privacy</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:soon: Statistical Analysis of Graphs</td>
-      <td> </td>
-      <td rowspan=3 align="center"> </td>
+      <td>:soon: Advanced Learning: Functional, Mixed and Text data</td>
+      <td align="center">TBD</td>
+      <td rowspan=3 align="center">TBD</td>
     </tr>
     <tr>
       <td>:soon: Deep Learning for computer vision</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td>:soon: Inverse Problems in image processing</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
   </tbody>
 </table>
 
 #### Semester 4
+
 <table>
   <thead>
     <th>Module</th>
