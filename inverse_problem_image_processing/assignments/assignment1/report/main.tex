@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+% \newcommand{\thetahat}{\hat{\theta}}
+
+% \newacronym{bmi}{BMI}{Body Mass Index}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+
+\newgeometry{
+  left=25mm,
+  right=25mm,
+  top=25mm,
+  bottom=25mm}
+\pagenumbering{arabic}
+
+\section{Exercise 1}
+
+Let $f$ be given by:
+\begin{equation}
+  f(x) = \frac{1}{2} \| Ax - y \|_2^2
+\end{equation}
+we want to compute the gradient of $f$. We have:
+
+\begin{align*}
+  \nabla_v f(x) & =\lim _{h \rightarrow 0} \frac{f(x+h v)-f(x)}{h}                                          \\
+                & =\lim _{h \rightarrow 0} \frac{\|A(x+h v)-y\|^2-\|A x-y\|^2}{2 h}                         \\
+                & =\lim _{h \rightarrow 0} \frac{\|A x-y\|^2+2 h<A x-y, A v>+h^2\|A v\|^2-\|A x-y\|^2}{2 h} \\
+                & =\lim _{h \rightarrow 0}(A x-y)^T A v+\frac{h}{2}\|A v\|^2                                \\
+                & =\left\langle A^T(A x-y), v\right\rangle,
+\end{align*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Exercise 2}
+\section{Exercise 3}
+\section{Exercise 4}
+
+
+% \clearpage
+% \printnoidxglossaries
+
+\end{document}
