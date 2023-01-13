@@ -19,3 +19,5 @@
 - What is bottom-up approach?
 - CNN are spatial invariant neural networks.
 - How to optimize a network? --> Gradient descent
+- How does a transformer work?
+- How does a VAE work?
