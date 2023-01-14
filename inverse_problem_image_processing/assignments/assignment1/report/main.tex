@@ -39,29 +39,46 @@ Let $f$ be given by:
 \begin{equation}
   f(x) = \frac{1}{2} \| Ax - y \|_2^2
 \end{equation}
-we want to compute the gradient of $f$. We have:
-
+we want to compute the gradient of $f$. We have for a given direction $v \in \R^n$:
 \begin{align*}
-  \nabla_v f(x) & =\lim _{h \rightarrow 0} \frac{f(x+h v)-f(x)}{h}                                          \\
-                & =\lim _{h \rightarrow 0} \frac{\|A(x+h v)-y\|^2-\|A x-y\|^2}{2 h}                         \\
-                & =\lim _{h \rightarrow 0} \frac{\|A x-y\|^2+2 h<A x-y, A v>+h^2\|A v\|^2-\|A x-y\|^2}{2 h} \\
-                & =\lim _{h \rightarrow 0}(A x-y)^T A v+\frac{h}{2}\|A v\|^2                                \\
-                & =\left\langle A^T(A x-y), v\right\rangle,
+  \nabla_v f(x)
+   & =\lim_{\varepsilon \to 0} \frac{f(x+\varepsilon v)-f(x)}{\varepsilon}                                                      \\
+   & =\lim_{\varepsilon \to 0} \frac{\|A(x+\varepsilon v)-y\|^2-\|A x-y\|^2}{2 \varepsilon}                                     \\
+   & =\lim_{\varepsilon \to 0} \frac{\|(Ax - y) + A \varepsilon v \|^2-\|A x-y\|^2}{2 \varepsilon}                              \\
+   & =\lim_{\varepsilon \to 0} \frac{\|A x-y\|^2+2 \varepsilon<A x-y, A v> + \varepsilon^2\|A v\|^2-\|A x-y\|^2}{2 \varepsilon} \\
+   & =\lim_{\varepsilon \to 0}(A x-y)^T A v + \underbrace{\frac{\varepsilon}{2}\|A v\|^2}_{\to 0}                               \\
+   & =\left\langle A^T(A x-y), v\right\rangle,
 \end{align*}
-
-
-
-
-
-
-
-
-
-
-
+We see that we obtain a scalar product with $v$ on one side, as we wished. The other side of the scalar product (\ie $A^T (Ax - y)$) corresponds to the gradient of $f$ in the direction $v$. In other words, this is the change that will occur when we take a small step in the direction of $v$.
 
 
 \section{Exercise 2}
+\subsection{Proof of the Lipschitz continuity of the gradient}
+Recall that a function $g: $ is said to be $L$-Lipschitz continuous if $\forall\ x_1, x_2 \in \R^n$:
+\begin{equation}
+  \|g(x_1) - g(x_2)\| \leq L \|x_1 - x_2\|.
+\end{equation}
+In particular for $g \equiv \nabla f$, we have:
+\begin{align*}
+  \| \nabla f (x_1) - \nabla f (x_2) \|
+   & = \| A^T(Ax_1 - y) - A^T(Ax_2 - y) \| \\
+   & = \| A^T A(x_1 - x_2) \| \\
+   & \leq \| A^T A \| \cdot \| x_1 - x_2 \|
+\end{align*}
+We therefore have that that $\nabla f$ is $L$-Lipschitz continuous, with $L := \| A^T A \|$.
+
+\subsection{Computation of the Lipschitz constant}
+Note that $\| A^T A \|$ is the matrix norm of $A^T A$, which is the largest singular value of $A^T A$. Let us call $\sigma_{max}(M)$ the largest singular value of a given matrix $M$. Recall that the singular value decomposition of $M$ is given by:
+\begin{equation}
+  M = U \Sigma V^T
+\end{equation}
+where $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix with the singular values of $M$ on the diagonal, which we assume to be sorted in decreasing order (without loss of generality, thanks to potential reordering of the rows, columns of U, V respectively). We have:
+
+
+
+
+
+
 \section{Exercise 3}
 \section{Exercise 4}
 
