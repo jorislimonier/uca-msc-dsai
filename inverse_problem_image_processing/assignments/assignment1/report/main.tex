@@ -61,8 +61,8 @@ Recall that a function $g: $ is said to be $L$-Lipschitz continuous if $\forall\
 In particular for $g \equiv \nabla f$, we have:
 \begin{align*}
   \| \nabla f (x_1) - \nabla f (x_2) \|
-   & = \| A^T(Ax_1 - y) - A^T(Ax_2 - y) \| \\
-   & = \| A^T A(x_1 - x_2) \| \\
+   & = \| A^T(Ax_1 - y) - A^T(Ax_2 - y) \|  \\
+   & = \| A^T A(x_1 - x_2) \|               \\
    & \leq \| A^T A \| \cdot \| x_1 - x_2 \|
 \end{align*}
 We therefore have that that $\nabla f$ is $L$-Lipschitz continuous, with $L := \| A^T A \|$.
@@ -73,7 +73,12 @@ Note that $\| A^T A \|$ is the matrix norm of $A^T A$, which is the largest sing
   M = U \Sigma V^T
 \end{equation}
 where $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix with the singular values of $M$ on the diagonal, which we assume to be sorted in decreasing order (without loss of generality, thanks to potential reordering of the rows, columns of U, V respectively). We have:
-
+\begin{align*}
+  \| A^T A \|
+   & = \sigma_{max}(A^T A)                                        \\
+   & = \sigma_{max}(U \Sigma \underbrace{V^T V}_{=Id} \Sigma U^T) \\
+   & = \sigma_{max}(U \Sigma^2 U^T)                               \\
+\end{align*}
 
 
 
