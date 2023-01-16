@@ -258,6 +258,34 @@ so the average number of weighting operations is equal to:
    & \approx 2.63                   \\
 \end{align*}
 
+\paragraph{3.}
+\begin{align*}
+  \P_e
+   & = \frac{C^{2n}_9}{C^{2n}_8}                               \\
+   & = \frac{\frac{8!}{2n!(8 - 2n)!}}{\frac{9!}{2n!(9 - 2n)!}} \\
+   & = 1 - \frac{2}{9}n                                        \\
+\end{align*}
+\begin{align*}
+  \P_l = \P_r
+   & = \frac{1}{2} (1 - \P_e) \\
+   & = \frac{1}{9}n           \\
+\end{align*}
+We want $\P_l = \P_r = \P_e$, to get maximum information. This is achieved for $n = 3$, that is 3 coins on each side.
 
+\section{Discrete source coding}
+\subsection{Exercise 4}
+\begin{itemize}
+  \item We encore the following commands:
+  \item Raise the stylus (RS)
+  \item Press the stylus (PS)
+  \item move the stylus left (–X)
+  \item move the stylus right (+X)
+  \item move the stylus up (+Y)
+  \item move the stylus down (–Y)
+\end{itemize}
+We have:
+$$
+\P_{RS} = \P_{PS} = \P_{-X} = 0.1, \quad \P_{+X} = 0.3, \quad \P_{+Y} = \P_{-Y} = 0.2
+$$
 
 \end{document}
