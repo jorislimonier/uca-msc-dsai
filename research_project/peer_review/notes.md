@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Paper peer review](#paper-peer-review)
+  - [Diaz ─ Combining EA and MCTS for improving optimization algorithms](#diaz-%E2%94%80-combining-ea-and-mcts-for-improving-optimization-algorithms)
+  - [Birbiri ─](#birbiri-%E2%94%80)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Paper peer review
 
 ## Diaz ─ Combining EA and MCTS for improving optimization algorithms
