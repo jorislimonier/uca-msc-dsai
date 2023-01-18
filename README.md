@@ -55,17 +55,14 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td>
         Semester 3
       </td>
-      <td align="center">
-      </td>
-      <td rowspan=2>
-      </td>
+      <td align="center">TBD</td>
+      <td rowspan=2 align="center">TBD</td>
     </tr>
     <tr>
       <td>
         Semester 4
       </td>
-      <td align="center">
-      </td>
+      <td align="center">TBD</td>
     </tr>
   </tbody>
 </table>
