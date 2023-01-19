@@ -292,6 +292,43 @@ These are the 2D detectors used before lifting.
 - Considérer toutes techniques (top-down, bottom-up, lifting...etc.)
 - Envoyer papiers sélectionnés en avance à LS et FP pendant vacances si possible
 
+### Réunion 2023-01-19
+
+#### Présentation de [VideoPose3D](https://arxiv.org/pdf/1811.11742.pdf)
+
+- Notes
+  - Utilisation de convolutions 1D sur des séries temporelles des coordonnées plutôt que des convolutions sur des cartes de chaleur 2D
+  - Utilisation de noyau de dilatation pour modéliser les dépendances à long terme (inspiré de la génération audio, semgentation sémantique, traduction par machine)
+  - Architecture contenant
+    - Normalization de lot (batch normalization)
+    - ReLU
+    - Dropout
+  - Apprentissage semi-supervisé via auto-encodeur
+    - Encodeur: Estimation de coordonnées 3D
+    - Décodeur: Projection sur le plan 2D
+    - --> Mesure de l'erreur
+- Questions
+  - "The input consists of 2D keypoints for a receptive field of 243 frames" (p. 2) = utilisation de 243 frames pour prédire une frame ?
+
+#### Notes
+
+- Robustesse aux multi-personnes ?
+  - Deux personnes dans la même image
+  - Calculer l'erreur en fonction de la distance des centres de gravité
+    - Erreur moyenne de prédiction des articulations
+    - Amélioration de performance
+      - Réentrainement avec données rognées pour robustesse à l'occlusion
+      - Si problème sur le détecteur 2D, potentiellement le réentrainer avec des données rognées
+- Occlusions sur Human3.6M ?
+  - En masquant la tête progressivement, comment les résultats évoluent-ils ? (bande noire de haut en bas, ou de gauche à droite)
+- Idée: analyse des performances
+  - Chute de performance dans le 2D ou dans le 3D ?
+- Regarder si d'autres datasets (HumanEva-I?) contiennent des images avec plusieurs personnes
+- Capture d'écran sur Acrobat
+  - Sélectionner région
+  - Zoomer
+  - Valider la capture d'écran
+
 ## References
 
 - [1] C. Zheng et al., “Deep Learning-Based Human Pose Estimation: A Survey,” arXiv:2012.13392 [cs], Jan. 2021, Accessed: Jan. 12, 2022. [Online]. Available: http://arxiv.org/abs/2012.13392
