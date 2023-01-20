@@ -83,13 +83,84 @@ where $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix with
    & = \sigma_{max}(U \Sigma V^T)^2                               \\
    & = \| A \| ^2                                                 \\
 \end{align*}
-
-
-
-
+Thus we have that the Lipschitz constant $L$ is given by:
+$$
+  L = \| A^T A \| = \| A \| ^2.
+$$
 
 \section{Exercise 3}
+\label{ex3}
+We must split the problem into two subproblems: $x = 0$ and $x \neq 0$. \\
+We will first consider the case $x = 0$. In this case, we have that the subdifferential of $f$ at a point $x$ is given by:
+\begin{equation}
+  \label{eq: subdifferential}
+  \partial f(x) := \left\{ c \in \R \mid \forall\ y \in \R, \quad f(y) \geq f(x) + \langle c, y - x \rangle \right\}
+\end{equation}
+We compute the following:
+\begin{align*}
+  \partial f(0)
+   & = \left\{ c \in \R \mid \forall\ y \in \R, \quad f(y) \geq f(0) + \langle c, y - 0 \rangle \right\} \\
+   & = \left\{ c \in \R \mid \forall\ y \in \R, \quad |y| \geq \langle c, y \rangle \right\}             \\
+   & = \left\{ c \in \R \mid \forall\ y \in \R, \quad |y| \geq cy \right\}                               \\
+   & =
+  \begin{cases}
+    \left\{ c \in \R \mid \forall\ y \in \R, \quad y \geq cy \right\},  & y \geq 0 \\
+    \left\{ c \in \R \mid \forall\ y \in \R, \quad -y \geq cy \right\}, & y < 0
+  \end{cases}                                                                              \\
+   & =
+  \begin{cases}
+    \left\{ c \in \R \mid \forall\ y \in \R, \quad c \leq 1 \right\},  & y \geq 0 \\
+    \left\{ c \in \R \mid \forall\ y \in \R, \quad c \geq -1 \right\}, & y < 0
+  \end{cases}                                                                              \\
+   & = \left\{ c \in \R \mid \forall\ y \in \R, \quad c \in [-1, 1] \right\}                             \\
+   & = [-1, 1]
+\end{align*}
+Now for the case $x \neq 0$, we have
+$$
+  x \neq 0 \implies \partial f(x) = \left\{ \operatorname{sign}(x) \right\}
+$$
+
+
+
 \section{Exercise 4}
+We want to compute the subdifferential of the following function:
+\begin{equation}
+  F(x) := \frac{1}{2} \| Ax - y \|^2 + \lambda \| x \|_1^2
+\end{equation}
+We define $F_1$ and $F_2$ as follows:
+\begin{align*}
+  F_1(x) & := \frac{1}{2} \| Ax - y \|^2 \\
+  F_2(x) & := \lambda \| x \|_1^2
+\end{align*}
+and we note that $F(x) = F_1(x) + F_2(x)$. \\
+We also note that $F_1$ is the function seen in exercise 1, while $F_2$ is somewhat of a generalization of the function seen in exercise 3 to the $n$-dimensional case (we will expand on that later). Furthermore, by proposition 1, we have that $\partial F(x) = \partial F_1(x) + F_2(x)$.  \\
+Let us first compute the subdifferential of $F_1$. By exercise 1, we know that $F_1$ is differentiable and we have:
+\begin{align*}
+  \partial F_1(x)
+  &= \left\{ \nabla F_1(x) \right\} \\
+  &= \left\{ A^T(Ax - y) \right\}
+\end{align*}
+Now let us compute the subdifferential of $F_2$. By proposition 2, we have:
+\begin{align*}
+  \partial F_2(x)
+  &= \partial \left( \lambda \| x \|_1 \right) \\
+  &= \lambda \partial \| x \|_1 \\
+\end{align*}
+We notice that $\| x \|_1$ is the sum of the absolute values of the components of $x$, which is a convex separable function. We can therefore apply proposition 3 to compute the subdifferential of $\| x \|_1$:
+\begin{align*}
+  &
+  \partial \| x \|_1 = \partial \sum_{i=1}^n |x_i| \\
+  \implies &
+  \partial F_2(x) = \left\{ \lambda (p_1, \ldots, p_n) \mid \forall i = 1, \ldots, n,\ p_i \in \partial |x_i| \right\}
+\end{align*}
+with $\partial |x_i|$ as defined in exercise \ref{ex3}. \\
+Combining the results of the previous two computations, we have:
+\begin{align*}
+  \partial F(x)
+  &= \partial F_1(x) + \partial F_2(x) \\
+  &= \left\{ A^T(Ax - y) \right\} + \left\{ \lambda (p_1, \ldots, p_n) \mid \forall i = 1, \ldots, n,\ p_i \in \partial |x_i| \right\} \\
+  &= \left\{ A^T(Ax - y) + \lambda (p_1, \ldots, p_n) \mid \forall i = 1, \ldots, n,\ p_i \in \partial |x_i| \right\}
+\end{align*}
 
 
 % \clearpage
