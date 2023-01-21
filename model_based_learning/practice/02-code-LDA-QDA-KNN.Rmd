@@ -1,0 +1,132 @@
+---
+title: "MBSL - lesson 2"
+author: "CB"
+date: "2022-09-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Supervised classification and resampling techniques
+
+We are going to use resampling techniques, such V-fold CV, to evaluate the performance of some classification techniques and eventually make a choice between several techniques in competition.
+
+## Using LDA and QDA on some data
+
+The LDA and QDA methods are implemented in R within the MASS package.
+
+```{r}
+library(MASS)
+?lda
+```
+
+To test LDA, we are going to use the famous Iris data (the ones used by Fisher in his 1936 article):
+
+```{r}
+data(iris)
+X = iris[,1:4]
+Y = iris$Species
+```
+
+Learning LDA and QDA classifiers is as simple as this:
+
+```{r}
+f.lda = lda(X,Y)
+f.qda = qda(X,Y)
+```
+
+This corresponds to step #1 of the learning process for LDA and QDA. In fact, wa can even look at the model parameter estimates ($\hat\theta$) that are stored in the two classifiers:
+
+```{r}
+f.qda
+```
+
+```{r}
+f.qda$scaling
+```
+
+Then, the classification step (MAP rule) can be done using a generic function in R, nammed `predict`:
+
+```{r}
+x_star = c(5.5,3,4,1.5)
+y_star = predict(f.qda,x_star)
+y_star
+```
+
+Now, with LDA:
+
+```{r}
+x_star = c(5.5,3,4,1.5)
+y_star = predict(f.lda,x_star)
+y_star
+```
+
+## Evaluating the performance of LDA and QDA with V-fold CV
+
+Here is a generic code implementing V-fold CV for any predictor:
+
+```{r}
+V = 15
+N = nrow(X)
+folds = rep(1:V,N/V)
+err.lda = err.qda = rep(NA,V) 
+for (v in 1:V){
+   # Splitting of the data between learning and valid. sets
+   X.learn = X[folds!=v,]
+   Y.learn = Y[folds!=v]
+   X.val = X[folds==v,]
+   Y.val = Y[folds==v]
+   
+   # Learn the classifier
+   f.lda = lda(X.learn,Y.learn)
+   f.qda = qda(X.learn,Y.learn)
+   
+   # Compute the validation classification error
+   yhat.lda = predict(f.lda,X.val)$class
+   err.lda[v] = sum(yhat.lda != Y.val) / length(Y.val)
+   
+   yhat.qda = predict(f.qda,X.val)$class
+   err.qda[v] = sum(yhat.qda != Y.val) / length(Y.val)
+}
+cat('* LDA:\t',mean(err.lda),'+/-',sd(err.lda),'\n')
+cat('* QDA:\t',mean(err.qda),'+/-',sd(err.qda),'\n')
+```
+
+## Using CV for parameter tuning
+
+To illustrate this task, we will use a non-model-based technique, K-NN, which has a hyper-parameter to tune.
+
+A basic call to K-NN in R is:
+
+```{r}
+library(class)
+x_star = c(5.5,3,4,1.5)
+y_hat = knn(X,x_star,Y,k = 3)
+y_hat
+```
+
+> Exercise: using the V-fold CV to choose the best value of k for the iris dataset.
+
+```{r}
+V = 15
+N = nrow(X)
+folds = rep(1:V,N/V)
+Kmax = 25
+err.knn = matrix(NA,V,Kmax) 
+for (v in 1:V){
+   # Splitting of the data between learning and valid. sets
+   X.learn = X[folds!=v,]
+   Y.learn = Y[folds!=v]
+   X.val = X[folds==v,]
+   Y.val = Y[folds==v]
+   
+   # Learn the classifier
+   for (k in 1:Kmax){
+      yhat = knn(X.learn,X.val,Y.learn,k)
+      err.knn[v,k] = sum(yhat != Y.val) / length(Y.val)
+   }
+}
+plot(1:Kmax,colMeans(err.knn),type='b')
+```

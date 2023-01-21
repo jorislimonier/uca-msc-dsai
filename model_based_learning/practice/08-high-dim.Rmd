@@ -1,0 +1,94 @@
+---
+title: "MBSL-lesson9"
+author: "CB"
+date: "2022-11-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Subspace clustering
+
+We need to install the `MBCbook` package for accessing some high-dimensional data and the `HDclassif` package for HDDC/MPPCA:
+
+```{r}
+#install.packages(c('MBCbook','HDclassif'))
+library(MBCbook)
+library(HDclassif)
+```
+
+Thanks to the first package, we have access to the `usps358` data.
+
+```{r}
+data(usps358)
+?usps358
+```
+
+Since all data are vectorized images, it is naturally possible to revert the process and visualize the images:
+
+```{r}
+X = usps358[,-1]
+Y = usps358$cls
+image(matrix(as.double(X[123,]),nrow=16))
+```
+
+> Exercise: try to cluster these data set with kmeans and Mclust, and compare the results with the actual labels.
+
+```{r}
+out.kmeans = kmeans(X,centers = 3,nstart = 10)
+   
+# Compare with the true labels
+table(Y,out.kmeans$cluster)
+
+# Let's try to visualize the cluster means
+par(mfrow=c(1,3))
+image(matrix(as.double(out.kmeans$centers[1,]),nrow=16))
+image(matrix(as.double(out.kmeans$centers[2,]),nrow=16))
+image(matrix(as.double(out.kmeans$centers[3,]),nrow=16))
+```
+
+
+```{r}
+out.mclust = Mclust(X,G=3,initialization=list(subset = sample(nrow(X),300)))
+
+# Compare with the true labels
+table(Y,out.mclust$classification)
+
+# Let's try to visualize the cluster means
+par(mfrow=c(1,3))
+image(matrix(as.double(out.mclust$parameters$mean[,1]),nrow=16))
+image(matrix(as.double(out.mclust$parameters$mean[,2]),nrow=16))
+image(matrix(as.double(out.mclust$parameters$mean[,3]),nrow=16))
+```
+Finally, let's test HDDC/MPPCA:
+
+```{r}
+#out.hddc = hddc(X,K = 3,model = "AkjBkQkd") # MPPCA
+out.hddc = hddc(X,K = 3,model = "AkjBkQkdk")
+
+# Compare with the true labels
+table(Y,out.hddc$class)
+
+# Let's try to visualize the cluster means
+par(mfrow=c(1,3))
+image(matrix(as.double(out.hddc$mu[1,]),nrow=16))
+image(matrix(as.double(out.hddc$mu[2,]),nrow=16))
+image(matrix(as.double(out.hddc$mu[3,]),nrow=16))
+```
+
+It is interesting to look at the estimated dimensions for the cluster subspaces:
+
+```{r}
+out.hddc$d
+```
+
+
+
+
+
+
+
+
+

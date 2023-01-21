@@ -1,27 +1,27 @@
+# UCA-MSc-DSAI
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [UCA-MSc-DSAI](#uca-msc-dsai)
-  - [Grades](#grades)
-    - [Recap](#recap)
-    - [Year 1](#year-1)
-      - [Semester 1](#semester-1)
-      - [Semester 2](#semester-2)
-    - [Year 2](#year-2)
-      - [Semester 3](#semester-3)
-      - [Semester 4](#semester-4)
+- [Grades](#grades)
+  - [Recap](#recap)
+  - [Year 1](#year-1)
+    - [Semester 1](#semester-1)
+    - [Semester 2](#semester-2)
+  - [Year 2](#year-2)
+    - [Semester 3](#semester-3)
+    - [Semester 4](#semester-4)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# UCA-MSc-DSAI
 
 :star::star::star: **Please star this repo if you use it (especially extensively)** :star::star::star:
 
 Resources for my Master's of Data Science and Artificial Intelligence at the University Côte d'Azur.
 
 ## Grades
+
 ### Recap
+
 <table>
   <thead>
     <th>Year</th>
@@ -55,17 +55,14 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td>
         Semester 3
       </td>
-      <td align="center">
-      </td>
-      <td rowspan=2>
-      </td>
+      <td align="center">TBD</td>
+      <td rowspan=2 align="center">TBD</td>
     </tr>
     <tr>
       <td>
         Semester 4
       </td>
-      <td align="center">
-      </td>
+      <td align="center">TBD</td>
     </tr>
   </tbody>
 </table>
@@ -73,7 +70,9 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
 Semester grades are an average of each subject's grade, weighted by the subject's numbers of credits (ECTS).
 
 ### Year 1
+
 #### Semester 1
+
 <table>
   <thead>
     <th>Module</th>
@@ -152,6 +151,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
 </table>
 
 #### Semester 2
+
 <table>
   <thead>
     <th>Module</th>
@@ -201,9 +201,10 @@ Semester grades are an average of each subject's grade, weighted by the subject'
   </tbody>
 </table>
 
-
 ### Year 2
+
 #### Semester 3
+
 <table>
   <thead>
     <th>Module</th>
@@ -213,49 +214,50 @@ Semester grades are an average of each subject's grade, weighted by the subject'
   </thead>
   <tbody>
     <tr>
-      <td rowspan=4>Base</td>
-      <td>:construction: Bayesian Learning</td>
-      <td> </td>
-      <td rowspan=4 align="center"> </td>
+      <td rowspan=4>Compulsory courses</td>
+      <td>:heavy_check_mark: Bayesian Learning</td>
+      <td align="center">16</td>
+      <td rowspan=4 align="center">TBD</td>
     </tr>
     <td>:construction: Advanced Deep Learning</td>
-    <td> </td>
+    <td align="center">TBD</td>
     <tr>
-      <td>:soon: Introduction to Information Theory</td>
-      <td> </td>
+      <td>:construction: Introduction to Information Theory</td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td>:construction: Model-Based statistical Learning</td>
-      <td> </td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td rowspan=2>Advanced methods in ML</td>
       <td>:construction: Research Project</td>
-      <td> </td>
-      <td rowspan=2 align="center"> </td>
+      <td align="center">TBD</td>
+      <td rowspan=2 align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Federated Learning - Data Privacy</td>
-      <td> </td>
+      <td>:construction: Federated Learning - Data Privacy</td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:soon: Statistical Analysis of Graphs</td>
-      <td> </td>
-      <td rowspan=3 align="center"> </td>
+      <td>:construction: Deep Learning for computer vision</td>
+      <td align="center">TBD</td>
+      <td rowspan=3 align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Deep Learning for computer vision</td>
-      <td> </td>
+      <td>:construction: Inverse Problems in image processing</td>
+      <td align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Inverse Problems in image processing</td>
-      <td> </td>
+      <td>:soon: Advanced Learning: Functional, Mixed and Text data</td>
+      <td align="center">TBD</td>
     </tr>
   </tbody>
 </table>
 
 #### Semester 4
+
 <table>
   <thead>
     <th>Module</th>
