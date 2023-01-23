@@ -235,6 +235,86 @@ $$
    & = \sum_{i=1}^3 H(Y \mid X = x_i) \log \P(X = x_i) \\
 \end{align*}
 
+\subsection{Problem}
+
+\subsubsection*{1.}
+
+\begin{align*}
+  \P(M = 0)
+   & = \P(M = 0, T = 0) + \P(M = 0, T = 1) \\
+   & = 1/8 + 3/16                          \\
+   & = 5/16                                \\
+\end{align*}
+\begin{align*}
+  \P(M = 1)
+   & = \P(M = 1, T = 0) + \P(M = 1, T = 1) \\
+   & = 1/16 + 5/8                          \\
+   & = 11/16                               \\
+\end{align*}
+\begin{align*}
+  \P(T = 0)
+   & = \P(T = 0, M = 0) + \P(T = 0, M = 1) \\
+   & = 1/8 + 1/16                          \\
+   & = 3/16                                \\
+\end{align*}
+\begin{align*}
+  \P(T = 1)
+   & = \P(T = 1, M = 0) + \P(T = 1, M = 1) \\
+   & = 3/16 + 5/8                          \\
+   & = 13/16                               \\
+\end{align*}
+
+\subsubsection*{2.}
+$$
+  \P(M = 0, T = 1) + \P(M = 1, T = 0) = 3/16 + 1/16 = 4/16 = 1/4
+$$
+
+\subsubsection*{3.}
+$$
+  1 - \P(T = 1) = 1 - 13/16 = 3/16 < 1/4
+$$
+Indeed.
+
+\subsubsection*{4.}
+\begin{align*}
+  I(E, T)
+   & = \sum_{i=0, 1}\sum_{j=0,1} \P(E = i, T = j) \log \frac{\P(E = i, T = j)}{\P(E = i) \P(T = j)}    \\
+   & = \sum_{j=0,1} \P(E = 1, T = j) \log \frac{\P(E = 1, T = j)}{\P(E = 1) \P(T = j)}                 \\
+   & = \P(E = 1, T = 0) \log \frac{\P(E = 1, T = 0)}{\P(E = 1) \P(T = 0)} +                            \\
+   & \P(E = 1, T = 1) \log \frac{\P(E = 1, T = 1)}{\P(E = 1) \P(T = 1)}                                \\
+   & = \P(T = 0) \log \frac{\P(T = 0)}{1 * \P(T = 0)} + \P(T = 1) \log \frac{\P(T = 1)}{1 * \P(T = 1)} \\
+   & = 0                                                                                               \\
+\end{align*}
+
+\subsubsection*{5.}
+\begin{align*}
+  I(M, T)
+   & = \sum_{i=0, 1}\sum_{j=0,1} \P(M = i, T = j) \log \frac{\P(M = i, T = j)}{\P(M = i) \P(T = j)} \\
+   & =
+  \frac{1}{8} \log \frac{\frac{1}{8}}{\frac{5}{16}\frac{3}{16}} +
+  \frac{3}{16} \log \frac{\frac{3}{16}}{\frac{5}{16}\frac{13}{16}} +
+  \frac{1}{16} \log \frac{\frac{1}{16}}{\frac{11}{16}\frac{3}{16}} +
+  \frac{1}{16} \log \frac{\frac{5}{8}}{\frac{11}{16}\frac{13}{16}}
+  \\
+   & =
+  \frac{1}{16} \left(
+  2 \log \frac{2}{\frac{5}{16} * 3} +
+  3 \log \frac{3}{\frac{5}{16} * 13} +
+  1 \log \frac{1}{\frac{11}{16} * 3} +
+  1 \log \frac{10}{\frac{11}{16} * 13}
+  \right)
+  \\
+   & =
+  \frac{1}{16} \left(
+  2 \log \frac{16*2}{5 * 3} +
+  3 \log \frac{16*3}{5 * 13} +
+  1 \log \frac{16*1}{11 * 3} +
+  1 \log \frac{16*10}{11 * 13}
+  \right)
+  \\
+\end{align*}
+
+
 \subsection{Problem 2}
 Consider a twin-pan balance and $c = 9$ coins. We know that one of these coins is fake. The problem is to find the fake coin given that it only differs from the other 8 coins by its weight.
 
@@ -285,7 +365,40 @@ We want $\P_l = \P_r = \P_e$, to get maximum information. This is achieved for $
 \end{itemize}
 We have:
 $$
-\P_{RS} = \P_{PS} = \P_{-X} = 0.1, \quad \P_{+X} = 0.3, \quad \P_{+Y} = \P_{-Y} = 0.2
+  \P_{RS} = \P_{PS} = \P_{-X} = 0.1, \quad \P_{+X} = 0.3, \quad \P_{+Y} = \P_{-Y} = 0.2
 $$
 
+\section{In-class exercises 2023-01-23}
+Consider the following matrix:
+$$
+  \Pi =
+  \begin{bmatrix}
+    0   & 0.7 & 0.3 \\
+    0.5 & 0   & 0.5 \\
+    0   & 0.8 & 0.2
+  \end{bmatrix}
+$$
+and:
+$$
+  p_\infty =
+  \begin{bmatrix}
+    x & y & z
+  \end{bmatrix}
+$$
+Therefore:
+\begin{align*}
+           & p_\infty \Pi = p_\infty       \\
+  \implies &
+  \det(p_\infty (\Pi - Id)) = 0            \\
+  \implies &
+  \det\left[p_\infty (\Pi - Id)\right] = 0 \\
+  \implies &
+  \det p_\infty
+  \begin{bmatrix}
+    -1  & 0.7 & 0.3  \\
+    0.5 & -1  & 0.5  \\
+    0   & 0.8 & -0.8
+  \end{bmatrix}
+  = 0                                      \\
+\end{align*}
 \end{document}
