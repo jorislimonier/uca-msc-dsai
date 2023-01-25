@@ -23,7 +23,8 @@ class LogisticRegressionEM:
     self.n, self.p = X.shape
     self.beta = np.random.normal(size=self.p)
 
-  def sigmoid(self, z: np.ndarray):
+  @staticmethod
+  def sigmoid(z: np.ndarray) -> np.ndarray:
     """
     Compute the sigmoid function.
 
@@ -35,7 +36,7 @@ class LogisticRegressionEM:
     """
     return 1 / (1 + np.exp(-z))
 
-  def complete_data_log_likelihood(self, beta: np.ndarray):
+  def complete_data_log_likelihood(self, beta: np.ndarray) -> float:
     """
     Compute the log-likelihood of the complete data (observed and estimated missing values) given the parameter estimates.
 
@@ -51,7 +52,7 @@ class LogisticRegressionEM:
     log_likelihood = np.sum(y_hat == self.y)
     return log_likelihood
 
-  def E_step(self, beta: np.ndarray):
+  def E_step(self, beta: np.ndarray) -> None:
     """
     Estimate the missing data based on the current parameter estimates.
 
@@ -63,13 +64,13 @@ class LogisticRegressionEM:
     self.missing_data = np.random.binomial(1, p, size=self.missing_mask.shape)
     self.missing_data[~self.missing_mask] = self.y[~self.missing_mask]
 
-  def M_step(self):
+  def M_step(self) -> None:
     """
     Update the parameter estimates based on the complete data (observed and estimated missing values) using maximum likelihood estimation.
     """
     self.beta = minimize(self.complete_data_log_likelihood, self.beta, method="BFGS").x
 
-  def fit(self, max_iter=100):
+  def fit(self, max_iter=1000):
     """
     Fit the logistic regression model using the EM algorithm.
 
@@ -80,7 +81,7 @@ class LogisticRegressionEM:
       self.E_step(self.beta)
       self.M_step()
 
-  def predict(self, X):
+  def predict(self, X) -> np.ndarray:
     """
     Predict the labels for the given feature matrix.
 
