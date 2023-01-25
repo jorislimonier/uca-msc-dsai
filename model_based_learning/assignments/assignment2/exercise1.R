@@ -33,7 +33,6 @@ median_imputation <- function(xna_miss) {
 }
 # Implement the multiple imputation method
 multiple_imputation <- function(xna_miss) {
-  # Don't print output
   xna_miss_mi <- mice(xna_miss, m = 5, maxit = 50, seed = 123, printFlag = FALSE)
   xna_miss_mi <- complete(xna_miss_mi, 1)
   return(xna_miss_mi)
