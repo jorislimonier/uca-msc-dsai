@@ -513,4 +513,139 @@ Therefore:
   \end{bmatrix}
   = 0                                      \\
 \end{align*}
+
+\section{In-class exercises 2023-01-30}
+\subsection{Lecture notes exercise}
+\begin{align*}
+  H(X)
+   & = - \sum_{i=1}^2 \P(X = x_i) \log \P(X = x_i) \\
+   & = - 2 * \frac{1}{2} \log \frac{1}{2}          \\
+   & = 1
+\end{align*}
+\begin{align*}
+  \P(Y = 0)
+   & = \P(Y = 0, X = 0) + \P(Y = 0, X = 1)                             \\
+   & = \P(Y = 0 \mid X = 0) \P(X = 0) + \P(Y = 0 \mid X = 1) \P(X = 1) \\
+   & = (1-p) \frac{1}{2} + p \frac{1}{2}                               \\
+   & = \frac{1}{2}                                                     \\
+\end{align*}
+\begin{align*}
+  \P(Y = 1)
+   & = 1 - \P(Y = 0) \\
+   & = \frac{1}{2}   \\
+\end{align*}
+\begin{align*}
+  \P(X = 0 \mid Y = 0)
+   & = \frac{\P(Y = 0 \mid X = 0) \P(X = 0)}{\P(Y = 0)} \\
+   & = \frac{(1 - p) 1/2}{1/2}                          \\
+   & = 1 - p                                            \\
+\end{align*}
+\begin{align*}
+  \P(X = 1 \mid Y = 0)
+   & = \frac{\P(Y = 0 \mid X = 1) \P(X = 1)}{\P(Y = 0)} \\
+   & = \frac{p 1/2}{1/2}                                \\
+   & = p                                                \\
+\end{align*}
+\begin{align*}
+  \P(X = 0 \mid Y = 1)
+   & = \frac{\P(Y = 1 \mid X = 0) \P(X = 0)}{\P(Y = 1)} \\
+   & = p                                                \\
+\end{align*}
+\begin{align*}
+  \P(X = 1 \mid Y = 1)
+   & = \frac{\P(Y = 0 \mid X = 1) \P(X = 1)}{\P(Y = 1)} \\
+   & = 1 - p                                            \\
+\end{align*}
+\begin{align*}
+  H(X \mid Y)
+   & = \frac{1}{2} H(p, 1-p) + \frac{1}{2} H(p, 1-p) \\
+   & = H(p, 1-p)                                     \\
+\end{align*}
+\begin{align*}
+  I(X, Y)
+   & = H(X) - H(X \mid Y) \\
+   & = 1 - H(p, 1-p)      \\
+\end{align*}
+
+\subsection{Previous exam - exercise 2}
+\subsubsection{1.}
+\begin{align*}
+  H(X)
+   & = h(\beta) \\
+\end{align*}
+
+\subsubsection{2.}
+\begin{align*}
+  \P(X = 0, Y = 0) & = \P(Y = 0 \mid X = 0) \P(X = 0) = q \beta      & \\
+  \P(X = 0, Y = 1) & = \P(Y = 1 \mid X = 0) \P(X = 0) = (1- q) \beta & \\
+  \P(X = 1, Y = 0) & = \P(Y = 0 \mid X = 1) \P(X = 1) = 0            & \\
+  \P(X = 1, Y = 1) & = \P(Y = 1 \mid X = 1) \P(X = 1) = (1 - \beta)  & \\
+\end{align*}
+
+\subsubsection{3.}
+\begin{align*}
+  \P(Y = 0)
+   & = \P(Y = 0, X = 0) + \P(Y = 0, X = 1) \\
+   & = q \beta + 0                         \\
+   & = q \beta                             \\
+\end{align*}
+\begin{align*}
+  \P(Y = 1)
+   & = \P(Y = 1, X = 0) + \P(Y = 1, X = 1) \\
+   & = (1 - q) \beta                       \\
+\end{align*}
+
+\subsubsection{4.}
+\begin{align*}
+  H(Y \mid X = 0)
+   & = h(q) \\
+\end{align*}
+\begin{align*}
+  H(Y \mid X = 1)
+   & = 0 \\
+\end{align*}
+\begin{align*}
+  H(Y)
+   & = H(Y \mid X = 0) \P(X = 0) + H(Y \mid X = 1) \P(X = 1) \\
+   & = h(q) \beta + 0 (1 - \beta)                            \\
+   & = h(q\beta)                                             \\
+\end{align*}
+
+\subsubsection{5.}
+\begin{align*}
+  H(Y \mid X)
+   & = H(Y \mid X = 0) \P(X = 0) + H(Y \mid X = 1) \P(X = 1) \\
+   & = h(q) \beta + 0 (1 - \beta)                            \\
+   & = h(q) \beta                                            \\
+\end{align*}
+\begin{align*}
+  I(X, Y)
+   & = H(Y) - H(Y \mid X)     \\
+   & = \beta h(q) - h(q)\beta \\
+\end{align*}
+\subsubsection{6.}
+\begin{align*}
+           &
+  f(x) = h(qx) - x h(q)                               \\
+  \implies &
+  f'(x) = h'(qx) - h(q)                               \\
+  \implies &
+  f'(x) = (- qx\log qx - (1 - qx) \log (1 - qx))' - h(q) \\
+  \implies &
+  f'(x) = (- q\log qx - qx \frac{q}{qx} + q\log (1 - qx) - (1 - qx) \frac{-q}{1 - qx} - h(q) \\
+\end{align*}
+\begin{align*}
+           &
+  f'(x) = 0                                        \\
+  \implies &
+  - qx\log qx - (1 - qx) \log (1 - qx) - h(q)  = 0 \\
+  \implies &
+  - qx\log qx - (1 - qx) \log (1 - qx) = h(q)      \\
+  \implies &
+  - x\log qx - \frac{(1 - qx)}{q} \log (1 - qx) = \frac{h(q)}{q}      \\
+  \implies &
+  - x\log qx - \frac{(1 - qx)}{q} \log (1 - qx) = \frac{h(q)}{q}      \\
+\end{align*}
+
+
 \end{document}
