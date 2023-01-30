@@ -626,26 +626,70 @@ Therefore:
 \subsubsection{6.}
 \begin{align*}
            &
-  f(x) = h(qx) - x h(q)                               \\
+  f(x) = h(qx) - x h(q)  \\
   \implies &
-  f'(x) = h'(qx) - h(q)                               \\
-  \implies &
-  f'(x) = (- qx\log qx - (1 - qx) \log (1 - qx))' - h(q) \\
-  \implies &
-  f'(x) = (- q\log qx - qx \frac{q}{qx} + q\log (1 - qx) - (1 - qx) \frac{-q}{1 - qx} - h(q) \\
+  f'(x) = qh'(qx) - h(q) \\
+\end{align*}
+\begin{align*}
+  h'(x)
+   & = [-x \log x - (1 - x) \log (1 - x)]'                                        \\
+   & = \frac{-1}{\ln 2} [x \ln x + (1 - x) \ln (1 - x)]'                          \\
+   & = \frac{-1}{\ln 2} [\ln x + \frac{x}{x} - \ln (1 - x) - \frac{1 - x}{1 - x}] \\
+   & = \frac{-1}{\ln 2} [\ln x - \ln (1 - x)]                                     \\
+   & = \log (1 - x) - \log x                                                      \\
+   & = \log (\frac{1}{x} - 1)                                                     \\
 \end{align*}
 \begin{align*}
            &
-  f'(x) = 0                                        \\
+  f'(x) = 0                           \\
   \implies &
-  - qx\log qx - (1 - qx) \log (1 - qx) - h(q)  = 0 \\
+  h'(qx) - h(q)= 0                    \\
   \implies &
-  - qx\log qx - (1 - qx) \log (1 - qx) = h(q)      \\
+  \log (1 - qx) - \log qx + h(q) = 0  \\
   \implies &
-  - x\log qx - \frac{(1 - qx)}{q} \log (1 - qx) = \frac{h(q)}{q}      \\
-  \implies &
-  - x\log qx - \frac{(1 - qx)}{q} \log (1 - qx) = \frac{h(q)}{q}      \\
+  \log (\frac{1 - qx}{qx}) + h(q) = 0 \\
+\end{align*}
+\begin{align*}
+  f''(x)
+   & = h''(qx)                  \\
+   & = [\log(\frac{1}{x} - 1)]' \\
+   & = \frac{-x^{-2}}{x^{-1} - 1} \\
+   & = \frac{x^{-1}}{x - 1} \\
+\end{align*}
+$$
+\beta_0 = \frac{1}{q (1 + 2^{\frac{h(q)}{q}})}
+$$
+\begin{align*}
+  f''(\beta_0)
+  &= q^2 h'' (qx) \\
 \end{align*}
 
+\subsection{Previous exam - exercise 3}
+\subsubsection{1.}
+\begin{align*}
+  H(S)
+  &= - 2*0.2 \log 0.2 - 0.4 \log 0.4 - 2*0.1 \log 0.1 \\
+  &\approx 2.12 \text{ sh/state of S} \\
+\end{align*}
+Since $H(S) \approx 2.12 < 2.5 = C$, the channel is adapted to the source.
 
+\subsubsection{2.}
+Codes 000, 001, 010, 011, 101. Average length:
+\begin{align*}
+  \bar{n}_{naive} 
+  &= 3 \text{ bits per state of S} \\
+\end{align*}
+$\bar{n}_{naive} = 2.7 > 2.12 = C$, so this encoding can't use this channel.
+
+\subsubsection{3.}
+\begin{align*}
+  p_0 = 0.2 &\implies n_0 = \left\lceil - \log 0.2 \right\rceil = 3 \\
+  p_1 = 0.4 &\implies n_1 = \left\lceil - \log 0.4 \right\rceil = 2 \\
+  p_2 = 0.2 &\implies n_2 = \left\lceil - \log 0.2 \right\rceil = 3 \\
+  p_3 = 0.1 &\implies n_3 = \left\lceil - \log 0.1 \right\rceil = 4 \\
+  p_4 = 0.1 &\implies n_4 = \left\lceil - \log 0.1 \right\rceil = 4 \\
+\end{align*}
+So, here is the code: 000, 11, 001, 0001, 0111.
+
+\subsubsection{4.}
 \end{document}
