@@ -226,7 +226,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td align="center">TBD</td>
     </tr>
     <tr>
-      <td>:construction: Model-Based statistical Learning</td>
+      <td>:heavy_check_mark: Model-Based statistical Learning</td>
       <td align="center">TBD</td>
     </tr>
     <tr>
@@ -269,8 +269,8 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <tr>
       <td>Personal Training </td>
       <td>:soon: Internship</td>
-      <td> </td>
-      <td> </td>
+      <td align="center">TBD</td>
+      <td align="center">TBD</td>
     </tr>
   </tbody>
 </table>
