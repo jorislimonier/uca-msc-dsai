@@ -1,0 +1,3 @@
+[submodule "dl_computer_vision/practice/YOLOX"]
+	path = dl_computer_vision/practice/YOLOX
+	url = https://github.com/Megvii-BaseDetection/YOLOX
