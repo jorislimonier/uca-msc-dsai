@@ -4,3 +4,6 @@
 [submodule "dl_computer_vision/practice/ByteTrack"]
 	path = dl_computer_vision/practice/ByteTrack
 	url = https://github.com/ifzhang/ByteTrack
+[submodule "research_project/mmpose"]
+	path = research_project/mmpose
+	url = https://github.com/open-mmlab/mmpose/
