@@ -219,7 +219,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td align="center">16</td>
       <td rowspan=4 align="center">TBD</td>
     </tr>
-    <td>:construction: Advanced Deep Learning</td>
+    <td>:heavy_check_mark: Advanced Deep Learning</td>
     <td align="center">TBD</td>
     <tr>
       <td>:construction: Introduction to Information Theory</td>
