@@ -222,7 +222,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <td>:heavy_check_mark: Advanced Deep Learning</td>
     <td align="center">TBD</td>
     <tr>
-      <td>:construction: Introduction to Information Theory</td>
+      <td>:heavy_check_mark: Introduction to Information Theory</td>
       <td align="center">TBD</td>
     </tr>
     <tr>
@@ -250,7 +250,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td align="center">TBD</td>
     </tr>
     <tr>
-      <td>:soon: Advanced Learning: Functional, Mixed and Text data</td>
+      <td>:construction: Advanced Learning: Functional, Mixed and Text data</td>
       <td align="center">TBD</td>
     </tr>
   </tbody>
