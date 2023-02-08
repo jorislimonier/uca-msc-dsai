@@ -9,6 +9,7 @@ from argparse import ArgumentParser
 import cv2
 import mmcv
 import numpy as np
+from constants import *
 
 from mmpose.apis import (
   collect_multi_frames,
@@ -23,6 +24,7 @@ from mmpose.apis import (
 from mmpose.core import Smoother
 from mmpose.datasets import DatasetInfo
 from mmpose.models import PoseLifter, TopDown
+
 debug = False
 
 if debug:
@@ -293,34 +295,58 @@ def parse_args() -> ArgumentParser:
   return parser
 
 
-def main(args: Optional[ArgumentParser] = None):
-  
-  if args is None:
-    parser = parse_args()
-    args = parser.parse_args()
+def predict(
+  det_config: str = f"{MMPOSE_FOLDER}demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py",
+  det_checkpoint: str = f"{MODELS_FOLDER}faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth",
+  pose_detector_config: Optional[
+    str
+  ] = f"{MMPOSE_FOLDER}configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w48_coco_256x192.py",
+  pose_detector_checkpoint: Optional[
+    str
+  ] = f"{MODELS_FOLDER}hrnet_w48_coco_256x192-b9e0b3ab_20200708.pth",
+  pose_lifter_config: str = f"{MMPOSE_FOLDER}configs/body/3d_kpt_sview_rgb_vid/video_pose_lift/h36m/videopose3d_h36m_243frames_fullconv_supervised_cpn_ft.py",
+  pose_lifter_checkpoint: str = f"{MODELS_FOLDER}videopose_h36m_243frames_fullconv_supervised_cpn_ft-88f5abbb_20210527.pth",
+  video_path: str = f"{INTERIM_FOLDER}short.mp4",
+  rebase_keypoint_height=True,
+  norm_pose_2d=True,
+  num_instances: int = -1,
+  show=False,
+  out_video_root: str = PROCESSED_FOLDER,
+  # device = "cpu",
+  device="cuda:0",
+  det_cat_id: int = 1,
+  bbox_thr: float = 0.9,
+  kpt_thr: float = 0.3,
+  use_oks_tracking=True,
+  tracking_thr: float = 0.3,
+  radius: int = 8,
+  thickness: int = 2,
+  smooth=True,
+  smooth_filter_cfg: str = f"{MMPOSE_FOLDER}configs/_base_/filters/one_euro.py",
+  use_multi_frames=False,
+  online=False,
+):
 
   assert has_mmdet, "Please install mmdet to run the demo."
-  assert args.show or (args.out_video_root != "")
-  assert args.det_config is not None
-  assert args.det_checkpoint is not None
+  assert show or (out_video_root != "")
+  assert det_config is not None
+  assert det_checkpoint is not None
 
-  video = mmcv.VideoReader(args.video_path)
-  assert video.opened, f"Failed to load video file {args.video_path}"
+  video = mmcv.VideoReader(video_path)
+  assert video.opened, f"Failed to load video file {video_path}"
 
   # First stage: 2D pose detection
   print("Stage 1: 2D pose detection.")
 
   print("Initializing model...")
   if debug:
-    print(args.det_config)
-    print(args.det_checkpoint)
-    print(args.device.lower())
-  person_det_model = init_detector(
-    args.det_config, args.det_checkpoint, device=args.device.lower()
-  )
+    print(det_config)
+    print(det_checkpoint)
+    print(device.lower())
+  person_det_model = init_detector(det_config, det_checkpoint, device=device.lower())
 
   pose_det_model = init_pose_model(
-    args.pose_detector_config, args.pose_detector_checkpoint, device=args.device.lower()
+    pose_detector_config, pose_detector_checkpoint, device=device.lower()
   )
 
   assert isinstance(pose_det_model, TopDown), (
@@ -328,7 +354,7 @@ def main(args: Optional[ArgumentParser] = None):
   )
 
   # frame index offsets for inference, used in multi-frame inference setting
-  if args.use_multi_frames:
+  if use_multi_frames:
     assert "frame_indices_test" in pose_det_model.cfg.data.test.data_cfg
     indices = pose_det_model.cfg.data.test.data_cfg["frame_indices_test"]
 
@@ -363,17 +389,17 @@ def main(args: Optional[ArgumentParser] = None):
     mmdet_results = inference_detector(person_det_model, cur_frame)
 
     # keep the person class bounding boxes.
-    person_det_results = process_mmdet_results(mmdet_results, args.det_cat_id)
+    person_det_results = process_mmdet_results(mmdet_results, det_cat_id)
 
-    if args.use_multi_frames:
-      frames = collect_multi_frames(video, frame_id, indices, args.online)
+    if use_multi_frames:
+      frames = collect_multi_frames(video, frame_id, indices, online)
 
     # make person results for current image
     pose_det_results, _ = inference_top_down_pose_model(
       pose_det_model,
-      frames if args.use_multi_frames else cur_frame,
+      frames if use_multi_frames else cur_frame,
       person_det_results,
-      bbox_thr=args.bbox_thr,
+      bbox_thr=bbox_thr,
       format="xyxy",
       dataset=pose_det_dataset,
       dataset_info=dataset_info,
@@ -386,8 +412,8 @@ def main(args: Optional[ArgumentParser] = None):
       pose_det_results,
       pose_det_results_last,
       next_id,
-      use_oks=args.use_oks_tracking,
-      tracking_thr=args.tracking_thr,
+      use_oks=use_oks_tracking,
+      tracking_thr=tracking_thr,
     )
 
     pose_det_results_list.append(copy.deepcopy(pose_det_results))
@@ -396,8 +422,10 @@ def main(args: Optional[ArgumentParser] = None):
   print("Stage 2: 2D-to-3D pose lifting.")
 
   print("Initializing model...")
-  pose_lift_model = init_pose_model(
-    args.pose_lifter_config, args.pose_lifter_checkpoint, device=args.device.lower()
+  pose_lift_model: PoseLifter = init_pose_model(
+    config=pose_lifter_config,
+    checkpoint=pose_lifter_checkpoint,
+    device=device.lower(),
   )
 
   assert isinstance(pose_lift_model, PoseLifter), (
@@ -405,10 +433,10 @@ def main(args: Optional[ArgumentParser] = None):
   )
   pose_lift_dataset = pose_lift_model.cfg.data["test"]["type"]
 
-  if args.out_video_root == "":
+  if out_video_root == "":
     save_out_video = False
   else:
-    os.makedirs(args.out_video_root, exist_ok=True)
+    os.makedirs(out_video_root, exist_ok=True)
     save_out_video = True
 
   if save_out_video:
@@ -431,14 +459,14 @@ def main(args: Optional[ArgumentParser] = None):
     data_cfg = pose_lift_model.cfg.data_cfg
 
   # build pose smoother for temporal refinement
-  if args.smooth:
+  if smooth:
     smoother = Smoother(
-      filter_cfg=args.smooth_filter_cfg, keypoint_key="keypoints", keypoint_dim=2
+      filter_cfg=smooth_filter_cfg, keypoint_key="keypoints", keypoint_dim=2
     )
   else:
     smoother = None
 
-  num_instances = args.num_instances
+  num_instances = num_instances
   pose_lift_dataset_info = pose_lift_model.cfg.data["test"].get("dataset_info", None)
   if pose_lift_dataset_info is None:
     warnings.warn(
@@ -472,7 +500,7 @@ def main(args: Optional[ArgumentParser] = None):
       dataset_info=pose_lift_dataset_info,
       with_track_id=True,
       image_size=video.resolution,
-      norm_pose_2d=args.norm_pose_2d,
+      norm_pose_2d=norm_pose_2d,
     )
 
     # Pose processing
@@ -484,7 +512,7 @@ def main(args: Optional[ArgumentParser] = None):
       keypoints_3d[..., 0] = -keypoints_3d[..., 0]
       keypoints_3d[..., 2] = -keypoints_3d[..., 2]
       # rebase height (z-axis)
-      if args.rebase_keypoint_height:
+      if rebase_keypoint_height:
         keypoints_3d[..., 2] -= np.min(keypoints_3d[..., 2], axis=-1, keepdims=True)
       res["keypoints_3d"] = keypoints_3d
       # add title
@@ -507,16 +535,16 @@ def main(args: Optional[ArgumentParser] = None):
       dataset=pose_lift_dataset,
       dataset_info=pose_lift_dataset_info,
       out_file=None,
-      radius=args.radius,
-      thickness=args.thickness,
+      radius=radius,
+      thickness=thickness,
       num_instances=num_instances,
-      show=args.show,
+      show=show,
     )
 
     if save_out_video:
       if writer is None:
         writer = cv2.VideoWriter(
-          osp.join(args.out_video_root, f"vis_{osp.basename(args.video_path)}"),
+          osp.join(out_video_root, f"vis_{osp.basename(video_path)}"),
           fourcc,
           fps,
           (img_vis.shape[1], img_vis.shape[0]),
@@ -525,7 +553,3 @@ def main(args: Optional[ArgumentParser] = None):
 
   if save_out_video:
     writer.release()
-
-
-if __name__ == "__main__":
-  main()
