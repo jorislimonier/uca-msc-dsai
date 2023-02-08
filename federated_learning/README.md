@@ -26,13 +26,33 @@
 1. Security, attacks
 
 ## Minitests
+
 ### Minitest 1
 
-### Define FL
+#### Define FL
 
 FL is a way to train a machine learning model while keeping the datasets local at the users (clients over the internet)
 
-### When should we use FL?
+#### When should we use FL?
 
 - Cost of data collection
 - Data privacy (GDPR)
+
+### Minitest 2
+
+#### What is per-client fairness (PCF) and per-sample fairness (PSF)?
+
+PCF: each client should have the same importance
+PSF: each sample should have the same importance
+
+#### How is it implemented in FL?
+Let $K$ be the number of clients and $n_k$ the number of samples of client $k$. Let $\{\xi_{k,l}\}_{l=1}^{n_k}$ be the samples of client $k$.
+
+Client objective function:
+$$
+F_k(w) = \frac{1}{n_k} \sum_{l=1}^{n_k} \ell(w, \xi_{k,l})
+$$
+Global objective function:
+$$
+F(w) = \sum_{k=1}^K p_k F_k(w)
+$$
