@@ -2,15 +2,17 @@
 import copy
 import os
 import os.path as osp
-from typing import Optional
 import warnings
 from argparse import ArgumentParser
+from datetime import datetime
+from typing import Optional
 
 import cv2
 import mmcv
+import numba
 import numpy as np
-from constants import *
 
+from constants import *
 from mmpose.apis import (
   collect_multi_frames,
   extract_pose_sequence,
@@ -23,7 +25,8 @@ from mmpose.apis import (
 )
 from mmpose.core import Smoother
 from mmpose.datasets import DatasetInfo
-from mmpose.models import PoseLifter, TopDown
+from mmpose.models import TopDown
+from mmpose.models import PoseLifter
 
 debug = False
 
@@ -41,6 +44,7 @@ except (ImportError, ModuleNotFoundError):
   has_mmdet = False
 
 
+@numba.jit()
 def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
   """Convert pose det dataset keypoints definition to pose lifter dataset
   keypoints definition, so that they are compatible with the definitions
@@ -117,9 +121,8 @@ def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
         [7, 9, 11, 6, 8, 10, 0, 2, 4, 1, 3, 5]
       ]
     else:
-      raise NotImplementedError(
-        f"unsupported conversion between {pose_lift_dataset} and " f"{pose_det_dataset}"
-      )
+      msg = f"unsupported conversion between {pose_lift_dataset} and {pose_det_dataset}"
+      raise NotImplementedError(msg)
 
   elif pose_lift_dataset == "Body3DMpiInf3dhpDataset":
     if pose_det_dataset in coco_style_datasets:
@@ -184,117 +187,7 @@ def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
   return keypoints_new
 
 
-def parse_args() -> ArgumentParser:
-  parser = ArgumentParser()
-  parser.add_argument("det_config", help="Config file for detection")
-  parser.add_argument("det_checkpoint", help="Checkpoint file for detection")
-  parser.add_argument(
-    "pose_detector_config",
-    type=str,
-    default=None,
-    help="Config file for the 1st stage 2D pose detector",
-  )
-  parser.add_argument(
-    "pose_detector_checkpoint",
-    type=str,
-    default=None,
-    help="Checkpoint file for the 1st stage 2D pose detector",
-  )
-  parser.add_argument(
-    "pose_lifter_config", help="Config file for the 2nd stage pose lifter model"
-  )
-  parser.add_argument(
-    "pose_lifter_checkpoint", help="Checkpoint file for the 2nd stage pose lifter model"
-  )
-  parser.add_argument("--video-path", type=str, default="", help="Video path")
-  parser.add_argument(
-    "--rebase-keypoint-height",
-    action="store_true",
-    help="Rebase the predicted 3D pose so its lowest keypoint has a "
-    "height of 0 (landing on the ground). This is useful for "
-    "visualization when the model do not predict the global position "
-    "of the 3D pose.",
-  )
-  parser.add_argument(
-    "--norm-pose-2d",
-    action="store_true",
-    help="Scale the bbox (along with the 2D pose) to the average bbox "
-    "scale of the dataset, and move the bbox (along with the 2D pose) to "
-    "the average bbox center of the dataset. This is useful when bbox "
-    "is small, especially in multi-person scenarios.",
-  )
-  parser.add_argument(
-    "--num-instances",
-    type=int,
-    default=-1,
-    help="The number of 3D poses to be visualized in every frame. If "
-    "less than 0, it will be set to the number of pose results in the "
-    "first frame.",
-  )
-  parser.add_argument(
-    "--show", action="store_true", default=False, help="whether to show visualizations."
-  )
-  parser.add_argument(
-    "--out-video-root",
-    type=str,
-    default="vis_results",
-    help="Root of the output video file. "
-    "Default not saving the visualization video.",
-  )
-  parser.add_argument("--device", default="cuda:0", help="Device for inference")
-  parser.add_argument(
-    "--det-cat-id",
-    type=int,
-    default=1,
-    help="Category id for bounding box detection model",
-  )
-  parser.add_argument(
-    "--bbox-thr", type=float, default=0.9, help="Bounding box score threshold"
-  )
-  parser.add_argument("--kpt-thr", type=float, default=0.3)
-  parser.add_argument(
-    "--use-oks-tracking", action="store_true", help="Using OKS tracking"
-  )
-  parser.add_argument(
-    "--tracking-thr", type=float, default=0.3, help="Tracking threshold"
-  )
-  parser.add_argument(
-    "--radius", type=int, default=8, help="Keypoint radius for visualization"
-  )
-  parser.add_argument(
-    "--thickness", type=int, default=2, help="Link thickness for visualization"
-  )
-  parser.add_argument(
-    "--smooth",
-    action="store_true",
-    help="Apply a temporal filter to smooth the 2D pose estimation "
-    "results. See also --smooth-filter-cfg.",
-  )
-  parser.add_argument(
-    "--smooth-filter-cfg",
-    type=str,
-    default="configs/_base_/filters/one_euro.py",
-    help="Config file of the filter to smooth the pose estimation "
-    "results. See also --smooth.",
-  )
-  parser.add_argument(
-    "--use-multi-frames",
-    action="store_true",
-    default=False,
-    help="whether to use multi frames for inference in the 2D pose"
-    "detection stage. Default: False.",
-  )
-  parser.add_argument(
-    "--online",
-    action="store_true",
-    default=False,
-    help="inference mode. If set to True, can not use future frame"
-    "information when using multi frames for inference in the 2D pose"
-    "detection stage. Default: False.",
-  )
-  return parser
-
-
+@numba.jit()
 def predict(
   det_config: str = f"{MMPOSE_FOLDER}demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py",
   det_checkpoint: str = f"{MODELS_FOLDER}faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth",
@@ -427,6 +320,7 @@ def predict(
     checkpoint=pose_lifter_checkpoint,
     device=device.lower(),
   )
+  print(type(pose_lift_model))
 
   assert isinstance(pose_lift_model, PoseLifter), (
     'Only "PoseLifter" model is supported for the 2nd stage ' "(2D-to-3D lifting)"
@@ -503,6 +397,9 @@ def predict(
       norm_pose_2d=norm_pose_2d,
     )
 
+    # Create current date for filename
+    dt_now = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Pose processing
     pose_lift_results_vis = []
     for idx, res in enumerate(pose_lift_results):
@@ -529,7 +426,7 @@ def predict(
     if num_instances < 0:
       num_instances = len(pose_lift_results_vis)
     img_vis = vis_3d_pose_result(
-      pose_lift_model,
+      model=pose_lift_model,
       result=pose_lift_results_vis,
       img=video[i],
       dataset=pose_lift_dataset,
@@ -544,7 +441,7 @@ def predict(
     if save_out_video:
       if writer is None:
         writer = cv2.VideoWriter(
-          osp.join(out_video_root, f"vis_{osp.basename(video_path)}"),
+          osp.join(out_video_root, f"vis_{dt_now}_{osp.basename(video_path)}"),
           fourcc,
           fps,
           (img_vis.shape[1], img_vis.shape[0]),

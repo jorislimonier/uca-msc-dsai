@@ -57,6 +57,7 @@ def overlay_keypoints(
     coord = pose[count].reshape(32, -1).astype(int)
 
     success, frame_bgr = cap.read()
+    
     if count % show_nth_frame == 0:
       frame = frame_bgr[:, :, ::-1]
 
