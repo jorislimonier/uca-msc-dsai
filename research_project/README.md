@@ -310,6 +310,19 @@ These are the 2D detectors used before lifting.
 - Questions
   - "The input consists of 2D keypoints for a receptive field of 243 frames" (p. 2) = utilisation de 243 frames pour prédire une frame ?
 
+### Réunion 2023-02-09
+- Etudier la variabilité des zone occultées vs visibles
+- Enlever les articulations occultées de la visualisation
+- Evaluer les nœuds visibles sur image occultée vs non-occultée
+- Papier
+  - Méthodologie
+  - Métriques
+  - Dataset
+  - Résultats
+  - Analyse des résultats
+  - Conclusion & Pistes
+
+
 #### Notes
 
 - Robustesse aux multi-personnes ?
