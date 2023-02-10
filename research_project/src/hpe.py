@@ -5,7 +5,7 @@ import os.path as osp
 import warnings
 from argparse import ArgumentParser
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Tuple
 
 import cv2
 import mmcv
@@ -25,8 +25,9 @@ from mmpose.apis import (
 )
 from mmpose.core import Smoother
 from mmpose.datasets import DatasetInfo
-from mmpose.models import TopDown
-from mmpose.models import PoseLifter
+from mmpose.models import PoseLifter, TopDown
+
+from utils import occlude_video_region, subclip_video
 
 debug = False
 
@@ -69,6 +70,8 @@ def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
     "TopDownPoseTrack18VideoDataset",
   ]
   keypoints_new = np.zeros((17, keypoints.shape[1]), dtype=keypoints.dtype)
+
+  # print(f"{pose_lift_dataset} {pose_det_dataset}")
   if pose_lift_dataset == "Body3DH36MDataset":
     if pose_det_dataset in ["TopDownH36MDataset"]:
       keypoints_new = keypoints
@@ -200,16 +203,22 @@ def predict(
   pose_lifter_config: str = f"{MMPOSE_FOLDER}configs/body/3d_kpt_sview_rgb_vid/video_pose_lift/h36m/videopose3d_h36m_243frames_fullconv_supervised_cpn_ft.py",
   pose_lifter_checkpoint: str = f"{MODELS_FOLDER}videopose_h36m_243frames_fullconv_supervised_cpn_ft-88f5abbb_20210527.pth",
   video_path: str = f"{INTERIM_FOLDER}short.mp4",
+  subclip: bool = False,
+  subclip_start: int = 0,
+  subclip_end: int = 1,
+  occlude: bool = False,
+  occlusion_proportion_h: Optional[float] = 0.35,
+  occlusion_proportion_w: Optional[float] = 1.0,
+  occlusion_top_left: Tuple[int, int] = (0, 0),
   rebase_keypoint_height=True,
   norm_pose_2d=True,
   num_instances: int = -1,
   show=False,
   out_video_root: str = PROCESSED_FOLDER,
-  # device = "cpu",
   device="cuda:0",
   det_cat_id: int = 1,
   bbox_thr: float = 0.9,
-  kpt_thr: float = 0.3,
+  # kpt_thr: float = 0.3,
   use_oks_tracking=True,
   tracking_thr: float = 0.3,
   radius: int = 8,
@@ -224,6 +233,35 @@ def predict(
   assert show or (out_video_root != "")
   assert det_config is not None
   assert det_checkpoint is not None
+
+  video_name = video_path.split("/")[-1].split(".")[0]  # without "mp4"
+  output_path = f"{out_video_root}{video_name}.mp4"
+
+  if subclip:
+    print("Subclipping video...")
+
+    output_path = output_path.replace(".mp4", "_subclip.mp4")
+    subclip_video(
+      video_path=video_path,
+      output_path=output_path,
+      start=subclip_start,
+      end=subclip_end,
+    )
+
+    video_path = output_path
+
+  if occlude:
+    print("Occluding video region...")
+
+    output_path = output_path.replace(".mp4", "_occl.mp4")
+    occlude_video_region(
+      video_path=video_path,
+      output_path=output_path,
+      proportion_h=occlusion_proportion_h,
+      proportion_w=occlusion_proportion_w,
+      top_left=occlusion_top_left,
+    )
+    video_path = output_path
 
   video = mmcv.VideoReader(video_path)
   assert video.opened, f"Failed to load video file {video_path}"
@@ -320,7 +358,6 @@ def predict(
     checkpoint=pose_lifter_checkpoint,
     device=device.lower(),
   )
-  print(type(pose_lift_model))
 
   assert isinstance(pose_lift_model, PoseLifter), (
     'Only "PoseLifter" model is supported for the 2nd stage ' "(2D-to-3D lifting)"
@@ -343,7 +380,9 @@ def predict(
     for res in pose_det_results:
       keypoints = res["keypoints"]
       res["keypoints"] = convert_keypoint_definition(
-        keypoints, pose_det_dataset, pose_lift_dataset
+        keypoints=keypoints,
+        pose_det_dataset=pose_det_dataset,
+        pose_lift_dataset=pose_lift_dataset,
       )
 
   # load temporal padding config from model.data_cfg
@@ -425,6 +464,7 @@ def predict(
     # Visualization
     if num_instances < 0:
       num_instances = len(pose_lift_results_vis)
+
     img_vis = vis_3d_pose_result(
       model=pose_lift_model,
       result=pose_lift_results_vis,
