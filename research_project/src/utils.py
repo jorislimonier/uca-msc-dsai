@@ -18,10 +18,11 @@ def subclip_video(video_path: str, output_path: str, start: int, end: int) -> No
       >>> shorten_video("video.mp4", "short.mp4", 0, 10)
   """
   from moviepy.editor import VideoFileClip
+  from moviepy.video.VideoClip import VideoClip
 
   clip = VideoFileClip(video_path)
-  clip = clip.subclip(start, end)
-  clip.write_videofile(output_path)
+  clip: VideoClip = clip.subclip(start, end)
+  clip.write_videofile(output_path, logger=None)
 
 
 def occlude_video_region(
