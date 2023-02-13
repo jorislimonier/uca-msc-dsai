@@ -11,6 +11,7 @@ import cv2
 import mmcv
 import numba
 import numpy as np
+import plotly.express as px
 
 from constants import *
 from mmpose.apis import (
@@ -26,7 +27,6 @@ from mmpose.apis import (
 from mmpose.core import Smoother
 from mmpose.datasets import DatasetInfo
 from mmpose.models import PoseLifter, TopDown
-
 from utils import occlude_video_region, subclip_video
 
 debug = False
@@ -190,7 +190,7 @@ def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
   return keypoints_new
 
 
-@numba.jit()
+# @numba.jit()
 def predict(
   det_config: str = f"{MMPOSE_FOLDER}demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py",
   det_checkpoint: str = f"{MODELS_FOLDER}faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth",
@@ -269,14 +269,15 @@ def predict(
   # First stage: 2D pose detection
   print("Stage 1: 2D pose detection.")
 
-  print("Initializing model...")
   if debug:
     print(det_config)
     print(det_checkpoint)
     print(device.lower())
+
+  print("Initializing model...")
   person_det_model = init_detector(det_config, det_checkpoint, device=device.lower())
 
-  pose_det_model = init_pose_model(
+  pose_det_model: TopDown = init_pose_model(
     pose_detector_config, pose_detector_checkpoint, device=device.lower()
   )
 
@@ -353,15 +354,15 @@ def predict(
   print("Stage 2: 2D-to-3D pose lifting.")
 
   print("Initializing model...")
-  pose_lift_model: PoseLifter = init_pose_model(
+  pose_lift_model = init_pose_model(
     config=pose_lifter_config,
     checkpoint=pose_lifter_checkpoint,
     device=device.lower(),
   )
 
-  assert isinstance(pose_lift_model, PoseLifter), (
-    'Only "PoseLifter" model is supported for the 2nd stage ' "(2D-to-3D lifting)"
-  )
+  msg = 'Only "PoseLifter" model is supported for the 2nd stage ' "(2D-to-3D lifting)"
+  assert isinstance(pose_lift_model, PoseLifter), msg
+
   pose_lift_dataset = pose_lift_model.cfg.data["test"]["type"]
 
   if out_video_root == "":
@@ -410,6 +411,9 @@ def predict(
   else:
     pose_lift_dataset_info = DatasetInfo(pose_lift_dataset_info)
 
+  global pos_det_results
+  pos_det_results = pose_det_results_list
+
   print("Running 2D-to-3D pose lifting inference...")
   for i, pose_det_results in enumerate(mmcv.track_iter_progress(pose_det_results_list)):
     # extract and pad input pose2d sequence
@@ -428,7 +432,7 @@ def predict(
 
     # 2D-to-3D pose lifting
     pose_lift_results = inference_pose_lifter_model(
-      pose_lift_model,
+      model=pose_lift_model,
       pose_results_2d=pose_results_2d,
       dataset=pose_lift_dataset,
       dataset_info=pose_lift_dataset_info,
@@ -444,23 +448,36 @@ def predict(
     pose_lift_results_vis = []
     for idx, res in enumerate(pose_lift_results):
       keypoints_3d = res["keypoints_3d"]
+
       # exchange y,z-axis, and then reverse the direction of x,z-axis
       keypoints_3d = keypoints_3d[..., [0, 2, 1]]
       keypoints_3d[..., 0] = -keypoints_3d[..., 0]
       keypoints_3d[..., 2] = -keypoints_3d[..., 2]
+
       # rebase height (z-axis)
       if rebase_keypoint_height:
         keypoints_3d[..., 2] -= np.min(keypoints_3d[..., 2], axis=-1, keepdims=True)
       res["keypoints_3d"] = keypoints_3d
+
       # add title
       det_res = pose_det_results[idx]
       instance_id = det_res["track_id"]
       res["title"] = f"Prediction ({instance_id})"
+
       # only visualize the target frame
       res["keypoints"] = det_res["keypoints"]
       res["bbox"] = det_res["bbox"]
       res["track_id"] = instance_id
       pose_lift_results_vis.append(res)
+
+    global results
+    results = pose_lift_results_vis
+
+    global info
+    info = pose_lift_dataset_info
+
+    global dataset
+    dataset = pose_lift_dataset
 
     # Visualization
     if num_instances < 0:
@@ -482,10 +499,10 @@ def predict(
     if save_out_video:
       if writer is None:
         writer = cv2.VideoWriter(
-          osp.join(out_video_root, f"vis_{dt_now}_{osp.basename(video_path)}"),
-          fourcc,
-          fps,
-          (img_vis.shape[1], img_vis.shape[0]),
+          filename=osp.join(out_video_root, f"vis_{dt_now}_{osp.basename(video_path)}"),
+          fourcc=fourcc,
+          fps=fps,
+          frameSize=(img_vis.shape[1], img_vis.shape[0]),
         )
       writer.write(img_vis)
 
