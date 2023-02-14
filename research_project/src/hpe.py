@@ -427,7 +427,6 @@ def predict(
 
     # smooth 2d results
     if smoother:
-      print("Smoothing 2D pose results...")
       pose_results_2d = smoother.smooth(pose_results_2d)
 
     # 2D-to-3D pose lifting
