@@ -311,6 +311,7 @@ These are the 2D detectors used before lifting.
   - "The input consists of 2D keypoints for a receptive field of 243 frames" (p. 2) = utilisation de 243 frames pour prédire une frame ?
 
 ### Réunion 2023-02-09
+
 - Etudier la variabilité des zone occultées vs visibles
 - Enlever les articulations occultées de la visualisation
 - Evaluer les nœuds visibles sur image occultée vs non-occultée
@@ -322,6 +323,12 @@ These are the 2D detectors used before lifting.
   - Analyse des résultats
   - Conclusion & Pistes
 
+### Réunion 2023-02-14
+
+- Utiliser les 3 lignes de code de keypoints_mpjpe dans `mmpose/mmpose/core/evaluation/pose3d_eval.py`
+- Identifier les points masquées en 2d et ne pas les prendre en compte pour la MPJPE
+- Utiliser la confiance des points masqués pour prédire l'occultation
+- Mesurer MPJPE sur les points non-occultés sur image occultée vs non-occultée
 
 #### Notes
 
