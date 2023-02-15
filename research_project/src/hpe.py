@@ -281,9 +281,9 @@ def predict(
     pose_detector_config, pose_detector_checkpoint, device=device.lower()
   )
 
-  assert isinstance(pose_det_model, TopDown), (
-    'Only "TopDown"' "model is supported for the 1st stage (2D pose detection)"
-  )
+  assert isinstance(
+    pose_det_model, TopDown
+  ), 'Only "TopDown" model is supported for the 1st stage (2D pose detection)'
 
   # frame index offsets for inference, used in multi-frame inference setting
   if use_multi_frames:

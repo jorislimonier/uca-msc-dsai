@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \usepackage{bibnames}
 \usepackage{tabularx}
-\usepackage{times}
+% \usepackage{times}
 \usepackage{hyperref}
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
@@ -23,8 +23,8 @@
 
 
 \begin{document}
-\title{Temporally-aware Human Pose Estimation on 3D videos: A review of the State of the Art}
-\titlerunning{Temporally-aware HPE on 3D videos: A review of the State of the Art}
+\title{Temporally-aware monocular 3D Human Pose Estimation on 2D videos}
+\titlerunning{Temporally-aware monocular 3D HPE on 2D videos}
 
 \author{
   Joris LIMONIER \inst{1} \orcidID{0000-0002-0393-2247} \and
@@ -45,16 +45,16 @@
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-  \ac{hpe} is the task of locating human body parts in a frame. This problem has drawn quite some interest in the past decade and it will probably continue to do so in the future. Indeed, beyond the scientific community, it may find come useful in augmented reality, the military or the monitoring of crowded areas. In this paper, we focus on 3D \ac{hpe}. We split it into ``single view, single person'', ``single view, multi-person'' and ``multi-view'', detailing the challenges of each approach. Subsequently, we review the existing, most performant techniques available for each task. Our goal is to make a currated list of the best performing techniques currently available, compare them analytically, understand them and comment on their strengths and weaknesses. We discuss the challenges of occlusion, availability of data and appropriately choosing metrics. Finally, we choose our future working direction which will be focusing on 3D \ac{hpe} using the temporal dimension of videos. We also comment on the challenges, as well as the opportunities, that such a work may bring.
+  \ac{hpe} is the task of locating human body parts in a frame. This problem has drawn quite some interest in the past decade and it will probably continue to do so in the future. Indeed, beyond the scientific community, it may find come useful in augmented reality, the military or the monitoring of crowded areas. In this paper, we focus on 3D \ac{hpe}. We split it into ``single view, single person'', ``single view, multi-person'' and ``multi-view'', detailing the challenges of each approach. Subsequently, we review the existing, most performant techniques available for each task. Our goal is to make a currated list of the best performing techniques currently available, compare them, understand them and comment on their strengths and weaknesses. We discuss the challenges of occlusion, availability of data and appropriately choosing metrics. Finally, we choose our future working direction which will be focusing on 3D \ac{hpe} using the temporal dimension of videos. We also comment on the challenges, as well as the opportunities, that such a work may bring.
   \keywords{Computer Vision \and Human Pose Estimation \and 3D Human Pose Estimation \and Human Pose Estimation in Videos}
 \end{abstract}
 \acresetall
 
 \section{Introduction}
 \label{section: introduction}
-The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in the field of Computer Vision. New architectures arose and new techniques suggested numbers of parameters that hadn't been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}. Such complex networks manage to segment images, detect objects in images or identify the pose of a person. Our interest goes to the latter task. The task of \ac{hpe} aims at detecting joints of a human being in a frame. This could be considered a solved problem in the 2D case when the person is clearly visible. Some other cases are more challenging, one of which is when some body parts are hidden (occlusions) in a 2D image. Another challenging case is inferring 3D coordinates from a 2D image, this will be our focus throughout this study. \\
+The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in the field of Computer Vision. New architectures arose and new techniques suggested numbers of parameters that had never been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}. Such complex networks manage to segment images, detect objects in images or identify the pose of a person. Our interest goes to the latter task. The task of \ac{hpe} aims at detecting joints of a human being in a frame. This could be considered a solved problem in the 2D case when the person is clearly visible. Some other cases are more challenging, one of which is when some body parts are hidden (occlusions) in a 2D image. Another challenging case is inferring 3D coordinates from a single 2D image (monocular \ac{hpe}), this will be our focus throughout this study. \\
 Furthermore, one can consider \ac{hpe} applied to images but also \ac{hpe} applied to videos. We want to focus on videos because we are interested in exploiting the temporal dimension rather than a frame-per-frame joints detection. Doing so brings its set of challenges and its complexity to the problem, which makes it even more interesting. \\
-We want to study the current state of the art for 3D \ac{hpe} on videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. Finally, we will give our conclusions and propose study pathways for the future of this study.
+We want to study the current state of the art for 3D \ac{hpe} on monocular videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. Finally, we will give our conclusions and propose study pathways for the future of this study.
 
 \section{Related Work}
 \ac{hpe} encompasses several subtasks, not all of which we are interested in. In this section, we describe the tasks we want to tackle, then we describe existing approaches.
@@ -66,7 +66,7 @@ Although ill-posed, inferences could be made in the the 3D \ac{hpe} monocular pr
 
 \subsection{Approaches}
 Several methods can be used to solve the 3D video \ac{hpe} problem, we will detail them in this section. Some of the solutions are presented for completeness, but they focus on a per-frame basis, which is not what we will want to study eventually. \\
-We will focus on 3D HPE from RGB images as this is the simplest, most common case. In this setting, one uses a conventional camera to capture videos. One can use one or multiple cameras to capture images. We will start with the one-camera case. As mentioned previously, this is an ill-posed problem as the captured 2D images come from a projection of the 3D space onto a 2D screen. Reverting the operation seems impossible in the general, mathematically-posed problem but using some commonsensical tricks (including spatial and temporal depth cues) could help achieve better results in some cases. For instance, the length of a human arm lies within a fixed-radius 3D ball for all human beings, which a smart algorithm could use to infer a set of plausible positions to lift such an arm from 2D to 3D. We will start with \ac{svsp} 3D \ac{hpe}, then study \ac{svmp} 3D \ac{hpe}, then finally \ac{mv} 3D \ac{hpe}.
+We will focus on 3D HPE from RGB images as this is the simplest, most common case. In this setting, one uses a conventional camera to capture videos. One can use one or multiple cameras to capture images. We will start with the one-camera case, also called single-view. As mentioned previously, this is an ill-posed problem as the captured 2D images come from a projection of the 3D space onto a 2D screen. Reverting the operation seems impossible in the general, mathematically-posed problem but using some commonsensical tricks (including spatial and temporal depth cues) could help achieve better results in some cases. For instance, the length of a human arm lies within a fixed-radius 3D ball for all human beings, which a smart algorithm could use to infer a set of plausible positions to lift such an arm from 2D to 3D. We will start with \ac{svsp} 3D \ac{hpe}, then study \ac{svmp} 3D \ac{hpe}, then finally \ac{mv} 3D \ac{hpe}.
 
 \paragraph{\ac{svsp} 3D \ac{hpe}.}
 In this setting, we distinguish three types of tasks:  skeleton-only, the kinematic model and \ac{hmr}. We will detail each of these techniques in their own paragraph.
@@ -101,7 +101,7 @@ Now that we introduced the approaches that can be used to identify people in ima
 \subsection{Datasets}
 One of the challenges when working on 3D images is to find appropriate datasets. Indeed, in comparison, the 2D setting has many datasets to offer, mainly because data collection and annotation is fairly easy. In the 3D world however, collecting data requires sensors to be placed on the protagonists' joints or heavy manual labeling. Indeed, annotating joints in the 3D space is also a harder task than in the 2D world. We will review a few datasets in depth, which may be of interest for our problem.
 \paragraph{Human3.6M} \cite{Human3.6M} is a dataset containing 3.6 millions of 3D human poses along with their respective annotations from accurate sensors. These sensors were placed on 11 actors (6 men, 5 women) performing 17 tasks. The tasks being performed include smoking, taking photos and talking over the phone. There exists a conventional train-test-split called Protocol \#1 where subjects S1, S5, S6 and S7 are used for training and subjects S9 and S11 are used for testing. This dataset is commonly regarded as one of the most, if not the most, famous datasets for indoor 3D \ac{hpe}. One of the reasons for its popularity may be that it can easily be downloaded from the internet.
-\paragraph{MPI-INF-3DHP} \cite{MPI-INF-3DHP} is a dataset of 1.3 million frames captured in a multi-camera, green screen setting. It encompasses 8 actors (4 men, 4 women) performing 8 types of action. Some of these actions are dynamic, such as exercising or doing sports, but some aren't, like sitting on a chair or being on the ground. Thanks to the green screen setting, actors can easily be segmented, as well as modified (\textit{e.g.} augmented) in finalized clips. This dataset can also be easily downloaded from the internet.
+\paragraph{MPI-INF-3DHP} \cite{MPI-INF-3DHP} is a dataset of 1.3 million frames captured in a multi-camera, green screen setting. It encompasses 8 actors (4 men, 4 women) performing 8 types of action. Some of these actions are dynamic, such as exercising or doing sports, but some are not, like sitting on a chair or being on the ground. Thanks to the green screen setting, actors can easily be segmented, as well as modified (\textit{e.g.} augmented) in finalized clips. This dataset can also be easily downloaded from the internet.
 \paragraph{MuPoTS-3D} \cite{MuPoTS-3D} is a multi-person 3D dataset of 8 people performing 20 real-world scenes, 5 of which are indoors and 15 of which are outdoors. It is a challenging dataset that contains numerous occlusions and lens flare in some outdoor images.
 
 \subsection{Metrics}
@@ -119,12 +119,12 @@ Let $V$ and $V_i^*$ be the ground truth and the predicted coordinates for the $i
 \begin{equation}
   MPVE = \frac{1}{N} \sum_{i=1}^N \|V_i - V_i^*\|_2
 \end{equation}
-According to some sources \cite{survey}, \ac{mpjpe} depends on the predicted scale of human shape and skeleton, therefore it doesn't always accurately indicate an accurate pose.
+According to some sources \cite{survey}, \ac{mpjpe} depends on the predicted scale of human shape and skeleton, therefore it does not always accurately indicate an accurate pose.
 
 \paragraph{\ac{3dpck}} is a metric that considers that a joint is correcly identified if it lies closer that a given distance from ground truth, usually $150mm$.
 
 \section{Evaluation and Comparison}
-A summary of the best-performing techniques in each category can be found in Table \ref{table: presentation of results}. We note that having multiple views on the Human3.6M dataset almost halves the \ac{mpjpe} compared to single views. Comparing performances on different datasets is already tricky, but the fact that we don't have the same metrics for \ac{svsp} and \ac{svmp} simply makes the comparison impossible. One additional information on top of the table is that both best-performing skeleton techniques are lifting techniques rather than direct ones.
+A summary of the best-performing techniques in each category can be found in Table \ref{table: presentation of results}. We note that having multiple views on the Human3.6M dataset almost halves the \ac{mpjpe} compared to single views. Comparing performances on different datasets is already tricky, but the fact that we do not have the same metrics for \ac{svsp} and \ac{svmp} simply makes the comparison impossible. One additional information on top of the table is that both best-performing skeleton techniques are lifting techniques rather than direct ones.
 \begin{table}
   \centering
   \caption{Presentation of different, top-performing 3D \ac{hpe} techniques.}
@@ -132,16 +132,16 @@ A summary of the best-performing techniques in each category can be found in Tab
   \begin{tabular}{|cccccc|}
     \hline
     Task & Type      & Method                                          & Dataset                & Metric             & Score \\ \hline
-    SVSP     & Skeleton  & \cite{multi hypothesis transformer}             & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 43.0  \\
-    SVSP     & Skeleton  & \cite{hrnet}                                    & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 42.6  \\
-    SVSP     & HMR       & \cite{mesh reconstruction with transformers}    & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 54.0  \\
-    SVSP     & HMR       & \cite{mesh graphormer}                          & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 51.2  \\ \hline
-    SVMP     & Top-down  & \cite{HMOR}                                     & MuPoTS-3D              & 3DPCK $\uparrow$   & 82.0  \\
-    SVMP     & Top-down  & \cite{graph and temporal convolutional network} & MuPoTS-3D              & 3DPCK $\uparrow$   & 87.5  \\
-    SVMP     & Bottom-up & \cite{PandaNet}                                 & MuPoTS-3D              & 3DPCK $\uparrow$   & 72.0  \\
-    SVMP     & Bottom-up & \cite{SMAP}                                     & MuPoTS-3D              & 3DPCK $\uparrow$   & 73.5  \\ \hline
-    MV       & -         & \cite{Transfusion}                              & Human3.6M              & MPJPE $\downarrow$ & 25.8  \\
-    MV       & -         & \cite{MetaFuse}                                 & Human3.6M              & MPJPE $\downarrow$ & 29.3  \\
+    SVSP & Skeleton  & \cite{multi hypothesis transformer}             & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 43.0  \\
+    SVSP & Skeleton  & \cite{hrnet}                                    & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 42.6  \\
+    SVSP & HMR       & \cite{mesh reconstruction with transformers}    & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 54.0  \\
+    SVSP & HMR       & \cite{mesh graphormer}                          & Human3.6M (protocol 1) & MPJPE $\downarrow$ & 51.2  \\ \hline
+    SVMP & Top-down  & \cite{HMOR}                                     & MuPoTS-3D              & 3DPCK $\uparrow$   & 82.0  \\
+    SVMP & Top-down  & \cite{graph and temporal convolutional network} & MuPoTS-3D              & 3DPCK $\uparrow$   & 87.5  \\
+    SVMP & Bottom-up & \cite{PandaNet}                                 & MuPoTS-3D              & 3DPCK $\uparrow$   & 72.0  \\
+    SVMP & Bottom-up & \cite{SMAP}                                     & MuPoTS-3D              & 3DPCK $\uparrow$   & 73.5  \\ \hline
+    MV   & -         & \cite{Transfusion}                              & Human3.6M              & MPJPE $\downarrow$ & 25.8  \\
+    MV   & -         & \cite{MetaFuse}                                 & Human3.6M              & MPJPE $\downarrow$ & 29.3  \\
     \hline
   \end{tabular}
 \end{table}
