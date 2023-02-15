@@ -316,6 +316,8 @@ These are the 2D detectors used before lifting.
 - Enlever les articulations occultées de la visualisation
 - Evaluer les nœuds visibles sur image occultée vs non-occultée
 - Papier
+  - Introduction
+  - Related work (SOTA)
   - Méthodologie
   - Métriques
   - Dataset

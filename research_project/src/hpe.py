@@ -194,12 +194,8 @@ def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
 def predict(
   det_config: str = f"{MMPOSE_FOLDER}demo/mmdetection_cfg/faster_rcnn_r50_fpn_coco.py",
   det_checkpoint: str = f"{MODELS_FOLDER}faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth",
-  pose_detector_config: Optional[
-    str
-  ] = f"{MMPOSE_FOLDER}configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w48_coco_256x192.py",
-  pose_detector_checkpoint: Optional[
-    str
-  ] = f"{MODELS_FOLDER}hrnet_w48_coco_256x192-b9e0b3ab_20200708.pth",
+  pose_detector_config: str = f"{MMPOSE_FOLDER}configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w48_coco_256x192.py",
+  pose_detector_checkpoint: str = f"{MODELS_FOLDER}hrnet_w48_coco_256x192-b9e0b3ab_20200708.pth",
   pose_lifter_config: str = f"{MMPOSE_FOLDER}configs/body/3d_kpt_sview_rgb_vid/video_pose_lift/h36m/videopose3d_h36m_243frames_fullconv_supervised_cpn_ft.py",
   pose_lifter_checkpoint: str = f"{MODELS_FOLDER}videopose_h36m_243frames_fullconv_supervised_cpn_ft-88f5abbb_20210527.pth",
   video_path: str = f"{INTERIM_FOLDER}short.mp4",
@@ -207,8 +203,8 @@ def predict(
   subclip_start: int = 0,
   subclip_end: int = 1,
   occlude: bool = False,
-  occlusion_proportion_h: Optional[float] = 0.35,
-  occlusion_proportion_w: Optional[float] = 1.0,
+  occlusion_proportion_h: float = 0.35,
+  occlusion_proportion_w: float = 1.0,
   occlusion_top_left: Tuple[int, int] = (0, 0),
   rebase_keypoint_height=True,
   norm_pose_2d=True,
