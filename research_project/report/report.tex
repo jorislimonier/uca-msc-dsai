@@ -47,7 +47,7 @@
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-  \ac{hpe} is the task of locating human body parts in a frame. This problem has drawn quite some interest in the past decade and it will probably continue to do so in the future. Indeed, beyond the scientific community, it may find come useful in augmented reality, the military or the monitoring of crowded areas. In this paper, we focus on 3D \ac{hpe}. We split it into ``single view, single person'', ``single view, multi-person'' and ``multi-view'', detailing the challenges of each approach. Subsequently, we review the existing, most performant techniques available for each task. Our goal is to make a currated list of the best performing techniques currently available, compare them, understand them and comment on their strengths and weaknesses. We discuss the challenges of occlusion, availability of data and appropriately choosing metrics. Finally, we choose our future working direction which will be focusing on 3D \ac{hpe} using the temporal dimension of videos. We also comment on the challenges, as well as the opportunities, that such a work may bring.
+  \ac{hpe} is defined as the task of locating human body parts in a frame. This problem has drawn quite some interest in the past decade and it will probably continue to do so in the future. Indeed, beyond the scientific community, it may come useful in augmented reality, the military or the monitoring of crowded areas. In this paper, we focus on 3D \ac{hpe} obtained from a unique 2D camera. We discuss the availability of data, the existing metrics for this task, as well as the challenges of occlusion. In particular, we propose a methodology to estimate the prediction quality of visible versus occluded keypoints in visible versus occluded scenes. We obtain reassuring results as the visible keypoints remain coherently predicted, even when other keypoints are occluded. Finally, we propose a future working direction to identify occluded keypoints, which is based on the high frequency noise that is added to the joint position over time. To conclude, we comment on the challenges, as well as the opportunities, that such a work may bring.
   \keywords{Computer Vision \and Human Pose Estimation \and 3D Human Pose Estimation \and Human Pose Estimation in Videos}
 \end{abstract}
 \acresetall
@@ -55,8 +55,8 @@
 \section{Introduction}
 \label{section: introduction}
 The Deep Learning revolution, coupled with increasing computing power and the improved use of GPU opened new opportunities in the field of Computer Vision. New architectures arose and new techniques suggested numbers of parameters that had never been seen before, some of them reaching hundreds of millions of parameters \cite{hrnet}: up to 94.9M for Faster R-CNN \cite{R-CNN}, 127.3M for Cascade R-CNN \cite{Cascade R-CNN}, 51.0M for FCOS \cite{FCOS}, 210.1M for CenterNet \cite{CenterNet}, 135.2M for Cascade Mask R-CNN \cite{Cascade R-CNN}, 138.2M for Hybrid Task Cascade \cite{Hybrid Task Cascade} and 63.4M for Mask R-CNN \cite{R-CNN}. Such complex networks manage to segment images, detect objects in images or identify the pose of a person. Our interest goes to the latter task. The task of \ac{hpe} aims at detecting joints of a human being in a frame. This could be considered a solved problem in the 2D case when the person is clearly visible. Some other cases are more challenging, one of which is when some body parts are hidden (occlusions) in a 2D image. Another challenging case is inferring 3D coordinates from a single 2D image (monocular \ac{hpe}), this will be our focus throughout this study. \\
-Furthermore, one can consider \ac{hpe} applied to images but also \ac{hpe} applied to videos. We want to focus on videos because we are interested in exploiting the temporal dimension rather than a frame-per-frame joints detection. Doing so brings its set of challenges and its complexity to the problem, which makes it even more interesting. \\
-We want to study the current state of the art for 3D \ac{hpe} on monocular videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. Finally, we will give our conclusions and propose study pathways for the future of this study.
+Furthermore, one can consider \ac{hpe} applied to images but also \ac{hpe} applied to videos. We want to focus on videos because we are interested in exploiting the temporal dimension rather than a frame-per-frame joints detection. \\
+We want to study the current state of the art for 3D \ac{hpe} on monocular videos while considering the temporal dimension. In order to do so, we will list and examine related work, then we will gather existing datasets and metrics while analysing their strengths and weaknesses. Subsequently, we will evaluate and compare existing methods on common datasets. In particular, we will discuss the challenge of occlusions through the prediction of visible versus hidden joints in visible versus occluded scenes. Finally, we will give our conclusions and propose study pathways for the future of this study.
 
 \section{Related Work}
 \ac{hpe} encompasses several subtasks, not all of which we are interested in. In this section, we describe the tasks we want to tackle, then we describe existing approaches.
@@ -99,7 +99,7 @@ Maybe also because the links between 2D and 3D are so tight, we see the same kin
 
 \section{Methodology}
 \label{sec: methodology}
-We saw that occlusions remain a challenge for the monocular 3D \ac{hpe} task. We want to challenge the existing \ac{svsp} methods by testing them on occluded videos and see how they perform. To do so, we choose a video dataset, manually add occlusions and evaluate the performance of the state-of-the-art methods on this occluded dataset, compared to the non-occluded counterpart. We want to answer several questions: first, are these methods able to predict the hidden keypoints? Second, are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? \\
+We saw that occlusions remain a challenge for the monocular 3D \ac{hpe} task. We want to challenge the existing \ac{svsp} methods by testing them on occluded videos and see how they perform. To do so, we choose a video dataset (Human3.6M \cite{Human3.6M}), manually add occlusions and evaluate the performance of the state-of-the-art methods on this occluded dataset, compared to the non-occluded counterpart. We want to answer several questions: first, are these methods able to predict the hidden keypoints? Second, are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? \\
 We perform predictions thanks to the MMPose library \cite{mmpose}, which is a PyTorch-based open-source library for pose estimation. The steps performed are as follows: First, a pre-trained object detector model is used to detect people in the input video frames. The specific detector model used is based on the Faster R-CNN architecture \cite{faster RCNN} with a ResNet-50 backbone \cite{resnet}. Then, the detected people are passed through a pre-trained 2D human pose estimator model to estimate their 2D joint positions in the input video frames. The specific pose estimator model used is based on the HRNet-W48 architecture \cite{hrnet}. Third, the estimated 2D joint positions are then passed through a pre-trained 3D human pose lifter model to estimate their corresponding 3D joint positions. The pose lifter model used is based on a fully convolutional neural network trained on the Human3.6M dataset. Finally, the output of the pipeline is a sequence of estimated 3D joint positions for each person detected in the input video frames. \\
 The pipeline presented above is the basis pipeline for our predictions. In order to evaluate the capabilities of the network on occluded scenes, we keep this pipeline, but we feed it an already-occluded video. We then compare the results of the pipeline on the occluded video to the results of the pipeline on the non-occluded video. Our occluded video contains a black rectangle starting from the top of the image, covering the full width of the image. The vertical proportion of the image that is occupied by the rectangle can vary depending on several factors. The first factor is the difficulty we want to set for the prediction. The second one is the position of the actor in the scene; actors can stand anywhere and a given occlusion ratio will not cover the same number of joints from one actor to another (see figure \ref{fig: occlusion ratios and actors positions}). This argument is further complexified by the fact that actors move throughout the video. As a result, some joints may go from being occluded to being visible, or vice-versa.
 \begin{figure}
@@ -189,8 +189,8 @@ A summary of the best-performing techniques in each category can be found in Tab
   \end{tabular}
 \end{table}
 
-\section{Results}
-In section \ref{sec: methodology}, we stated that we wanted to answer several questions about \ac{svsp} methods: are they able to predict the occluded keypoints? Are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? We will now answer these questions.
+\section{Results \& analysis}
+In section \ref{sec: methodology}, we stated that we wanted to answer several questions about \ac{svsp} methods: are they able to predict the occluded keypoints? Are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? We will now answer these questions. What we call ``the model'' in subsequent paragraphs consists of the bottom-up detector, coupled to the lifter model we detailed in section \ref{sec: methodology}.
 \paragraph{Ability to predict the occluded keypoints.}
 The model is not able to infer occluded keypoints from the position of the visible ones. When trying to predict the occluded keypoints, the model seems to only predict them in the visible part of the image. This is probably due to the fact that the model is trained on non-occluded videos, and therefore does not have enough data to learn how to predict occluded keypoints. This deficiency suffers drastically from the increase of the number of occluded keypoints. Indeed, when the occlusion ratio is increased (figure \ref{fig: predictions varying occlusion ratios}), or when the subject moves towards the upper part of the image, the occluded keypoints stay in the visible part of the image, thus creating non-sensical predictions, such as predicting that the hands are next to the feet (figure \ref{fig: spider}).
 \begin{figure}[ht]
@@ -198,41 +198,50 @@ The model is not able to infer occluded keypoints from the position of the visib
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics[width=\textwidth]{assets/pred_no_occlusion.png}
-    \caption{Prediction without occlusion.}
+    \caption{Prediction without occlusion (occlusion ratio of 0).}
     \label{fig: no occlusion}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
     \includegraphics[width=\textwidth]{assets/pred_head_hidden.png}
-    \caption{Prediction where the head is hidden.}
+    \caption{Prediction where the head is hidden (occlusion ratio of 0.35).}
     \label{fig: head hidden}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
+    \includegraphics[width=\textwidth]{assets/pred_head_hidden_comp.png}
+    \caption{Prediction where the head is hidden and the model fails to predict the legs (occlusion ratio of 0.35).}
+    \label{fig: head hidden comp}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
     \includegraphics[width=\textwidth]{assets/pred_spider.png}
-    \caption{Prediction where half of the body is hidden.}
+    \caption{Prediction where half of the body is hidden (occlusion ratio of 0.50).}
     \label{fig: spider}
   \end{subfigure}
-  \caption{Predictions with varying occlusions ratios.}
+  \caption{Predictions with varying occlusions ratios. The model is not able to predict the occluded keypoints. Instead, it tries to shift them in the visible part of the image.}
   \label{fig: predictions varying occlusion ratios}
 \end{figure}
 \paragraph{Ability to predict visible keypoints on occluded videos.}
-Although the visible keypoints may be cluttered and hard to distinguish in figure \ref{fig: spider}, the model still seems to be able to predict them somewhat coherently. This is further confirmed by figure \ref{fig: head hidden}, where the model is able to coherently predict the visible keypoints even though the head is hidden. This property is made even more plausible by performing predictions on other images that are not shown here.
+Although the visible keypoints may be cluttered and hard to distinguish in figure \ref{fig: spider}, the model still seems to be able to predict them somewhat coherently. This is further confirmed by figure \ref{fig: head hidden}, where the model is able to coherently predict the visible keypoints even though the head is hidden. Furthermore, we note that the model is unable to predict the legs in figure \ref{fig: head hidden comp} (left leg in green is wrongly predicted behind right leg in blue), however the model makes the same mistake in the non-occluded counterpart (figure \ref{fig: no occlusion}). This hints that wrong predictions on visible keypoints may not be due to occlusions, but rather to the model itself.
 \paragraph{Prediction quality of visible keypoints on occluded compared to non-occluded videos.}
-As mentioned previously, the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. However, it seems that the network is less confident about visible keypoints in occluded scenes, as can be noticed by their unstability. Indeed, the prediction of the keypoints seems to ``shake''. In other words, they show a higher variability than the predicted keypoints in the non-occluded scene setting. This phenomenon is further amplified for occluded keypoints.
+As mentioned previously, the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. However, it seems that the network is less confident about visible keypoints in occluded scenes, as can be noticed by their unstability. Indeed, the prediction of the keypoints seems to ``shake''. In other words, it appears that a high frequency noise is added to the joint position over time. This phenomenon is further amplified for occluded keypoints.
 
-\section{Analysis of results}
 \section{Conclusion and Perspectives}
 \subsection{Conclusion}
-Throughout this study of the State of the Art, we saw that 3D \ac{hpe} can be splitted into three tasks: \ac{svsp} , \ac{svmp} and \ac{mv}. The first one can consist of finding joints (skeleton) or superimposing an artificial 3D body model (\ac{hmr}). The second one can consist of either identifying each person in the image then finding their joints (top-down), or finding all joints plus a depth map before grouping these joints into the person they belong to (bottom-up). Finally, the last one avoids the strugles of other tasks, such as occlusions, thanks to its multiple views but it requires having multiple cameras and determining precisely where each of them lies with respect to the others. \\
-We also saw that neither for datasets, nor for metrics is there one perfect, universal standard. For datasets, we have to choose between an ``easy'', maybe utopic, one and other ones with less data. For metrics, we may need to use several of them to properly evaluate the performances of any given model.
+Throughout this study of the State of the Art, we saw that 3D \ac{hpe} can be splitted into three tasks: \ac{svsp} , \ac{svmp} and \ac{mv}, which we detailed. The first one can consist of finding joints (skeleton) or superimposing an artificial 3D body model (\ac{hmr}). The second one can consist of either identifying each person in the image then finding their joints (top-down), or finding all joints plus a depth map before grouping these joints into the person they belong to (bottom-up). Finally, the last one avoids the strugles of other tasks, such as occlusions, thanks to its multiple views but it requires having multiple cameras and determining precisely where each of them lies with respect to the others. \\
+We also saw that neither for datasets, nor for metrics is there one perfect, universal standard. For datasets, we have to choose between an ``easy'', maybe utopic, one and other ones with less data. For metrics, we may need to use several of them to properly evaluate the performances of any given model. \\
+With respect to model predictions and occlusions, we answered three questions. The first one asked whether models are able to predict occluded keypoints. As we saw, they are not. The occluded keypoints are predicted within the visible region of the image, although they are not visible.
+The second question asked whether models are able to predict visible keypoints on occluded videos. We saw that they are able to predict visible keypoints on occluded videos, but that they may be less confident about them.
+The third question asked how well models predict visible keypoints on occluded compared to non-occluded videos. We saw that the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. Furthermore, we showcased an example where the model was unable to correctly predict the visible keypoints in the occluded setting, but it was also unable to correctly predict them in the non-occluded setting. However, we noted that the uncertainty of the network can be noticed through the high-frequency noise that is added to the joint position over time.
 
 
 \subsection{Perspectives}
-For the future of this study, we could go in many directions but there is one we are particularly interested in, occlusions in 3D videos. This is indeed a challenging topic and we believe we could benefit from the temporal consistency of motion to infer positions when a person becomes occluded. There are some challenges we expect to face, such as choosing an appropriate dataset and metric(s). As we mentioned previously, there is no silver bullet here so we will have to make compromises. If the dataset is too easy, we will not challenge our technique enough. If it is too hard on the other hand, we may want to increase our network model. This may lead to unacceptable training complexities on an already computationally expensive task. We will have to find the right balance, which makes this task both challenging and interesting.
-
+Building on that last challenge regarding the high-frequency noise, we could try to use the variance of a joint position over time as a metric to predict whether a keypoint is occluded or not. More variance in the joint position with respect to time could mean that the keypoint is occluded. This is not particularly interesting on the Human3.6M dataset because we add the synthetic occlusion ourselves, so we know which keypoints are occluded. However, it could be interesting for other datasets where is occlusion is more natural and unlabeled. For instance, in movie datasets where characters move in front of others and we want to predict the position of a character in the background. \\
+Another perspective to improve the robustness of our model with respect to occlusions would simply be to train it on occluded videos. This may allow the model to learn how to predict occluded keypoints, as well as better predicting visible keypoints in occluded scenes.
 
 \bibliographystyle{splncs04}
 \begin{thebibliography}{8}
