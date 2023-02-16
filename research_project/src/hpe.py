@@ -45,8 +45,11 @@ except (ImportError, ModuleNotFoundError):
   has_mmdet = False
 
 
-@numba.jit()
-def convert_keypoint_definition(keypoints, pose_det_dataset, pose_lift_dataset):
+def convert_keypoint_definition(
+  keypoints: np.ndarray,
+  pose_det_dataset: str = "TopDownCocoDataset",
+  pose_lift_dataset: str = "Body3DH36MDataset",
+):
   """Convert pose det dataset keypoints definition to pose lifter dataset
   keypoints definition, so that they are compatible with the definitions
   required for 3D pose lifting.
@@ -407,8 +410,8 @@ def predict(
   else:
     pose_lift_dataset_info = DatasetInfo(pose_lift_dataset_info)
 
-  global pos_det_results
-  pos_det_results = pose_det_results_list
+  global pose_lift_results_list
+  pose_lift_results_list = []
 
   print("Running 2D-to-3D pose lifting inference...")
   for i, pose_det_results in enumerate(mmcv.track_iter_progress(pose_det_results_list)):
@@ -435,6 +438,8 @@ def predict(
       image_size=video.resolution,
       norm_pose_2d=norm_pose_2d,
     )
+
+    pose_lift_results_list.append(copy.deepcopy(pose_lift_results))
 
     # Create current date for filename
     dt_now = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -465,14 +470,11 @@ def predict(
       res["track_id"] = instance_id
       pose_lift_results_vis.append(res)
 
-    global results
-    results = pose_lift_results_vis
-
-    global info
-    info = pose_lift_dataset_info
-
-    global dataset
-    dataset = pose_lift_dataset
+      try:
+        counter += 1
+      except:
+        counter = 0
+    print(f"\ncounter: {counter}")
 
     # Visualization
     if num_instances < 0:
@@ -500,6 +502,18 @@ def predict(
           frameSize=(img_vis.shape[1], img_vis.shape[0]),
         )
       writer.write(img_vis)
+
+  global interm_res
+  interm_res = res
+  
+  global results
+  results = pose_lift_results_vis
+
+  global info
+  info = pose_lift_dataset_info
+
+  global dataset
+  dataset = pose_lift_dataset
 
   if save_out_video:
     writer.release()

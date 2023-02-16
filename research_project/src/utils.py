@@ -65,7 +65,7 @@ def occlude_video_region(
       # Initialize the video writer
       fourcc = cv2.VideoWriter_fourcc(*"mp4v")
       out = cv2.VideoWriter(output_path, fourcc, 50, (frame_w, frame_h))
-      
+
       first_round = False
 
     # Draw the rectangle occulusion
@@ -83,3 +83,26 @@ def occlude_video_region(
 
   out.release()
   cap.release()
+
+
+def convert_kp_coco_h36m(kp: np.ndarray) -> np.ndarray:
+  """
+  Convert keypoints from COCO to H36M format.
+  """
+  kp_new = np.zeros((17, kp.shape[1]), dtype=kp.dtype)
+
+  # pelvis (root) is in the middle of l_hip and r_hip
+  kp_new[0] = (kp[11] + kp[12]) / 2
+  # thorax is in the middle of l_shoulder and r_shoulder
+  kp_new[8] = (kp[5] + kp[6]) / 2
+  # spine is in the middle of thorax and pelvis
+  kp_new[7] = (kp_new[0] + kp_new[8]) / 2
+  # in COCO, head is in the middle of l_eye and r_eye
+  # in PoseTrack18, head is in the middle of head_bottom and head_top
+  kp_new[10] = (kp[1] + kp[2]) / 2
+  # rearrange other keypoints
+  kp_new[[1, 2, 3, 4, 5, 6, 9, 11, 12, 13, 14, 15, 16]] = kp[
+    [12, 14, 16, 11, 13, 15, 0, 5, 7, 9, 6, 8, 10]
+  ]
+
+  return kp_new
