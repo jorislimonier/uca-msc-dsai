@@ -4,6 +4,10 @@
 \usepackage{tabularx}
 % \usepackage{times}
 \usepackage{hyperref}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
 % \renewcommand\UrlFont{\color{blue}\rmfamily}
@@ -93,15 +97,41 @@ Although 3D methods are more likely to solve occlusions' challenges, reconstruct
 \paragraph{Conclusion.} The last couple of years saw great improvements in 2D \ac{hpe}, which bounced into the 3D world thanks to their tight relationship (\textit{c.f.} the lifting methods above). These improvements are qualified, however, by the lack of abundant, real-world, diverse data in comparison the 2D setting. \\
 Maybe also because the links between 2D and 3D are so tight, we see the same kind of problems regarding occlusions and computation as the number of people in the scene grows. Indeed, having an occluded and/or crowded scene on which one performs 2D \ac{hpe}, then lifting still means that 2D \ac{hpe} must be performed, hence the logical commonality between challenges in 2D and 3D.
 
-\section{Method}
-We saw that occlusions remain a challenge for the monocular 3D \ac{hpe} task. We want to challenge the existing ac{svsp} methods by testing them on occluded videos and see how they perform. To do so, we choose a video dataset, manually add occlusions and evaluate the performance of the state-of-the-art methods on this occluded dataset, compared to the non-occluded counterpart. We want to answer several questions: first, are these methods able to predict the hidden keypoints? Second, are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? \\
-We perform predictions thanks to the MMPose library \cite{mmpose}, which is a PyTorch-based open-source library for pose estimation. The steps performed are as follows:
-\begin{enumerate}
-  \item A pre-trained object detector model is used to detect people in the input video frames. The specific detector model used is based on the Faster R-CNN architecture \cite{faster RCNN} with a ResNet-50 backbone.
-  \item The detected people are passed through a pre-trained 2D human pose estimator model to estimate their 2D joint positions in the input video frames. The specific pose estimator model used is based on the HRNet-W48 architecture.
-  \item The estimated 2D joint positions are then passed through a pre-trained 3D human pose lifter model to estimate their corresponding 3D joint positions. The specific pose lifter model used is based on a fully convolutional neural network trained on the Human3.6M dataset. parameter.
-  \item The final output of the pipeline is a sequence of estimated 3D joint positions for each person detected in the input video frames, which can be used for further analysis and applications such as motion capture, action recognition, and human-robot interaction.
-\end{enumerate}
+\section{Methodology}
+\label{sec: methodology}
+We saw that occlusions remain a challenge for the monocular 3D \ac{hpe} task. We want to challenge the existing \ac{svsp} methods by testing them on occluded videos and see how they perform. To do so, we choose a video dataset, manually add occlusions and evaluate the performance of the state-of-the-art methods on this occluded dataset, compared to the non-occluded counterpart. We want to answer several questions: first, are these methods able to predict the hidden keypoints? Second, are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? \\
+We perform predictions thanks to the MMPose library \cite{mmpose}, which is a PyTorch-based open-source library for pose estimation. The steps performed are as follows: First, a pre-trained object detector model is used to detect people in the input video frames. The specific detector model used is based on the Faster R-CNN architecture \cite{faster RCNN} with a ResNet-50 backbone \cite{resnet}. Then, the detected people are passed through a pre-trained 2D human pose estimator model to estimate their 2D joint positions in the input video frames. The specific pose estimator model used is based on the HRNet-W48 architecture \cite{hrnet}. Third, the estimated 2D joint positions are then passed through a pre-trained 3D human pose lifter model to estimate their corresponding 3D joint positions. The pose lifter model used is based on a fully convolutional neural network trained on the Human3.6M dataset. Finally, the output of the pipeline is a sequence of estimated 3D joint positions for each person detected in the input video frames. \\
+The pipeline presented above is the basis pipeline for our predictions. In order to evaluate the capabilities of the network on occluded scenes, we keep this pipeline, but we feed it an already-occluded video. We then compare the results of the pipeline on the occluded video to the results of the pipeline on the non-occluded video. Our occluded video contains a black rectangle starting from the top of the image, covering the full width of the image. The vertical proportion of the image that is occupied by the rectangle can vary depending on several factors. The first factor is the difficulty we want to set for the prediction. The second one is the position of the actor in the scene; actors can stand anywhere and a given occlusion ratio will not cover the same number of joints from one actor to another (see figure \ref{fig: occlusion ratios and actors positions}). This argument is further complexified by the fact that actors move throughout the video. As a result, some joints may go from being occluded to being visible, or vice-versa.
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/h35_S1_Directions 1.54138969.png}
+    \caption{Actor in the center, occlusion 0.35.}
+    \label{fig: actor center, occlusion ratio 35}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/h50_S1_Directions 1.54138969.png}
+    \caption{Actor in the center, occlusion 0.50.}
+    \label{fig: actor center, occlusion ratio 50}
+  \end{subfigure}
+  % \hfill
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/h35_S1_Walking 1.54138969.png}
+    \caption{Actor in the bottom, occlusion 0.35.}
+    \label{fig: actor bottom, occlusion ratio 35}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/h50_S1_Walking 1.54138969.png}
+    \caption{Actor in the bottom, occlusion 0.50.}
+    \label{fig: actor bottom, occlusion ratio 50}
+  \end{subfigure}
+  \caption{Comparison of occlusion ratios and actors positions. \ref{fig: actor center, occlusion ratio 35} vs \ref{fig: actor center, occlusion ratio 50} and \ref{fig: actor bottom, occlusion ratio 35} vs \ref{fig: actor bottom, occlusion ratio 50} compare occlusion ratios of 0.35 and 0.50 respectively. \ref{fig: actor center, occlusion ratio 35} vs \ref{fig: actor bottom, occlusion ratio 35} and \ref{fig: actor center, occlusion ratio 50} vs \ref{fig: actor bottom, occlusion ratio 50} compare actors positions in the center and at the bottom of the image respectively.}
+  \label{fig: occlusion ratios and actors positions}
+\end{figure}
 
 
 
@@ -160,6 +190,39 @@ A summary of the best-performing techniques in each category can be found in Tab
 \end{table}
 
 \section{Results}
+In section \ref{sec: methodology}, we stated that we wanted to answer several questions about \ac{svsp} methods: are they able to predict the occluded keypoints? Are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? We will now answer these questions.
+\paragraph{The ability to predict the occluded keypoints.}
+The model is not able to infer occluded keypoints from the position of the visible ones. When trying to predict the occluded keypoints, the model seems to only predict them in the visible part of the image. This is probably due to the fact that the model is trained on non-occluded videos, and therefore does not have enough data to learn how to predict occluded keypoints. This deficiency suffers drastically from the increase of the number of occluded keypoints. Indeed, when the occlusion ratio is increased (figure \ref{fig: predictions varying occlusion ratios}), or when the subject moves towards the upper part of the image, the occluded keypoints stay in the visible part of the image, thus creating non-sensical predictions, such as predicting that the hands are next to the feet (figure \ref{fig: spider}).
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/pred_no_occlusion.png}
+    \caption{Prediction without occlusion.}
+    \label{fig: no occlusion}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/pred_head_hidden.png}
+    \caption{Prediction where the head is hidden.}
+    \label{fig: head hidden}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{assets/pred_spider.png}
+    \caption{Prediction where half of the body is hidden.}
+    \label{fig: spider}
+  \end{subfigure}
+  \caption{Predictions with varying occlusions ratios.}
+  \label{fig: predictions varying occlusion ratios}
+\end{figure}
+\paragraph{The ability to predict visible keypoints on occluded videos.}
+Although the visible keypoints may be cluttered and hard to distinguish in figure \ref{fig: spider}, the model still seems to be able to predict them somewhat coherently. This is further confirmed by figure \ref{fig: head hidden}, where the model is able to coherently predict the visible keypoints even though the head is hidden. This property is made even more plausible by performing predictions on other images that are not shown here.
+\paragraph{The prediction quality of visible keypoints on occluded compared to non-occluded videos.}
+
+
 \section{Analysis of results}
 \section{Conclusion and Perspectives}
 \subsection{Conclusion}
@@ -197,6 +260,7 @@ For the future of this study, we could go in many directions but there is one we
   \bibitem{MuPoTS-3D} Mehta D, Sotnychenko O, Mueller F, Xu W, Sridhar S, Pons-Moll G, Theobalt C. Single-shot multi-person 3d pose estimation from monocular rgb. In2018 International Conference on 3D Vision (3DV) 2018 Sep 5 (pp. 120-130). IEEE.
   \bibitem{mmpose} MMPose Contributors. OpenMMLab Pose Estimation Toolbox and Benchmark, 2020. Available at: \url{https://github.com/open-mmlab/mmpose}.
   \bibitem{faster RCNN} Girshick, R., 2015. Fast r-cnn. In Proceedings of the IEEE international conference on computer vision (pp. 1440-1448).
+  \bibitem{resnet} He, K., Zhang, X., Ren, S. and Sun, J., 2016. Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 770-778).
 
 
 
