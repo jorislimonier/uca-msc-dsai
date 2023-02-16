@@ -191,7 +191,7 @@ A summary of the best-performing techniques in each category can be found in Tab
 
 \section{Results}
 In section \ref{sec: methodology}, we stated that we wanted to answer several questions about \ac{svsp} methods: are they able to predict the occluded keypoints? Are they able to predict visible keypoints on occluded videos? How well do they predict visible keypoints on occluded compared to non-occluded videos? We will now answer these questions.
-\paragraph{The ability to predict the occluded keypoints.}
+\paragraph{Ability to predict the occluded keypoints.}
 The model is not able to infer occluded keypoints from the position of the visible ones. When trying to predict the occluded keypoints, the model seems to only predict them in the visible part of the image. This is probably due to the fact that the model is trained on non-occluded videos, and therefore does not have enough data to learn how to predict occluded keypoints. This deficiency suffers drastically from the increase of the number of occluded keypoints. Indeed, when the occlusion ratio is increased (figure \ref{fig: predictions varying occlusion ratios}), or when the subject moves towards the upper part of the image, the occluded keypoints stay in the visible part of the image, thus creating non-sensical predictions, such as predicting that the hands are next to the feet (figure \ref{fig: spider}).
 \begin{figure}[ht]
   \centering
@@ -218,10 +218,10 @@ The model is not able to infer occluded keypoints from the position of the visib
   \caption{Predictions with varying occlusions ratios.}
   \label{fig: predictions varying occlusion ratios}
 \end{figure}
-\paragraph{The ability to predict visible keypoints on occluded videos.}
+\paragraph{Ability to predict visible keypoints on occluded videos.}
 Although the visible keypoints may be cluttered and hard to distinguish in figure \ref{fig: spider}, the model still seems to be able to predict them somewhat coherently. This is further confirmed by figure \ref{fig: head hidden}, where the model is able to coherently predict the visible keypoints even though the head is hidden. This property is made even more plausible by performing predictions on other images that are not shown here.
-\paragraph{The prediction quality of visible keypoints on occluded compared to non-occluded videos.}
-
+\paragraph{Prediction quality of visible keypoints on occluded compared to non-occluded videos.}
+As mentioned previously, the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. However, it seems that the network is less confident about visible keypoints in occluded scenes, as can be noticed by their unstability. Indeed, the prediction of the keypoints seems to ``shake''. In other words, they show a higher variability than the predicted keypoints in the non-occluded scene setting. This phenomenon is further amplified for occluded keypoints.
 
 \section{Analysis of results}
 \section{Conclusion and Perspectives}
