@@ -470,12 +470,6 @@ def predict(
       res["track_id"] = instance_id
       pose_lift_results_vis.append(res)
 
-      try:
-        counter += 1
-      except:
-        counter = 0
-    print(f"\ncounter: {counter}")
-
     # Visualization
     if num_instances < 0:
       num_instances = len(pose_lift_results_vis)

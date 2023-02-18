@@ -2,9 +2,9 @@
 \usepackage{graphicx}
 \usepackage{bibnames}
 \usepackage{tabularx}
-% \usepackage{times}
+\usepackage{times}
 \usepackage{hyperref}
-
+\usepackage{multirow}
 \usepackage{caption}
 \usepackage{subcaption}
 
@@ -225,23 +225,40 @@ The model is not able to infer occluded keypoints from the position of the visib
   \caption{Predictions with varying occlusions ratios. The model is not able to predict the occluded keypoints. Instead, it tries to shift them in the visible part of the image.}
   \label{fig: predictions varying occlusion ratios}
 \end{figure}
+
+Table \ref{table: mpjpe varying occlusion ratios} shows the \ac{mpjpe} for the first 10 seconds of a given video (\textit{Directions 1.54138969.mp4}) for subject 1. We see that as the occlusion ratio increases, the \ac{mpjpe} also increases, which makes sense. However, we can say that the \ac{mpjpe} is not significantly higher for an occlusion ratio of 0.35 than for no occlusion. The largest increase occurs when we increase the occlusion ratio to 0.5, which we can easily understand since most of the actor's body is occluded and the model is not able to properly predict the keypoints. There are two things that qualify our results. First, this analysis is only done on a subclip of one video, so it is not a representative statistic. We did not compute more metrics by lack of time and lack of appropriate hardware. Second, the analysis was performed on all keypoints. Maybe a more interesting metric would have been to compute the \ac{mpjpe} only on visible keypoints. However, table \ref{table: mpjpe varying occlusion ratios} gives at least a hint at what the results may be on the whole test data.
+\begin{table}
+  \centering
+  \begin{tabular}[t]{|c|c|}
+    \hline
+                    & MPJPE                 \\ \hline
+    Occlusion ratio & Directions 1.54138969 \\ \hline
+    0               & 322.39                \\
+    0.35            & 326.17                \\
+    0.50            & 441.72                \\ \hline
+  \end{tabular}
+  \caption{MPJPE of the model for varying occlusion ratios.}
+  \label{table: mpjpe varying occlusion ratios}
+\end{table}
 \paragraph{Ability to predict visible keypoints on occluded videos.}
 Although the visible keypoints may be cluttered and hard to distinguish in figure \ref{fig: spider}, the model still seems to be able to predict them somewhat coherently. This is further confirmed by figure \ref{fig: head hidden}, where the model is able to coherently predict the visible keypoints even though the head is hidden. Furthermore, we note that the model is unable to predict the legs in figure \ref{fig: head hidden comp} (left leg in green is wrongly predicted behind right leg in blue), however the model makes the same mistake in the non-occluded counterpart (figure \ref{fig: no occlusion}). This hints that wrong predictions on visible keypoints may not be due to occlusions, but rather to the model itself.
 \paragraph{Prediction quality of visible keypoints on occluded compared to non-occluded videos.}
-As mentioned previously, the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. However, it seems that the network is less confident about visible keypoints in occluded scenes, as can be noticed by their unstability. Indeed, the prediction of the keypoints seems to ``shake''. In other words, it appears that a high frequency noise is added to the joint position over time. This phenomenon is further amplified for occluded keypoints.
+As mentioned previously, the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. However, it seems that the network is less confident about visible keypoints in occluded scenes, as can be noticed by their unstability. Indeed, the prediction of the keypoints seems to ``shake''. In other words, it appears that a high frequency noise is added to the joint position over time. This phenomenon is further amplified for occluded keypoints. \\
 
 \section{Conclusion and Perspectives}
+In this section, we make a recap about the results of this paper, and we discuss about a few ideas that may lead to future work.
 \subsection{Conclusion}
 Throughout this study of the State of the Art, we saw that 3D \ac{hpe} can be splitted into three tasks: \ac{svsp} , \ac{svmp} and \ac{mv}, which we detailed. The first one can consist of finding joints (skeleton) or superimposing an artificial 3D body model (\ac{hmr}). The second one can consist of either identifying each person in the image then finding their joints (top-down), or finding all joints plus a depth map before grouping these joints into the person they belong to (bottom-up). Finally, the last one avoids the strugles of other tasks, such as occlusions, thanks to its multiple views but it requires having multiple cameras and determining precisely where each of them lies with respect to the others. \\
 We also saw that neither for datasets, nor for metrics is there one perfect, universal standard. For datasets, we have to choose between an ``easy'', maybe utopic, one and other ones with less data. For metrics, we may need to use several of them to properly evaluate the performances of any given model. \\
-With respect to model predictions and occlusions, we answered three questions. The first one asked whether models are able to predict occluded keypoints. As we saw, they are not. The occluded keypoints are predicted within the visible region of the image, although they are not visible.
-The second question asked whether models are able to predict visible keypoints on occluded videos. We saw that they are able to predict visible keypoints on occluded videos, but that they may be less confident about them.
+With respect to model predictions and occlusions, we answered three questions. The first one asked whether models are able to predict occluded keypoints. As we saw, they are not. Indeed, the occluded keypoints are predicted within the visible region of the image, although they are not visible. However, the results are not drastically worse as long as the occlusion is not pathological. \\
+The second question asked whether models are able to predict visible keypoints on occluded videos. We saw that they are able to predict visible keypoints on occluded videos, but that they may be less confident about them. \\
 The third question asked how well models predict visible keypoints on occluded compared to non-occluded videos. We saw that the prediction of visible keypoints in occluded scenes seems close enough to the prediction of visible keypoints in non-occluded scenes. Furthermore, we showcased an example where the model was unable to correctly predict the visible keypoints in the occluded setting, but it was also unable to correctly predict them in the non-occluded setting. However, we noted that the uncertainty of the network can be noticed through the high-frequency noise that is added to the joint position over time.
 
 
 \subsection{Perspectives}
 Building on that last challenge regarding the high-frequency noise, we could try to use the variance of a joint position over time as a metric to predict whether a keypoint is occluded or not. More variance in the joint position with respect to time could mean that the keypoint is occluded. This is not particularly interesting on the Human3.6M dataset because we add the synthetic occlusion ourselves, so we know which keypoints are occluded. However, it could be interesting for other datasets where is occlusion is more natural and unlabeled. For instance, in movie datasets where characters move in front of others and we want to predict the position of a character in the background. \\
-Another perspective to improve the robustness of our model with respect to occlusions would simply be to train it on occluded videos. This may allow the model to learn how to predict occluded keypoints, as well as better predicting visible keypoints in occluded scenes.
+Another simpler perspective would be to evaluate our model on visible keypoints only and on more videos. \\
+Finally, a last perspective to improve the robustness of our model with respect to occlusions would simply be to train it on occluded videos. This may allow the model to learn how to predict occluded keypoints, as well as better predicting visible keypoints in occluded scenes.
 
 \bibliographystyle{splncs04}
 \begin{thebibliography}{8}
