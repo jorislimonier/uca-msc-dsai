@@ -4,8 +4,8 @@
 **/data/
 advanced-DL/practice/hymenoptera_data
 inverse_problem_image_processing/assignments/assignment1/solutions.pdf
-research_project/**/*.mp4
-research_project/**/*.pth
+**/research_project/**/*.mp4
+**/research_project/**/*.pth
 
 # ------------ PYTHON ------------
 
