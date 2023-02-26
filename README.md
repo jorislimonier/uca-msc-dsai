@@ -223,7 +223,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <td align="center">TBD</td>
     <tr>
       <td>:heavy_check_mark: Introduction to Information Theory</td>
-      <td align="center">TBD</td>
+      <td align="center">16</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Model-Based statistical Learning</td>
