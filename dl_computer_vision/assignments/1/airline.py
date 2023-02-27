@@ -47,14 +47,22 @@ class AirlineDataset(Dataset):
 
 
 class AirlineDataModule(pl.LightningDataModule):
-  def __init__(self, train_sequences: list, test_sequences: list, batch_size: int):
+  def __init__(
+    self,
+    train_sequences: list,
+    val_sequences: list,
+    test_sequences: list,
+    batch_size: int,
+  ):
     super().__init__()
     self.train_sequences = train_sequences
+    self.val_sequences = val_sequences
     self.test_sequences = test_sequences
     self.batch_size = batch_size
 
   def setup(self, stage=None):
     self.train = AirlineDataset(sequences=self.train_sequences)
+    self.val = AirlineDataset(sequences=self.val_sequences)
     self.test = AirlineDataset(sequences=self.test_sequences)
 
   def train_dataloader(self):
@@ -67,7 +75,7 @@ class AirlineDataModule(pl.LightningDataModule):
 
   def val_dataloader(self):
     return DataLoader(
-      self.test,
+      self.val,
       batch_size=1,
       shuffle=False,
       num_workers=8,
@@ -93,7 +101,7 @@ class PassengerPredictionModel(nn.Module):
       hidden_size=n_hidden,
       num_layers=n_layers,  # number of stacked LSTM layers
       batch_first=True,
-      dropout=0.,
+      dropout=0.1,
     )
 
     self.linear = nn.Linear(in_features=n_hidden, out_features=1)
@@ -109,9 +117,16 @@ class PassengerPredictionModel(nn.Module):
 
 
 class PassengerPredictor(pl.LightningModule):
-  def __init__(self, n_features: int, lr: float = 0.0001, weight_decay: float = 0.01):
+  def __init__(
+    self,
+    n_features: int,
+    lr: float = 0.0001,
+    weight_decay: float = 0.01,
+  ):
     super().__init__()
-    self.model = PassengerPredictionModel(n_features=n_features)
+    self.model = PassengerPredictionModel(
+      n_features=n_features, n_layers=1, n_hidden=20
+    )
     self.criterion = nn.MSELoss()
     self.lr = lr
     self.weight_decay = weight_decay
@@ -128,7 +143,7 @@ class PassengerPredictor(pl.LightningModule):
     sequences = batch["sequence"]
     labels = batch["label"]
 
-    loss, outputs = self(sequences, labels)
+    loss, _ = self(sequences, labels)
     self.log("train_loss", loss, prog_bar=True, logger=True)
     return loss
 
@@ -149,4 +164,8 @@ class PassengerPredictor(pl.LightningModule):
     return loss
 
   def configure_optimizers(self):
-    return torch.optim.AdamW(self.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+    return torch.optim.AdamW(
+      params=self.parameters(),
+      lr=self.lr,
+      weight_decay=self.weight_decay,
+    )
