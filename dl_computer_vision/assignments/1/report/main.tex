@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+
+\newacronym{lstm}{LSTM}{Long Short-Term Memory}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+\newgeometry{
+  left=25mm,
+  right=25mm,
+  top=25mm,
+  bottom=25mm}
+\pagenumbering{arabic}
+\section{Question 1}
+\gls{lstm} networks are a type of recurrent neural network that is commonly used for sequential data processing. \gls{lstm} models can be either stateful or stateless, which refers to how the model maintains its internal state information between batches of input sequences. \\
+A stateful \gls{lstm} maintains its internal state information between batches of input sequences. This means that the hidden state of the model at the end of one batch is used as the initial state for the next batch. Stateful \glspl{lstm} are useful when the sequence data has long-term dependencies that span multiple batches. However, according to some sources, stateful \glspl{lstm} require careful management of the batch size and the number of epochs during training to ensure that the model's internal state is not reset prematurely. \\
+On the other hand, a stateless \gls{lstm} resets its internal state after each batch of input sequences is processed. This means that the model does not retain any memory of the previous batch and treats each batch as an independent sequence. Stateless \glspl{lstm} are useful when the sequence data does not have long-term dependencies that span multiple batches.
+
+\section{Question 2}
+The main difference between a single \gls{lstm} layer of 100 neurons and a stacked 2-layered \gls{lstm} each of 50 neurons is the architectural complexity and the ability to model more complex patterns in sequential data. \\
+A single \gls{lstm} layer of 100 neurons is a deep neural network layer that contains 100 \gls{lstm} units. The layer takes in a sequence of input vectors and produces a sequence of output vectors. Each \gls{lstm} unit in the layer has its own memory cell, which allows the layer to learn long-term dependencies in the input sequence. This type of layer can be used to model complex patterns in sequential data. \\
+A stacked 2-layered \gls{lstm} of 50 neurons each, on the other hand, consists of two \gls{lstm} layers, each containing 50 \gls{lstm} units. The input sequence is passed through the first layer of 50 \gls{lstm} units, and the output of this layer is then passed through the second layer of 50 \gls{lstm} units. The advantage of using a stacked 2-layered \gls{lstm} is that it can capture more complex dependencies in the input sequence. The first layer can capture short-term dependencies, while the second layer can capture longer-term dependencies.
+
+\section{Question 3}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
