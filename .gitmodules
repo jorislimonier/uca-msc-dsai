@@ -10,3 +10,6 @@
 [submodule "dl_computer_vision/practice/video_convolution"]
 	path = dl_computer_vision/practice/video_convolution
 	url = https://github.com/srijandas07/video_convolution
+[submodule "federated_learning/practice/FedCourse23"]
+	path = federated_learning/practice/FedCourse23
+	url = https://gitlab.inria.fr/arodio/FedCourse23
