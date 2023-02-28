@@ -56,3 +56,22 @@ Global objective function:
 $$
 F(w) = \sum_{k=1}^K p_k F_k(w)
 $$
+
+### Minitest 3
+#### Question 1
+
+$$
+F(w) = \sum_{i=1}^M \frac{1}{M} F_i(w)
+$$
+so $\alpha_i = \frac{1}{M}$.
+
+For $k = 1, \ldots M$: \
+$\quad$ $A_k$ is the set of available clients at round $k$ \
+$\quad$ Send weights to the server\
+$\quad$ For each client $i \in A_k$:\
+$\quad$ $\quad$ Perform $E$ local steps.\
+$\quad$ $\Delta_k = \sum_{i \in A_k} q_i \Delta_k^{(i)}$, with $q_i = \frac{1}{M \pi_i}$\
+$\quad$ $w_{k+1, 0} = w_{k, 0} + \eta_s \Delta_k$
+
+#### Question 2
+Yes, when number of iterations if limited and if converging to $F_B$ may be faster than converging to $F$.
