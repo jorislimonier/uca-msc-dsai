@@ -8,7 +8,7 @@
 \usepackage{multirow}
 \usepackage{glossaries}
 % \makenoidxglossaries
-% \newcommand{\thetahat}{\hat{\theta}}
+\newcommand{\prox}{\operatorname{prox}}
 
 % \newacronym{bmi}{BMI}{Body Mass Index}
 
@@ -35,10 +35,10 @@
 
 \section{Exercise 1}
 \begin{equation}
-  \operatorname{prox}_{\tau f}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + f(u)
+  \prox_{\tau f}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + f(u)
 \end{equation}
 \begin{equation}
-  \operatorname{prox}_{\tau |\cdot|}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|
+  \prox_{\tau |\cdot|}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|
 \end{equation}
 \begin{equation}
 \end{equation}
@@ -49,30 +49,36 @@ Let $h(x) = \frac{1}{2\tau}\|u-x\|^2 + |u|$. Then
    & =
   \begin{cases}
     \frac{1}{\tau}(u-x) - 1,  & u < 0 \\
-    0,                        & u < 0 \\
+    0,                        & u = 0 \\
     \frac{1}{\tau} (u-x) + 1, & u > 0 \\
   \end{cases}
 \end{align*}
-\paragraph{$u > 0$}
+
+\paragraph{Case $u > 0$.}
 \begin{align*}
            &
+  \frac{\partial}{\partial u} h(x) = 0 \\
+  \implies &
   \frac{1}{\tau} (u-x) + 1 = 0 \\
   \implies &
   u = x - \tau                 \\
 \end{align*}
-\paragraph{$u < 0$}
+
+\paragraph{Case $u < 0$.}
 \begin{align*}
            &
+  \frac{\partial}{\partial u} h(x) = 0 \\
+  \implies &
   \frac{1}{\tau} (u-x) - 1 = 0 \\
   \implies &
   u = x + \tau                 \\
 \end{align*}
 
-\paragraph{$u = 0$}
+\paragraph{Case $u = 0$.}
 $\partial h(u) = [-1, 1]$
 Therefore
 \begin{align*}
-  \operatorname{prox}_{\tau |\cdot|}(x)
+  \prox_{\tau |\cdot|}(x)
    & = \begin{cases}
     x - \tau, & x < -\tau              \\
     0,        & -\tau \leq x \leq \tau \\
@@ -89,11 +95,11 @@ Therefore
   \end{cases}
 \end{equation}
 \begin{equation}
-  \operatorname{prox}_{\tau |\cdot|_0}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_0
+  \prox_{\tau |\cdot|_0}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_0
 \end{equation}
 
 \begin{equation}
-  \operatorname{prox}_{\tau |\cdot|_0}(x) = \begin{cases}
+  \prox_{\tau |\cdot|_0}(x) = \begin{cases}
     0, & x = 0    \\
     x, & x \neq 0
   \end{cases}
@@ -115,20 +121,20 @@ So it is better to choose $u = 0$ when $\frac{x^2}{2\tau} < 1$, else, set $u = x
   \end{cases}
 \end{equation}
 \begin{equation}
-  \operatorname{prox}_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
+  \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
 \end{equation}
 
 \begin{equation}
-  \operatorname{prox}_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
+  \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
 \end{equation}
 Given by prof:
 \begin{equation}
-  \operatorname{prox}(x) = \max(\operatorname{prox}_{\tau |\cdot|_1}(x), 0)
+  \prox(x) = \max(\prox_{\tau |\cdot|_1}(x), 0)
 \end{equation}
 
 
 \section{Exercise 4}
-Compute $\operatorname{prox}_{f}(x)$.
+Compute $\prox_{f}(x)$.
 
 
 % \clearpage
