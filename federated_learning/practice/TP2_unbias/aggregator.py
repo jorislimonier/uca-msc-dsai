@@ -199,8 +199,12 @@ class Aggregator(ABC):
     """
 
     # Hint: use rng to write self.sampled_clients_ids
+    p = self.clients_weights if self.sample_with_replacement else None
     self.sampled_clients_ids = np.random.choice(
-      self.n_clients, self.n_clients_per_round, replace=self.sample_with_replacement
+      self.n_clients,
+      self.n_clients_per_round,
+      replace=self.sample_with_replacement,
+      p=p,
     )
 
     # TODO: print the sampled clients
@@ -257,7 +261,11 @@ class CentralizedAggregator(Aggregator):
 
     self.global_trainer.optimizer.zero_grad()
 
-    aggregation_weights = clients_weights[self.sampled_clients_ids] / self.sampling_rate
+    aggregation_weights = (
+      torch.ones(self.n_clients_per_round)
+      if self.sample_with_replacement
+      else clients_weights[self.sampled_clients_ids] / self.sampling_rate
+    )
 
     # TODO: use the proper aggregation weight
     average_models(

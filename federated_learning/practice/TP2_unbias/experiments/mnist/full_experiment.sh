@@ -42,6 +42,7 @@ python3 run_experiment.py \
   --device "${DEVICE}" \
   --log_freq "${LOG_FREQ}" \
   --verbose 1 \
-  --sampling_rate 1 \
+  --sampling_rate 0.2 \
+  --sample_with_replacement \
   --logs_dir "logs/mnist/seed_${SEED}" \
   --seed "${SEED}"
