@@ -13,3 +13,9 @@
 [submodule "federated_learning/practice/FedCourse23"]
 	path = federated_learning/practice/FedCourse23
 	url = https://gitlab.inria.fr/arodio/FedCourse23
+[submodule "dl_computer_vision/practice/two-stream-action-recognition"]
+	path = dl_computer_vision/practice/two-stream-action-recognition
+	url = https://github.com/mohammed-elkomy/two-stream-action-recognition.git
+[submodule "dl_computer_vision/practice/gdown.pl"]
+	path = dl_computer_vision/practice/gdown.pl
+	url = https://github.com/circulosmeos/gdown.pl.git
