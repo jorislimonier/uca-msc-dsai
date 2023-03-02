@@ -1,0 +1,98 @@
+---
+title: "Networks - day 1"
+author: "CB"
+date: "2023-02-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Manipulation and characterization of the networks
+
+We first need to install the `igraph` library:
+
+```{r}
+#install.packages('igraph')
+library(igraph)
+```
+
+After, we can create a first graph and try to manipulate it.
+
+> Exercise: create an adjacency matrix corresponding to a undirected network where the first node is connected to the 4 other nodes, that are not connected togather.
+
+```{r}
+A = cbind(c(0,1,1,1,1),
+          c(1,0,0,0,0),
+          c(1,0,0,0,0),
+          c(1,0,0,0,0),
+          c(1,0,0,0,0))
+```
+
+This adjacency matrix can be used within the `igraph` environment for plots or computations.
+
+```{r}
+g = graph.adjacency(A)
+g
+```
+
+```{r}
+plot(g)
+```
+
+If we prefer to display a undirected network, we have make this call:
+
+```{r}
+g = graph.adjacency(A, mode='undirected')
+plot(g)
+```
+
+> Exercise= modify the adjacendy matrix to make a connection between the nodes 3 and 5, and plot it.
+
+```{r}
+A = cbind(c(0,1,1,1,1),
+          c(1,0,0,0,0),
+          c(1,0,0,0,1),
+          c(1,0,0,0,0),
+          c(1,0,1,0,0))
+g = graph.adjacency(A, mode='undirected')
+plot(g)
+```
+
+We can also use the `igraph` library to compute the degree of the nodes.
+
+```{r}
+degree(g)
+```
+
+Another statistic we can compute for graphs is the number of k-cliques.
+
+> Definition: a k-clique is a set of k nodes that are all connected togather.
+
+For instance, in the above network, there is one 3-clique and 5 2-cliques.
+
+```{r}
+cliques(g)
+```
+
+> Exercice: write a small piece of code allowing to plot the signature of the graph by counting the number of k-cliques, k=1,...,n
+
+```{r}
+signature <- function(g, max = 10){
+   cl = cliques(g)
+   s = rep(0,max)
+   for (i in 1:length(cl)){
+      l = length(cl[[i]])
+      s[l] = s[l] + 1
+   }
+   barplot(s)
+   return(s)
+}
+signature(g)
+```
+
+
+
+
+
