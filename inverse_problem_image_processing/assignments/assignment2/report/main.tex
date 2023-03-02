@@ -33,19 +33,20 @@
   bottom=25mm}
 \pagenumbering{arabic}
 
-\section{Exercise 1}
+\section{Tutorial 5}
+\subsection{Exercise 1}
+The proximal operator of $\tau f$ is defined as:
 \begin{equation}
-  \prox_{\tau f}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + f(u)
+  \prox_{\tau f}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + f(u)
 \end{equation}
+which we can apply to the $\ell_1$ norm to get:
 \begin{equation}
-  \prox_{\tau |\cdot|}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|
+  \prox_{\tau |\cdot|}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + |u|
 \end{equation}
-\begin{equation}
-\end{equation}
-Let $h(x) = \frac{1}{2\tau}\|u-x\|^2 + |u|$. Then
+Let $h(u) = \frac{1}{2\tau}\|u-x\|^2 + |u|$, then
 \begin{align*}
-  \frac{\partial}{\partial u} h(x)
-   & = \frac{\partial}{\partial u} \frac{1}{2\tau}\|u-x\|^2 + |u| \\
+  \frac{\partial}{\partial u} h(u)
+   & = \frac{\partial}{\partial u}  \left[\frac{1}{2\tau}\|u-x\|^2 + |u| \right] \\
    & =
   \begin{cases}
     \frac{1}{\tau}(u-x) - 1,  & u < 0 \\
@@ -57,26 +58,33 @@ Let $h(x) = \frac{1}{2\tau}\|u-x\|^2 + |u|$. Then
 \paragraph{Case $u > 0$.}
 \begin{align*}
            &
-  \frac{\partial}{\partial u} h(x) = 0 \\
+  \frac{\partial}{\partial u}  h(u) = 0 \\
   \implies &
-  \frac{1}{\tau} (u-x) + 1 = 0 \\
+  \frac{1}{\tau} (u-x) + 1 = 0          \\
   \implies &
-  u = x - \tau                 \\
+  u = x - \tau                          \\
 \end{align*}
 
 \paragraph{Case $u < 0$.}
 \begin{align*}
            &
-  \frac{\partial}{\partial u} h(x) = 0 \\
+  \frac{\partial}{\partial u}  h(u) = 0 \\
   \implies &
-  \frac{1}{\tau} (u-x) - 1 = 0 \\
+  \frac{1}{\tau} (u-x) - 1 = 0          \\
   \implies &
-  u = x + \tau                 \\
+  u = x + \tau                          \\
 \end{align*}
 
 \paragraph{Case $u = 0$.}
-$\partial h(u) = [-1, 1]$
-Therefore
+In this case, we cannot compute the derivative as the function is non-differentiable in $u = 0$. We have however that the subdifferential of $h$ is given by:
+$$
+  \partial h(u) = [-1, 1]
+$$
+In particular, we have by the optimality condition that:
+\begin{equation}
+  0 \in \partial h(u^*) \iff u^* \in \arg \min_{u \in \R} f(u)
+\end{equation}
+As a result, we have that the proximal operator of $\tau |\cdot|$ is given by:
 \begin{align*}
   \prox_{\tau |\cdot|}(x)
    & = \begin{cases}
@@ -85,35 +93,40 @@ Therefore
     x + \tau, & x > \tau               \\
   \end{cases}
 \end{align*}
+We plot this proximal operator in the companion notebook.
 
-\section{Exercise 2}
-
+\subsection{Exercise 2}
+We define $f$ as the $\ell_0$ norm:
 \begin{equation}
   f(x) = |x|_0 = \begin{cases}
     0, & x = 0    \\
     1, & x \neq 0
   \end{cases}
 \end{equation}
+The proximal operator of $\tau f$ is defined as:
 \begin{equation}
-  \prox_{\tau |\cdot|_0}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_0
+  \prox_{\tau |\cdot|_0}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + |u|_0
 \end{equation}
-
-\begin{equation}
-  \prox_{\tau |\cdot|_0}(x) = \begin{cases}
-    0, & x = 0    \\
-    x, & x \neq 0
-  \end{cases}
-\end{equation}
-
+% \begin{equation}
+%   \prox_{\tau |\cdot|_0}(x) = \begin{cases}
+%     0, & x = 0    \\
+%     x, & x \neq 0
+%   \end{cases}
+% \end{equation}
+Let $h(u)$ be given by:
+$$
+h(u) := \frac{1}{2\tau}\|u-x\|^2 + |u|_0
+$$
+then 
 \begin{align*}
   h'(x) = \begin{cases}
-    0, & x \neq 0 \\
-    1, & x = 0
+    \frac{1}{2\tau} (u-x) + 0, & x \neq 0 \\
+    \frac{1}{2\tau} (u-x) + 1, & x = 0
   \end{cases}
 \end{align*}
 So it is better to choose $u = 0$ when $\frac{x^2}{2\tau} < 1$, else, set $u = x$.
 
-\section{Exercise 3}
+\subsection{Exercise 3}
 \begin{equation}
   \delta_{\R_+^n} (x) = \begin{cases}
     \infty, & x \not \in \R_+^n \\
@@ -133,8 +146,12 @@ Given by prof:
 \end{equation}
 
 
-\section{Exercise 4}
+\subsection{Exercise 4}
 Compute $\prox_{f}(x)$.
+
+
+\section{Tutorial 6}
+\subsection{Question 7}
 
 
 % \clearpage
