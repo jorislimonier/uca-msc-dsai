@@ -11,5 +11,10 @@
 - Grade
   - 50% 2 or 3 pratical sessions graded
   - 50% Exam
+    - Define the $\ell_2$ norm
+    - Define the $\ell_1$ norm
+    - Define an algorithm to solve the problem proximal problem --> proximal gradient descent
+    - No convergence rates
+    - No proofs
 - Homework 1
   - Exercise 1, 2, 4
