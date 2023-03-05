@@ -34,45 +34,53 @@
 \pagenumbering{arabic}
 
 \section{Tutorial 5}
-\subsection{Exercise 1}
+\subsection{Exercise 1: Soft-thresholding}
+\label{sec:soft-thresholding}
 The proximal operator of $\tau f$ is defined as:
-\begin{equation}
-  \prox_{\tau f}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + f(u)
-\end{equation}
+\begin{equation*}
+  \prox_{\tau f}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\left(u-x \right)^2 + f(u)
+\end{equation*}
 which we can apply to the $\ell_1$ norm to get:
-\begin{equation}
-  \prox_{\tau |\cdot|}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + |u|
-\end{equation}
-Let $h(u) = \frac{1}{2\tau}\|u-x\|^2 + |u|$, then
+\begin{equation*}
+  \prox_{\tau |\cdot|}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\left(u-x \right)^2 + |u|
+\end{equation*}
+Let $h(u)$ be given by:
+$$
+  h(u) := \frac{1}{2\tau}\left(u-x \right)^2 + |u|
+$$
+The optimality condition states that given that $h$ is is proper, we have:
+\begin{equation*}
+  0 \in \partial h(u^*) \iff u^* \in \arg \min_{u \in \R} h(u)
+\end{equation*}
+then we have:
 \begin{align*}
   \frac{\partial}{\partial u} h(u)
-   & = \frac{\partial}{\partial u}  \left[\frac{1}{2\tau}\|u-x\|^2 + |u| \right] \\
+   & = \frac{\partial}{\partial u}  \left[\frac{1}{2\tau}\left(u-x \right)^2 + |u| \right] \\
    & =
   \begin{cases}
     \frac{1}{\tau}(u-x) - 1,  & u < 0 \\
-    0,                        & u = 0 \\
     \frac{1}{\tau} (u-x) + 1, & u > 0 \\
   \end{cases}
 \end{align*}
-
+We set the derivative to zero to find the critical points of $h$. We have three cases to consider: $u > 0$, $u < 0$ and $u = 0$.
 \paragraph{Case $u > 0$.}
 \begin{align*}
            &
-  \frac{\partial}{\partial u}  h(u) = 0 \\
+  \frac{\partial}{\partial u}  h(u^*) = 0 \\
   \implies &
-  \frac{1}{\tau} (u-x) + 1 = 0          \\
+  \frac{1}{\tau} (u^*-x) + 1 = 0          \\
   \implies &
-  u = x - \tau                          \\
+  u^* = x - \tau                          \\
 \end{align*}
 
 \paragraph{Case $u < 0$.}
 \begin{align*}
            &
-  \frac{\partial}{\partial u}  h(u) = 0 \\
+  \frac{\partial}{\partial u}  h(u^*) = 0 \\
   \implies &
-  \frac{1}{\tau} (u-x) - 1 = 0          \\
+  \frac{1}{\tau} (u^*-x) - 1 = 0          \\
   \implies &
-  u = x + \tau                          \\
+  u^* = x + \tau                          \\
 \end{align*}
 
 \paragraph{Case $u = 0$.}
@@ -80,70 +88,167 @@ In this case, we cannot compute the derivative as the function is non-differenti
 $$
   \partial h(u) = [-1, 1]
 $$
-In particular, we have by the optimality condition that:
-\begin{equation}
-  0 \in \partial h(u^*) \iff u^* \in \arg \min_{u \in \R} f(u)
-\end{equation}
-As a result, we have that the proximal operator of $\tau |\cdot|$ is given by:
+In particular, $0 \in \partial h(u)$, so we can apply the optimality condition. Therefore, the proximal operator is given by:
 \begin{align*}
   \prox_{\tau |\cdot|}(x)
    & = \begin{cases}
-    x - \tau, & x < -\tau              \\
-    0,        & -\tau \leq x \leq \tau \\
-    x + \tau, & x > \tau               \\
-  \end{cases}
+    x - \tau, & u > 0            \\
+    x + \tau, & u < 0            \\
+    0,        & \text{otherwise} \\
+  \end{cases}  \\
+   & = \begin{cases}
+    x - \tau, & x - \tau > 0     \\
+    x + \tau, & x + \tau < 0     \\
+    0,        & \text{otherwise} \\
+  \end{cases}  \\
+   & = \begin{cases}
+    x - \tau, & x > \tau         \\
+    x + \tau, & x < - \tau       \\
+    0,        & \text{otherwise} \\
+  \end{cases}  \\
+   & = \begin{cases}
+    x - \tau, & x > \tau      \\
+    x + \tau, & x < -\tau     \\
+    0,        & |x| \leq \tau \\
+  \end{cases} \\
 \end{align*}
-We plot this proximal operator in the companion notebook.
+\\We plot this proximal operator in the companion notebook.
 
-\subsection{Exercise 2}
+\subsection{Exercise 2: Hard-thresholding}
 We define $f$ as the $\ell_0$ norm:
-\begin{equation}
+\begin{equation*}
   f(x) = |x|_0 = \begin{cases}
     0, & x = 0    \\
     1, & x \neq 0
   \end{cases}
-\end{equation}
+\end{equation*}
 The proximal operator of $\tau f$ is defined as:
-\begin{equation}
-  \prox_{\tau |\cdot|_0}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\|u-x\|^2 + |u|_0
-\end{equation}
-% \begin{equation}
+\begin{equation*}
+  \prox_{\tau |\cdot|_0}(x) = \arg\min_{u \in \R} \frac{1}{2\tau}\left(u-x \right)^2 + |u|_0
+\end{equation*}
+% \begin{equation*}
 %   \prox_{\tau |\cdot|_0}(x) = \begin{cases}
 %     0, & x = 0    \\
 %     x, & x \neq 0
 %   \end{cases}
-% \end{equation}
+% \end{equation*}
 Let $h(u)$ be given by:
-$$
-h(u) := \frac{1}{2\tau}\|u-x\|^2 + |u|_0
-$$
-then 
 \begin{align*}
-  h'(x) = \begin{cases}
-    \frac{1}{2\tau} (u-x) + 0, & x \neq 0 \\
-    \frac{1}{2\tau} (u-x) + 1, & x = 0
-  \end{cases}
+  h(u)
+   & := \frac{1}{2\tau}\left(u-x \right)^2 + |u|_0 \\
+   & =
+  \begin{cases}
+    \frac{1}{2\tau} \left(u-x \right)^2 + 1,  & u \neq 0 \\
+    \frac{1}{2\tau} \left( 0-x \right)^2 + 0, & u = 0    \\
+  \end{cases}                       \\
+   & =
+  \begin{cases}
+    \frac{1}{2\tau} \left(u-x \right)^2 + 1, & u \neq 0 \\
+    \frac{x^2}{2\tau},                       & u = 0    \\
+  \end{cases}                       \\
 \end{align*}
-So it is better to choose $u = 0$ when $\frac{x^2}{2\tau} < 1$, else, set $u = x$.
-
-\subsection{Exercise 3}
-\begin{equation}
-  \delta_{\R_+^n} (x) = \begin{cases}
-    \infty, & x \not \in \R_+^n \\
-    0,      & \text{otherwise}
+We have two cases to consider: $u \neq 0$ and $u = 0$.
+\paragraph{Case $u \neq 0$.}
+In this case, $h$ is differentiable. We will compute its derivative and set it to zero to find the critical points of $h$. The derivative of $h$ is given by:
+\begin{align*}
+  \frac{\partial}{\partial u} h(x)
+   & = \frac{1}{\tau} (u-x)
+\end{align*}
+We now set this derivative to zero to find the critical points of $h$:
+\begin{align*}
+           &
+  \frac{\partial}{\partial u}  h(u^*) = 0 \\
+  \implies &
+  \frac{1}{\tau} (u^*-x) = 0              \\
+  \implies &
+  u^* = x                                 \\
+\end{align*}
+Therefore, we have:
+\begin{align*}
+  h(u^*)
+   & = \frac{1}{2\tau}\left(u^* - x \right)^2 + |u^*|_0 \\
+   & = \frac{1}{2\tau}\left(x - x \right)^2 + 1         \\
+   & = 1                                                \\
+\end{align*}
+\paragraph{Case $u = 0$.}
+In this case, we cannot compute the derivative as the function is non-differentiable in $u = 0$. We have that $h$ is given by:
+\begin{equation*}
+  h(u) = \frac{x^2}{2\tau}
+\end{equation*}
+Now, the question is whether it is better to have $h(u) = \frac{x^2}{2\tau}$ or $h(u) = 1$. We compare the two quantities:
+\begin{align*}
+  \frac{x^2}{2\tau} < 1
+  \implies &
+  x^2 < 2\tau \\
+  \implies &
+  x \in [-\sqrt{2\tau}, \sqrt{2\tau}]  \\
+\end{align*}
+So in order to minimize $h$, we prefer having $h(u) = \frac{x^2}{2\tau}$ as long as $x \in [-\sqrt{2\tau}, \sqrt{2\tau}]$ and $h(u) = 1$ otherwise. We need to choose $u$ appropriately, which means that the proximal operator of $\tau |\cdot|_0$ is given by:
+\begin{equation*}
+  \prox_{\tau |\cdot|_0}(x) = \begin{cases}
+    0, & x \in [-\sqrt{2\tau}, \sqrt{2\tau}] \\
+    x, & \text{otherwise}                   \\
   \end{cases}
-\end{equation}
-\begin{equation}
-  \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
-\end{equation}
+\end{equation*}
+\\We plot this proximal operator in the companion notebook.
 
-\begin{equation}
-  \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
-\end{equation}
-Given by prof:
-\begin{equation}
-  \prox(x) = \max(\prox_{\tau |\cdot|_1}(x), 0)
-\end{equation}
+
+\subsection{Exercise 3: Non-negativity constraints}
+\subsubsection{Part 1}
+\label{sec:part1}
+Let $\R_+^n$ be the set of vectors with non-negative entries. We define the indicator function of $\R_+^n$ as:
+\begin{equation*}
+  \delta_{\R_+^n} (x) =
+  \begin{cases}
+    0,      & x \in \R_+^n     \\
+    \infty, & \text{otherwise}
+  \end{cases}
+\end{equation*}
+Therefore the proximal operator of $\delta_{\R_+^n}$ is given by:
+\begin{equation*}
+  \prox_{\delta_{\R_+^n}}(x) = \arg\min_{u \in \R^n} \frac{1}{2}\|u-x\|^2 + \delta_{\R_+^n} (u)
+\end{equation*}
+We define $h(u)$ as:
+\begin{equation*}
+  h(u) = \frac{1}{2}\|u-x\|^2 + \delta_{\R_+^n} (u)
+\end{equation*}
+We understand from the definition of the indicator function that no component of $u$ can be negative, otherwise $h$ would be infinite. \\
+We have two cases to consider: $u \in \R_+^n$ and $u \notin \R_+^n$.
+\paragraph{Case $u \in \R_+^n$.}
+In this case, $h$ is differentiable. We will compute its derivative and set it to zero to find the critical points of $h$. The derivative of $h$ is given by:
+\begin{align*}
+  \nabla h(u^*) = 0
+  \implies &
+  u^* - x = 0 \\
+  \implies &
+  u^* = x
+\end{align*}
+\paragraph{Case $u \notin \R_+^n$.}
+In this case, as mentioned above, $h$ is infinite. We cannot choose any component $u_i$ of $u$ to be negative, otherwise $h$ would be infinite because of the indicator function. However, we still want to choose $u$ to be as close as possible to $x$, in order to minimize the $\|u-x\|^2$ component. We proceed in a component-wise fashion, thanks to the separability of $h$. For all $i$ such that $x_i < 0$, we can therefore choose $u_i = 0$, which is the point in $\R_+$ which minimizes the distance to $x_i$. \\
+We can summarize the proximal operator of $\delta_{\R_+^n}$ as:
+\begin{equation*}
+  \forall i=1, \ldots, n,\ \left\{\prox_{\delta_{\R_+^n}}(x)\right\}_i = \max(0, x_i)
+\end{equation*}
+\subsubsection{Part 2}
+We now compute the proximal operator of $\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)$, which is given by:
+\begin{equation*}
+  \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u \in \R_+^n} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
+\end{equation*}
+We define $h(u)$ as:
+\begin{equation*}
+  h(u) = \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
+\end{equation*}
+We note that $h$ is separable. We can therefore apply the proximal operator of $\tau |\cdot|_1$ to each component of $u$. Moreover, we can use the same argument as in section \ref{sec:part1} regarding the non-negativity constraint. Indeed once again, as long as one of the component of $u$ is negative, $h$ is infinite, so minimizing $h$ means that all components of $u$ must be non-negative. For the rest, the minimizer of $\frac{1}{2\tau}\|u-x\|^2 + |u|_1$ is by definition equal to $\prox_{\tau |\cdot|_1}(x)$, that is:
+\begin{equation*}
+  \arg\min_{u \in \R^n} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 =: \prox_{\tau |\cdot|_1}(x)
+\end{equation*}
+and we computed this proximal operator in section \ref{sec:soft-thresholding}. \\
+Now, the indicator forces all components of $u$ to be non-negative (this is the same argument as in section \ref{sec:part1} really). As a result, we can summarize the proximal operator of $\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)$ as:
+\begin{equation*}
+  \forall i = 1, \ldots, n, \  \left(\prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x)\right)_i = \max\left(\left(\prox_{\tau |\cdot|_1}(x)\right)_i, 0\right)
+\end{equation*}
+where the maximum is taken component-wise.
+
 
 
 \subsection{Exercise 4}
