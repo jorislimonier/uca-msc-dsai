@@ -179,15 +179,15 @@ Now, the question is whether it is better to have $h(u) = \frac{x^2}{2\tau}$ or 
 \begin{align*}
   \frac{x^2}{2\tau} < 1
   \implies &
-  x^2 < 2\tau \\
+  x^2 < 2\tau                         \\
   \implies &
-  x \in [-\sqrt{2\tau}, \sqrt{2\tau}]  \\
+  x \in [-\sqrt{2\tau}, \sqrt{2\tau}] \\
 \end{align*}
 So in order to minimize $h$, we prefer having $h(u) = \frac{x^2}{2\tau}$ as long as $x \in [-\sqrt{2\tau}, \sqrt{2\tau}]$ and $h(u) = 1$ otherwise. We need to choose $u$ appropriately, which means that the proximal operator of $\tau |\cdot|_0$ is given by:
 \begin{equation*}
   \prox_{\tau |\cdot|_0}(x) = \begin{cases}
     0, & x \in [-\sqrt{2\tau}, \sqrt{2\tau}] \\
-    x, & \text{otherwise}                   \\
+    x, & \text{otherwise}                    \\
   \end{cases}
 \end{equation*}
 \\We plot this proximal operator in the companion notebook.
@@ -252,7 +252,53 @@ where the maximum is taken component-wise.
 
 
 \subsection{Exercise 4}
-Compute $\prox_{f}(x)$.
+Let us define $f$ as the elastic net functional, that is:
+\begin{equation*}
+  f(x) = \|x\|_1 + \frac{\lambda}{2}\|x\|^2
+\end{equation*}
+We want ot compute $\prox_{f}(x)$. \\
+We define $g$ as:
+\begin{equation*}
+  g(x) = \| x \|_1
+\end{equation*}
+therefore, we have that:
+\begin{equation*}
+  f(x) = g(x) + \frac{\lambda}{2}\|x\|^2
+\end{equation*}
+By proposition 3 with $c = \lambda$, we have that:
+\begin{align*}
+  \prox_{f}(x) = \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right)
+\end{align*}
+Now, using proposition 2 with the variable from the proposition $\lambda_{\text{prop}}$ being such that $\lambda_{\text{prop}} = \lambda + 1$, we have that:
+\begin{align*}
+           &
+  (\lambda + 1) \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \prox_{(\lambda + 1) g} \left( x \right)         \\
+  \implies &
+  \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x \right) \\
+  \implies &
+  \prox_{f} \left( x \right) = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x \right)                                        \\
+\end{align*}
+However, from section \ref{sec:soft-thresholding}, we know that:
+\begin{equation*}
+  \prox_{\tau |\cdot|_1} (x)
+  = \begin{cases}
+    x - \tau, & x > \tau      \\
+    x + \tau, & x < -\tau     \\
+    0,        & |x| \leq \tau \\
+  \end{cases}
+\end{equation*}
+Therefore by separability of $g$ and using $\tau := (\lambda + 1)$, we have that for all $i = 1, \ldots, n$:
+\begin{align*}
+  \prox_{f} \left( x_i \right)
+   & = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x_i \right) \\
+   & = \frac{1}{\tau} \prox_{\tau g} \left( x_i \right)                 \\
+   & = \frac{1}{\tau} \times
+  \begin{cases}
+    x_i - \tau, & x_i > \tau      \\
+    x_i + \tau, & x_i < -\tau     \\
+    0,          & |x_i| \leq \tau \\
+  \end{cases}                                            \\
+\end{align*}
 
 
 \section{Tutorial 6}
