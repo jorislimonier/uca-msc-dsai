@@ -227,12 +227,12 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     </tr>
     <tr>
       <td>:heavy_check_mark: Model-Based statistical Learning</td>
-      <td align="center">TBD</td>
+      <td align="center">14</td>
     </tr>
     <tr>
       <td rowspan=2>Advanced methods in ML</td>
-      <td>:construction: Research Project</td>
-      <td align="center">TBD</td>
+      <td>:heavy_check_mark: Research Project</td>
+      <td align="center">16</td>
       <td rowspan=2 align="center">TBD</td>
     </tr>
     <tr>
