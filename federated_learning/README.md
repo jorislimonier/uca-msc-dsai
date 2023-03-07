@@ -18,6 +18,11 @@
   - 25% Minitest 10 or 15 min
   - 25% Participation to the labs
 
+## Exam
+- 2h
+- Open questions
+- Find errors in an algorithm
+
 ## Labs
 
 1. Intro to federated learning & framework implementation
