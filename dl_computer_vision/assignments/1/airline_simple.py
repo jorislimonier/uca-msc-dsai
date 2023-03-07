@@ -1,10 +1,13 @@
 from __future__ import print_function
+
 import argparse
+
+import matplotlib
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import numpy as np
-import matplotlib
+from torch.utils.data import DataLoader
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -15,8 +18,13 @@ class CustomLSTM(nn.Module):
     super(CustomLSTM, self).__init__()
     self.hidden_size = hidden_size
     self.num_layers = num_layers
-    self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-    self.fc = nn.Linear(hidden_size, output_size)
+    self.lstm = nn.LSTM(
+      input_size=input_size,
+      hidden_size=hidden_size,
+      num_layers=num_layers,
+      batch_first=True,
+    )
+    self.fc = nn.Linear(in_features=hidden_size, out_features=output_size)
 
   def forward(self, x: torch.Tensor):
     h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
@@ -34,15 +42,19 @@ class PassengerPredictor:
     self.optimizer = optimizer
     self.loss_fn = loss_fn
 
-  def train_step(self, batch, model, optimizer, loss_fn):
+  def train_step(
+    self, batch: dict, model: nn.Module, optimizer: optim.Optimizer, loss_fn: nn.Module
+  ):
     optimizer.zero_grad()
     pred = model(batch["sequence"].float())
     loss = loss_fn(pred, batch["label"])
+
     loss.backward()
     optimizer.step()
+
     return loss.item()
 
-  def val_step(self, batch, model, loss_fn):
+  def val_step(self, batch: dict, model: nn.Module, loss_fn: nn.Module):
     with torch.no_grad():
       pred = model(batch["sequence"])
       loss = loss_fn(pred, batch["label"])
@@ -68,3 +80,11 @@ class PassengerPredictor:
         f"Epoch {epoch}: train loss {train_losses[-1]:.4f}, val loss {val_losses[-1]:.4f}"
       )
     return train_losses, val_losses
+
+  def predict(self, model: nn.Module, dataloader: DataLoader):
+    model.eval()
+    preds = []
+    for batch in dataloader:
+      pred = model(batch["sequence"])
+      preds.append(pred)
+    return torch.cat(preds).detach().numpy()
