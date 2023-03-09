@@ -33,8 +33,7 @@
   bottom=25mm}
 \pagenumbering{arabic}
 
-\section{Tutorial 5}
-\subsection{Exercise 1: Soft-thresholding}
+\section{Exercise 1: Soft-thresholding}
 \label{sec:soft-thresholding}
 The proximal operator of $\tau f$ is defined as:
 \begin{equation*}
@@ -114,7 +113,7 @@ In particular, $0 \in \partial h(u)$, so we can apply the optimality condition. 
 \end{align*}
 \\We plot this proximal operator in the companion notebook.
 
-\subsection{Exercise 2: Hard-thresholding}
+\section{Exercise 2: Hard-thresholding}
 We define $f$ as the $\ell_0$ norm:
 \begin{equation*}
   f(x) = |x|_0 = \begin{cases}
@@ -193,8 +192,8 @@ So in order to minimize $h$, we prefer having $h(u) = \frac{x^2}{2\tau}$ as long
 \\We plot this proximal operator in the companion notebook.
 
 
-\subsection{Exercise 3: Non-negativity constraints}
-\subsubsection{Part 1}
+\section{Exercise 3: Non-negativity constraints}
+\subsection{Part 1}
 \label{sec:part1}
 Let $\R_+^n$ be the set of vectors with non-negative entries. We define the indicator function of $\R_+^n$ as:
 \begin{equation*}
@@ -229,7 +228,7 @@ We can summarize the proximal operator of $\delta_{\R_+^n}$ as:
 \begin{equation*}
   \forall i=1, \ldots, n,\ \left\{\prox_{\delta_{\R_+^n}}(x)\right\}_i = \max(0, x_i)
 \end{equation*}
-\subsubsection{Part 2}
+\subsection{Part 2}
 We now compute the proximal operator of $\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)$, which is given by:
 \begin{equation*}
   \prox_{\tau |\cdot|_1 + \delta_{\R_+^n} (\cdot)}(x) = \arg\min_{u \in \R_+^n} \frac{1}{2\tau}\|u-x\|^2 + |u|_1 + \delta_{\R_+^n} (u)
@@ -251,7 +250,7 @@ where the maximum is taken component-wise.
 
 
 
-\subsection{Exercise 4}
+\section{Exercise 4}
 Let us define $f$ as the elastic net functional, that is:
 \begin{equation*}
   f(x) = \|x\|_1 + \frac{\lambda}{2}\|x\|^2
@@ -272,37 +271,15 @@ By proposition 3 with $c = \lambda$, we have that:
 Now, using proposition 2 with the variable from the proposition $\lambda_{\text{prop}}$ being such that $\lambda_{\text{prop}} = \lambda + 1$, we have that:
 \begin{align*}
            &
-  (\lambda + 1) \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \prox_{(\lambda + 1) g} \left( x \right)         \\
+  (\lambda + 1) \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \prox_{g} \left( x \right)         \\
   \implies &
-  \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x \right) \\
+  \prox_{\frac{g}{\lambda + 1}} \left( \frac{x}{\lambda + 1}\right) = \frac{1}{\lambda + 1} \prox_{g} \left( x \right) \\
   \implies &
-  \prox_{f} \left( x \right) = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x \right)                                        \\
+  \prox_{f} \left( x \right) = \frac{1}{\lambda + 1} \prox_{g} \left( x \right)                                        \\
+  \implies &
+  \prox_{f} \left( x \right) = \frac{1}{\lambda + 1} \prox_{| \cdot |_1} \left( x \right)                              \\
 \end{align*}
-However, from section \ref{sec:soft-thresholding}, we know that:
-\begin{equation*}
-  \prox_{\tau |\cdot|_1} (x)
-  = \begin{cases}
-    x - \tau, & x > \tau      \\
-    x + \tau, & x < -\tau     \\
-    0,        & |x| \leq \tau \\
-  \end{cases}
-\end{equation*}
-Therefore by separability of $g$ and using $\tau := (\lambda + 1)$, we have that for all $i = 1, \ldots, n$:
-\begin{align*}
-  \prox_{f} \left( x_i \right)
-   & = \frac{1}{\lambda + 1} \prox_{(\lambda + 1) g} \left( x_i \right) \\
-   & = \frac{1}{\tau} \prox_{\tau g} \left( x_i \right)                 \\
-   & = \frac{1}{\tau} \times
-  \begin{cases}
-    x_i - \tau, & x_i > \tau      \\
-    x_i + \tau, & x_i < -\tau     \\
-    0,          & |x_i| \leq \tau \\
-  \end{cases}                                            \\
-\end{align*}
-
-
-\section{Tutorial 6}
-\subsection{Question 7}
+where we know section \ref{sec:soft-thresholding} the value of the proximal operator of $| \cdot |_1$.
 
 
 % \clearpage
