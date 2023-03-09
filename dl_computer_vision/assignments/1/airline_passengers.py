@@ -178,6 +178,32 @@ def create_sequences(
   return sequences
 
 
+def ohe(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
+  """
+  One-hot-encode the specified columns in the dataframe, dropping the original
+  columns.
+  """
+  for col in columns:
+    # Perform one-hot-encoding if the column is in the dataframe
+    # Prevents errors on notebook reruns
+    if col in df.columns:
+      ohe = pd.get_dummies(df[col], prefix=col, drop_first=True)
+      df = pd.concat(objs=[df, ohe], axis=1)
+      df = df.drop(columns=col)
+  return df
+
+
+def compute_pred_error(
+  y_pred: np.ndarray, y_true: np.ndarray, loss_fn: nn.Module, seq_length: int
+) -> float:
+  """Compute the error between the predictions and the true values."""
+  with torch.no_grad():
+    error = loss_fn(
+      torch.tensor(y_pred).reshape(-1),
+      torch.tensor(y_true[seq_length:]),
+    ).item()
+  return error
+
 class AirlineDataset(Dataset):
   """
   Dataset for the airline data.
@@ -186,8 +212,9 @@ class AirlineDataset(Dataset):
     sequences (list): List of sequences and labels.
   """
 
-  def __init__(self, sequences: list):
+  def __init__(self, sequences: list, device: str = "cuda"):
     self.sequences = sequences
+    self.device = device
 
   def __len__(self):
     return len(self.sequences)
@@ -196,8 +223,8 @@ class AirlineDataset(Dataset):
     sequence, label = self.sequences[idx]
 
     return dict(
-      sequence=torch.tensor(sequence.values, dtype=torch.float),
-      label=torch.tensor(label.values, dtype=torch.float),
+      sequence=torch.tensor(sequence.values, dtype=torch.float, device=self.device),
+      label=torch.tensor(label.values, dtype=torch.float, device=self.device),
     )
 
 
@@ -214,6 +241,7 @@ class PassengerDataModule:
     batch_size: int = 4,
     seq_length: int = 1,
     target_col: str = None,
+    device: str = "cuda",
   ):
     self.train = train
     self.val = val
@@ -221,12 +249,14 @@ class PassengerDataModule:
     self.batch_size = batch_size
     self.seq_length = seq_length
     self.target_col = target_col
+    self.device = device
     self.setup()
 
   def setup(self):
     """
     Create sequences, datasets and dataloaders.
     """
+    # Create sequences
     self.train_sequences = create_sequences(
       data=self.train, seq_length=self.seq_length, target_col=self.target_col
     )
@@ -237,18 +267,35 @@ class PassengerDataModule:
       data=self.test, seq_length=self.seq_length, target_col=self.target_col
     )
 
-    self.train_dataset = AirlineDataset(sequences=self.train_sequences)
-    self.val_dataset = AirlineDataset(sequences=self.val_sequences)
-    self.test_dataset = AirlineDataset(sequences=self.test_sequences)
+    # Create datasets
+    self.train_dataset = AirlineDataset(
+      sequences=self.train_sequences,
+      device=self.device,
+    )
+    self.val_dataset = AirlineDataset(
+      sequences=self.val_sequences,
+      device=self.device,
+    )
+    self.test_dataset = AirlineDataset(
+      sequences=self.test_sequences,
+      device=self.device,
+    )
 
+    # Create dataloaders
     self.train_dataloader = DataLoader(
-      dataset=self.train_dataset, batch_size=self.batch_size, shuffle=False
+      dataset=self.train_dataset,
+      batch_size=self.batch_size,
+      shuffle=False,
     )
     self.val_dataloader = DataLoader(
-      dataset=self.val_dataset, batch_size=self.batch_size, shuffle=False
+      dataset=self.val_dataset,
+      batch_size=self.batch_size,
+      shuffle=False,
     )
     self.test_dataloader = DataLoader(
-      dataset=self.test_dataset, batch_size=self.batch_size, shuffle=False
+      dataset=self.test_dataset,
+      batch_size=self.batch_size,
+      shuffle=False,
     )
 
 
@@ -257,19 +304,31 @@ class PassengerLSTM(nn.Module):
   A LSTM model for the airline data.
   """
 
-  def __init__(self, input_size, hidden_size, num_layers, output_size, **kwargs):
+  def __init__(
+    self,
+    input_size: int,
+    hidden_size: int,
+    num_layers: int,
+    output_size: int,
+    device: str,
+    **kwargs,
+  ):
     super(PassengerLSTM, self).__init__()
 
     self.hidden_size = hidden_size
     self.num_layers = num_layers
+    self.device = device
     self.lstm = nn.LSTM(
       input_size=input_size,
       hidden_size=hidden_size,
       num_layers=num_layers,
       batch_first=True,
+      device=device,
       **kwargs,
     )
-    self.fc = nn.Linear(in_features=hidden_size, out_features=output_size)
+    self.fc = nn.Linear(
+      in_features=hidden_size, out_features=output_size, device=device
+    )
 
   def forward(self, x: torch.Tensor):
     """
@@ -288,6 +347,69 @@ class PassengerLSTM(nn.Module):
     return out
 
 
+class EarlyStopping:
+  def __init__(
+    self,
+    patience: int = 10,
+    verbose: bool = True,
+    restore_best: bool = True,
+    model_path: str = "best_model.pt",
+  ):
+    self.patience = patience
+    self.verbose = verbose
+    self.counter = 0
+    self.best_loss = torch.inf
+    self.early_stop = False
+    self.restore_best = restore_best
+    self.model_path = model_path
+
+  def __call__(
+    self,
+    val_loss: float,
+    model: nn.Module,
+    epoch: int,
+  ):
+    """
+    Check if the model should stop training.
+    """
+
+    if val_loss < self.best_loss:
+      self.save_checkpoint(val_loss=val_loss, model=model, model_path=self.model_path)
+      self.best_loss = val_loss
+      self.best_epoch = epoch
+      self.counter = 0
+
+    else:
+      self.counter += 1
+      if self.verbose:
+        print(
+          f"EarlyStopping counter: {self.counter} / {self.patience}",
+        )
+      if self.counter >= self.patience:
+        self.early_stop = True
+
+        if self.restore_best:
+          self.restore_checkpoint(model=model, model_path=self.model_path)
+
+  def save_checkpoint(self, val_loss: float, model: nn.Module, model_path: str):
+    """
+    Save the model to disk.
+    """
+    # if self.verbose:
+    # print(f"New best val_loss. Saving model ...")
+
+    torch.save(model.state_dict(), model_path)
+
+  def restore_checkpoint(self, model: nn.Module, model_path: str):
+    """
+    Restore the model from disk.
+    """
+    # if self.verbose:
+    print(f"Restoring model from epoch {self.best_epoch} ...")
+
+    model.load_state_dict(torch.load(model_path))
+
+
 class PassengerPredictor:
   def __init__(
     self,
@@ -296,10 +418,10 @@ class PassengerPredictor:
     optimizer: optim.Optimizer,
     loss_fn: nn.Module,
   ):
+    self.data_module = data_module
     self.model = model
     self.optimizer = optimizer
     self.loss_fn = loss_fn
-    self.data_module = data_module
 
   def train_step(
     self,
@@ -332,10 +454,12 @@ class PassengerPredictor:
     optimizer: optim.Optimizer,
     loss_fn: nn.Module,
     n_epochs: int,
+    early_stopping: EarlyStopping = None,
   ):
     """Train the model."""
     train_losses = []
     val_losses = []
+
     for epoch in range(n_epochs):
 
       # Initialize/reset the loss
@@ -359,12 +483,29 @@ class PassengerPredictor:
         val_loss += self.val_step(batch=batch, model=model, loss_fn=loss_fn)
 
       # Store the losses
-      train_losses.append(train_loss / len(self.data_module.train_dataloader))
-      val_losses.append(val_loss / len(self.data_module.val_dataloader))
+      train_loss_batch = train_loss / len(self.data_module.train_dataloader)
+      val_loss_batch = val_loss / len(self.data_module.val_dataloader)
+
+      train_losses.append(train_loss_batch)
+      val_losses.append(val_loss_batch)
+
+      if early_stopping is not None:
+        early_stopping(val_loss=val_loss_batch, model=model, epoch=epoch)
+
+        if early_stopping.early_stop:
+          print(
+            f"Early stopping at epoch {epoch}, "
+            + f"best val loss {early_stopping.best_loss} "
+            + f"(epoch {early_stopping.best_epoch})"
+          )
+
+          # if early_stopping.restore_best:
+          #   return early_stopping.best_model, train_losses, val_losses
+          break
 
       if epoch % 10 == 0:
         print(
-          f"Epoch {epoch}: train loss {train_losses[-1]:.4f}, val loss {val_losses[-1]:.4f}"
+          f"Epoch {epoch}: train loss {train_losses[-1]:.4f}, val loss {val_losses[-1]:.4f}",
         )
 
     return train_losses, val_losses
@@ -387,4 +528,4 @@ class PassengerPredictor:
           preds.append(pred)
           last_sequence = torch.cat((last_sequence, pred), dim=1)[:, -1, :]
 
-    return torch.cat(preds).detach().numpy()
+    return torch.cat(preds).detach().cpu().numpy()
