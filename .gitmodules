@@ -19,3 +19,6 @@
 [submodule "dl_computer_vision/practice/gdown.pl"]
 	path = dl_computer_vision/practice/gdown.pl
 	url = https://github.com/circulosmeos/gdown.pl.git
+[submodule "dl_computer_vision/practice/gan_class_images"]
+	path = dl_computer_vision/practice/gan_class_images
+	url = https://gitlab.inria.fr/yaowang/gan_class_images.git
