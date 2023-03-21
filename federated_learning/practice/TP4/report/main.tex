@@ -74,6 +74,7 @@ The SSIM metric is defined as:
 The SSIM ranges between $-1$ and $1$. The closer to $1$, the more similar the two images are. The closer to $-1$, the more different the two images are. It can be interpreted as a correlation coefficient.
 
 \subsection{Exercise 1}
+Table \ref{tab:SSIM} shows the SSIM for various values of $\alpha$ and local steps $E$. $\alpha$ represent how much the local model is IID. Larger values of $\alpha$ means that the local model is more IID.
 % make a table with the SSIM for various values of alpha
 % put alpha on the columns and E on the rows
 \begin{table}[h]
@@ -82,13 +83,16 @@ The SSIM ranges between $-1$ and $1$. The closer to $1$, the more similar the tw
             & $\alpha = 0.1$ & 0.5   & 0.7   \\ \hline
     $E = 1$ & 0.018          & 0.017 & 0.017 \\
     10      & 0.025          & 0.022 & 0.023 \\
+    20      & 0.025          & 0.023 & 0.024 \\
+    50      & 0.027          & 0.024 & 0.026 \\
   \end{tabular}
-  \caption{SSIM for various values of $\alpha$}
+  \caption{SSIM for various values of the non-IID coefficient $\alpha$ and the local steps $E$.}
   \label{tab:SSIM}
 \end{table}
+We see that for a given number of local steps $E$, the SSIM increases as $\alpha$ increases. This means that the more the local model is IID, the better the global model is.
 
 % the more you increase alpha, the more you are IID
-
+\section{Thread model: Honest-but-curious server}
 \subsection{Exercise 2}
 We run the experiment with the attack occurring at various number of rounds. The results are shown in Figure \ref{fig:SSIM}.
 \begin{figure}[h]
