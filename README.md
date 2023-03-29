@@ -233,24 +233,24 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td rowspan=2>Advanced methods in ML</td>
       <td>:heavy_check_mark: Research Project</td>
       <td align="center">16</td>
-      <td rowspan=2 align="center">TBD</td>
+      <td rowspan=2 align="center">16.7</td>
     </tr>
     <tr>
-      <td>:construction: Federated Learning - Data Privacy</td>
-      <td align="center">TBD</td>
+      <td>:heavy_check_mark: Federated Learning - Data Privacy</td>
+      <td align="center">18.1</td>
     </tr>
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
-      <td>:construction: Deep Learning for computer vision</td>
+      <td>:heavy_check_mark: Deep Learning for computer vision</td>
       <td align="center">TBD</td>
       <td rowspan=3 align="center">TBD</td>
     </tr>
     <tr>
-      <td>:construction: Inverse Problems in image processing</td>
+      <td>:heavy_check_mark: Inverse Problems in image processing</td>
       <td align="center">TBD</td>
     </tr>
     <tr>
-      <td>:construction: Advanced Learning: Functional, Mixed and Text data</td>
+      <td>:heavy_check_mark: Advanced Learning: Functional, Mixed and Text data</td>
       <td align="center">TBD</td>
     </tr>
   </tbody>
