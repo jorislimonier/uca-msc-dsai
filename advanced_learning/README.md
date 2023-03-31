@@ -1,4 +1,4 @@
 # Advanced Learning: functional, mixed and text data
 
 ## Grading
-- Assignment(s)
+- Assignment(s)... lol nope. Last minute change to exam.

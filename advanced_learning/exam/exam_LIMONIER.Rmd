@@ -1,0 +1,231 @@
+---
+title: "Exam: Learning with Complex Data"
+author: "Joris LIMONIER"
+date: "2023-03-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. General Questions
+
+### 1.1 Explain the rational behind the stochastic block model (SBM) and what are the advantages or limits of this model compared to other approaches
+
+A block model is a type of network modeling that represents the vertices and edges of a network as a block image, such as a matrix $\Pi$. The Stochastic Block Model (SBM) is a generative model of random graphs that was introduced in 1983 in the field of social network analysis by Holland et al.
+
+The SBM assumes that the cluster membership of a node $i$ ($C_i$), and the presence of an edge between nodes $i$ and $j$ ($Y_{ij}$), depend on the cluster memberships of the nodes ($C$) and the probability matrix of connecting nodes belonging to different clusters ($\pi$).
+
+The SBM is effective in modeling social networks with communities and hubs. Community detection and hub identification are achieved by comparing intra-cluster probabilities ($\pi_{qq}$) to inter-cluster probabilities ($\pi_{ql},\,q\neq l$). SBM assumes that:
+
+\begin{align}
+C_i&\sim\mathcal{M}(1,\rho)\\
+(Y_{ij}|C_{iq}C_{jl}=1)&\sim\mathcal{B}(\pi_{ql}) \quad \forall \; q,l \in \{ 1,\ldots,K \}
+\end{align}
+
+A cluster is considered a community when the probability of a node in the cluster to connect with nodes also in the same cluster is larger than the probability to connect with nodes in other clusters. Conversely, a cluster is considered a hub when the probability of a node in the cluster to connect with nodes also in the same cluster is smaller than the probability to connect with nodes in other clusters.
+
+Inference on the SBM parameters can be performed using Monte Carlo Markov Chain (MCMC) and Variational Expectation Maximization (VEM) algorithms. The goal of inference is to estimate the parameters $\rho$, $\pi$, and $C$ from the data $Y$.
+
+### 1.2 Explain how one can select the appropriate number of groups in statistical clustering approaches.
+
+When using the Stochastic Block Model (SBM), choosing the appropriate number of clusters ($C$) can be done using model selection criteria such as the Akaike Information Criterion (AIC) or the Bayesian Information Criterion (BIC).
+
+To determine the optimal number of clusters, the log-likelihood is maximized through an iterative optimization process, and a penalty dependent on the selected criterion is applied. The maximized log-likelihood values are then compared across different numbers of clusters ($C$), and the criterion that yields the highest value indicates the optimal number of clusters.
+
+In summary, the goal is to find the number of clusters that maximizes the log-likelihood of the SBM, and this can be achieved through the use of appropriate model selection criteria.
+
+## 2. Short Project: Analysis of the Enron email network
+
+### Instructions
+
+**The result of the project should be a Rmarkdown document/notebook containing:**
+
+- an explanation of your positioning for this project,
+- the codes used for the project (with enough comments and description),
+- the interpretation of the obtained results,
+- a conclusion
+
+### Positioning
+
+The Enron scandal involved fraudulent accounting practices, corruption, and insider trading at the American energy company Enron Corporation, ultimately leading to its collapse in 2001. Executives, including CEO Jeffrey Skilling and CFO Andrew Fastow, participated in practices such as hiding debt and manipulating energy markets to inflate earnings and profits. Enron's bankruptcy resulted in the loss of jobs and billions of dollars in investor and employee losses. The scandal led to the passage of stricter accounting requirements and served as a warning about corporate greed and the need for transparency and accountability.
+
+An interesting aspect of the Enron scandal, in the context of network analysis, will be to study the tensions that may exist through emails as the company faces a crisis.
+
+### Constructing the graph network
+
+<u>Load libraries</u>
+
+```{r}
+library(sna)
+library(VBLPCM)
+```
+
+<u>Exploratory Data Analysis</u>
+
+```{r}
+library(sna)
+library(VBLPCM)
+enron = load("Enron.Rdata")
+cat("The dataset contains:", enron)
+```
+
+```{r}
+# Basic information about the employees
+summary(employeelist)
+
+# Basic information about the emails
+summary(message)
+
+# Basic information about the recipients
+summary(recipientinfo)
+
+# Sample of the employees
+head(employeelist)
+
+# Sample of the emails
+head(message)
+
+# Sample of the recipients
+head(recipientinfo)
+```
+
+<u>Constructing transactional data</u>
+
+We first construct a history of all the emails sent or received by the employees with some information about the type of email (to, cc, bcc). In other languages, this is called an outer join. This type of data is typically called transactional data.
+
+```{r}
+# select columns: mid, sender and date
+senders <- message[, 1:3]
+
+# select columns mid, to and rvalue
+recipients <- recipientinfo[, 2:4]
+transactional_data <- merge(x = senders, y = recipients, by = "mid", all = T)
+
+head(transactional_data)
+
+```
+
+We determine the number of unique addresses in the transactional data:
+
+```{r}
+# select email adresses of senders
+sender_addresses <- transactional_data$sender
+
+# select email adresses of recipients
+recipient_addresses <- transactional_data$rvalue
+
+# get unique addresses
+unique_addresses <- unique(c(
+  sender_addresses,
+  recipient_addresses
+))
+
+cat("Number of unique addresses:", length(unique_addresses))
+```
+
+However, if we look at the `employeelist` data, we see that the number of email addresses is much lower than in the previous case.
+
+```{r}
+unique_employee_address <- unique(c(
+  employeelist$Email_id,
+  employeelist$Email2,
+  employeelist$Email3,
+  employeelist$EMail4
+))
+
+cat("Number of unique employee addresses:", length(unique_employee_address))
+```
+
+<u>Building up the adjacency matrix</u>
+
+We now compute the adjacency matrix from the transactional data. We noticed that some employees have multiple email addresses, but we will ignore this information for time considerations. We will also ignore the type of email (to, cc, bcc) for the same reason.
+
+```{r}
+sender_recipient <- unique(transactional_data[, c(2, 5, 3)])
+employee_transactional_data <- sender_recipient[sender_recipient[, 1] %in% unique_employee_address, ]
+
+transactional_to_adjacency <- function(data, employee_addresses) {
+  # Create an adjacency matrix from transactional data
+
+  n <- length(employee_addresses)
+  A <- matrix(0, n, n)
+  colnames(A) <- employee_addresses
+
+  # iterate over addresses
+  for (sender in employee_addresses) {
+
+    idx <- which(employee_addresses == sender)
+    # find the mail exchange recipients
+    exchanges <- data[
+      which(data[, 1] == sender),
+    ]
+
+    # Fill the appropriate entries in the adjacency matrix
+    for (recipient in exchanges[, 2]) {
+      idy <- which(employee_addresses == recipient)
+      A[idx, idy] <- 1
+    }
+  }
+
+  return(list(employee_addresses = employee_addresses, A = A))
+}
+
+```
+
+### Graph visualization
+
+We compute and plot the adjacency matrix:
+
+```{r}
+A <- transactional_to_adjacency(
+  employee_transactional_data,
+  unique_employee_address
+)
+
+gplot(A$A, edge.col = "#7d72c60d")
+
+```
+
+We see that many edges on the side are unlinked to the rest of the graph. These are email addresses that were never used. We will remove them from the graph. \
+Note that a node is unlinked from the graph if it has no incoming or outgoing edges. In other word, its row and column contain all zeros. Because all entries in the adjacency matrix are binary, we can check whether the `colSums` and `rowSums` functions return zero to identify such nodes.
+
+```{r}
+remove_empty_entries <- function(A) {
+  # Find nodes with both empty rows and columns and remove them
+  emptycols <- which(colSums(A) == 0)
+  emptyrows <- which(rowSums(A) == 0)
+  empty_idx <- Reduce(intersect, list(emptyrows, emptycols))
+  A[-empty_idx, -empty_idx]
+}
+
+A_filled <- remove_empty_entries(A$A)
+gplot(A_filled, edge.col = "#7d72c60d")
+```
+
+### Performing data analytics on the network
+
+We will use the LPCM here.
+
+```{r}
+
+res <- vblpcmfit(vblpcmstart(as.network(A_filled), G = 3, model = "plain", LSTEPS = 1e3), STEPS = 50)
+plot(res)
+
+
+```
+
+```{r}
+res <- vblpcmfit(vblpcmstart(as.network(A_filled), G = 6, model = "plain", LSTEPS = 1e3), STEPS = 50)
+plot(res)
+```
+
+```{r}
+res <- vblpcmfit(vblpcmstart(as.network(A_filled), G = 9, model = "plain", LSTEPS = 1e3), STEPS = 50)
+plot(res)
+```
+
+### Final words
+
+We see that LPCM is able to identify the different groups within the graphs. It is not clear however how many groups should be identified. Several other investigations could have been performed. One of them would be to look at the position of the employees in the hierarchy and see if it is linked to the groups identified by the LPCM. Another interesting investigation would be to look at the email type (to, cc, bcc) for the same reason. In my experience, managers tend to be included in the cc field more often than other employees. Using both of these pieces of information, we could try to identify the different groups within the company. Unfortunately, I do not have the time to perform these investigations. 

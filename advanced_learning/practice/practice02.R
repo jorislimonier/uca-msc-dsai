@@ -4,4 +4,5 @@ X <- as.vector(cbind(
 ))
 X
 dist(X)
-?optim
+
+install.packages("blockmodels")
