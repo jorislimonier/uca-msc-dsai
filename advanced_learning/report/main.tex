@@ -1,0 +1,48 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+
+% Importing settings from setup.sty
+\usepackage{setup}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{glossaries}
+% \makenoidxglossaries
+% \newcommand{\prox}{\operatorname{prox}}
+
+
+% \pagenumbering{roman}
+\begin{document}
+
+% Inserting title page
+\import{./}{title}
+
+\pagenumbering{gobble}
+\tableofcontents
+% \listoffigures
+% \listoftables
+
+
+
+\newgeometry{
+  left=25mm,
+  right=25mm,
+  top=25mm,
+  bottom=25mm}
+\pagenumbering{arabic}
+ 
+% Evaluation: Write a brief report in which you provide your own view of the challenge of "Learning Without Data Collections". The report can be based on my book entitled "DEEP LEARNING TO SEE - Towards New Foundations of Computer Vision" and on both my two lectures. In particular you could organized you report as follows:
+
+% 1. Brief discussion on actual contexts in which  the view of  "Learning Without Data Collections" can take place.
+% 2. Critical comments on the notion of motion invariance. In particular, provide a perspective on strengths and weakness in the process of feature extraction
+% 3. Find one-two articles that you consider related to the covered topic and underline the similarities.
+
+% AI are really good (performance), but really bad (computational cost)
+
+\section{Context of Learning without Data Collection}
+\section{Critical comments on the notion of motion invariance}
+\section{Related articles}
+% \clearpage
+% \printnoidxglossaries
+
+\end{document}
