@@ -217,10 +217,10 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td rowspan=4>Compulsory courses</td>
       <td>:heavy_check_mark: Bayesian Learning</td>
       <td align="center">16</td>
-      <td rowspan=4 align="center">TBD</td>
+      <td rowspan=4 align="center">15.75</td>
     </tr>
     <td>:heavy_check_mark: Advanced Deep Learning</td>
-    <td align="center">TBD</td>
+    <td align="center">17</td>
     <tr>
       <td>:heavy_check_mark: Introduction to Information Theory</td>
       <td align="center">16</td>
@@ -233,7 +233,7 @@ Semester grades are an average of each subject's grade, weighted by the subject'
       <td rowspan=2>Advanced methods in ML</td>
       <td>:heavy_check_mark: Research Project</td>
       <td align="center">16</td>
-      <td rowspan=2 align="center">16.7</td>
+      <td rowspan=2 align="center">16.5</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Federated Learning - Data Privacy</td>
@@ -242,12 +242,12 @@ Semester grades are an average of each subject's grade, weighted by the subject'
     <tr>
       <td rowspan=3>Advanced methods in AI</td>
       <td>:heavy_check_mark: Deep Learning for computer vision</td>
-      <td align="center">TBD</td>
+      <td align="center">18</td>
       <td rowspan=3 align="center">TBD</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Inverse Problems in image processing</td>
-      <td align="center">TBD</td>
+      <td align="center">16</td>
     </tr>
     <tr>
       <td>:heavy_check_mark: Advanced Learning: Functional, Mixed and Text data</td>
