@@ -28,6 +28,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
     <th>Semester</th>
     <th>Semester Average</th>
     <th>Year Average</th>
+    <th>Master's Average</th>
   </thead>
   <tbody>
     <tr>
@@ -41,6 +42,7 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
         17.48
       </td>
       <td rowspan=2 align="center">16.80</td>
+      <td rowspan=4 align="center">15.10</td>
     </tr>
     <tr>
       <td>
@@ -55,14 +57,14 @@ Resources for my Master's of Data Science and Artificial Intelligence at the Uni
       <td>
         Semester 3
       </td>
-      <td align="center">16.36</td>
-      <td rowspan=2 align="center">TBD</td>
+      <td align="center">16.61 (16.36 + 0.25 bonus)</td>
+      <td rowspan=2 align="center">13.39</td>
     </tr>
     <tr>
       <td>
         Semester 4
       </td>
-      <td align="center">TBD</td>
+      <td align="center">10.17</td>
     </tr>
   </tbody>
 </table>
